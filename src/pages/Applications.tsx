@@ -12,7 +12,8 @@ import {
   MoreHorizontal, 
   AlertCircle,
   RefreshCw,
-  Target
+  Target,
+  Edit3
 } from 'lucide-react';
 import { PageHeader } from '@/components/common/PageHeader';
 import { Button } from '@/components/ui/Button';
@@ -23,11 +24,15 @@ import { EmptyState } from '@/components/common/EmptyState';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/Table';
 import { CreateApplicationModal } from '@/components/applications/CreateApplicationModal';
+import { EditApplicationModal } from '@/components/applications/EditApplicationModal';
 import { useApplicationsListQuery } from '@/hooks/queries/useApplicationsQuery';
-import { ApplicationStatus } from '@/types';
+import { ApplicationStatus, DbApplication } from '@/types';
 
 export const ApplicationsPage: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [editingApplication, setEditingApplication] = useState<DbApplication | null>(null);
+  const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
+
   const { data: applications, isLoading, isError, error, refetch } = useApplicationsListQuery();
 
   const formatDate = (dateString?: string | null) => {
@@ -43,8 +48,19 @@ export const ApplicationsPage: React.FC = () => {
     }
   };
 
+  const toggleMenu = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setActiveMenuId((prev) => (prev === id ? null : id));
+  };
+
+  const handleOpenEdit = (app: DbApplication, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setActiveMenuId(null);
+    setEditingApplication(app);
+  };
+
   return (
-    <div className="space-y-6 animate-fadeIn">
+    <div className="space-y-6 animate-fadeIn" onClick={() => setActiveMenuId(null)}>
       {/* Page Header */}
       <PageHeader
         title="İş Başvurularım"
@@ -94,7 +110,6 @@ export const ApplicationsPage: React.FC = () => {
       {/* Content Section based on TanStack Query State */}
       {isLoading ? (
         <div className="space-y-4">
-          {/* Skeleton Desktop Table */}
           <div className="hidden md:block rounded-2xl border border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-900/60 p-6 space-y-4 shadow-soft">
             <div className="h-6 w-36 bg-slate-200 dark:bg-slate-800 rounded-lg animate-pulse mb-4" />
             <div className="space-y-3">
@@ -112,7 +127,6 @@ export const ApplicationsPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Skeleton Mobile Cards */}
           <div className="block md:hidden space-y-3">
             {[1, 2, 3].map((i) => (
               <div key={i} className="p-4 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 space-y-3">
@@ -152,7 +166,7 @@ export const ApplicationsPage: React.FC = () => {
         />
       ) : (
         <>
-          {/* Desktop Table View (hidden on mobile) */}
+          {/* Desktop Table View */}
           <div className="hidden md:block">
             <Table>
               <TableHeader>
@@ -177,6 +191,7 @@ export const ApplicationsPage: React.FC = () => {
 
                   const targetRoleDisplay = (app as any).target_role || 'Software Engineer';
                   const priorityDisplay = (app as any).priority || 'Orta';
+                  const isMenuOpen = activeMenuId === app.id;
 
                   return (
                     <TableRow key={app.id}>
@@ -234,15 +249,27 @@ export const ApplicationsPage: React.FC = () => {
                         </span>
                       </TableCell>
 
-                      {/* Actions Column */}
-                      <TableCell className="text-right">
+                      {/* Actions Menu Column */}
+                      <TableCell className="text-right relative">
                         <button
+                          onClick={(e) => toggleMenu(app.id, e)}
                           className="p-1.5 rounded-lg text-slate-400 hover:text-foreground hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                          title="İşlemler"
-                          aria-label="İşlemler"
+                          title="İşlem Menüsü"
+                          aria-label="İşlem Menüsü"
                         >
                           <MoreHorizontal className="w-4 h-4" aria-hidden="true" />
                         </button>
+
+                        {isMenuOpen && (
+                          <div className="absolute right-4 top-12 w-36 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-xl py-1 z-30 animate-fadeIn">
+                            <button
+                              onClick={(e) => handleOpenEdit(app, e)}
+                              className="w-full px-3 py-2 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-indigo-500/10 hover:text-indigo-400 flex items-center gap-2 transition-colors"
+                            >
+                              <Edit3 className="w-3.5 h-3.5 text-indigo-400" aria-hidden="true" /> Düzenle
+                            </button>
+                          </div>
+                        )}
                       </TableCell>
                     </TableRow>
                   );
@@ -251,7 +278,7 @@ export const ApplicationsPage: React.FC = () => {
             </Table>
           </div>
 
-          {/* Mobile Card Layout (block on mobile, hidden on md+) */}
+          {/* Mobile Card Layout */}
           <div className="block md:hidden space-y-3">
             {applications.map((app) => {
               const companyInitials = app.company_name
@@ -263,11 +290,12 @@ export const ApplicationsPage: React.FC = () => {
 
               const targetRoleDisplay = (app as any).target_role || 'Software Engineer';
               const priorityDisplay = (app as any).priority || 'Orta';
+              const isMenuOpen = activeMenuId === app.id;
 
               return (
                 <div
                   key={app.id}
-                  className="p-4 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft space-y-3"
+                  className="p-4 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft space-y-3 relative"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3 min-w-0">
@@ -279,13 +307,28 @@ export const ApplicationsPage: React.FC = () => {
                         <p className="text-xs text-indigo-400 font-semibold truncate">{app.position}</p>
                       </div>
                     </div>
-                    <button
-                      className="p-1.5 text-slate-400 hover:text-foreground rounded-lg"
-                      title="İşlemler"
-                      aria-label="İşlemler"
-                    >
-                      <MoreHorizontal className="w-4 h-4" aria-hidden="true" />
-                    </button>
+
+                    <div className="relative">
+                      <button
+                        onClick={(e) => toggleMenu(app.id, e)}
+                        className="p-1.5 text-slate-400 hover:text-foreground rounded-lg"
+                        title="İşlem Menüsü"
+                        aria-label="İşlem Menüsü"
+                      >
+                        <MoreHorizontal className="w-4 h-4" aria-hidden="true" />
+                      </button>
+
+                      {isMenuOpen && (
+                        <div className="absolute right-0 top-8 w-36 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-xl py-1 z-30">
+                          <button
+                            onClick={(e) => handleOpenEdit(app, e)}
+                            className="w-full px-3 py-2 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-indigo-500/10 hover:text-indigo-400 flex items-center gap-2"
+                          >
+                            <Edit3 className="w-3.5 h-3.5 text-indigo-400" aria-hidden="true" /> Düzenle
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-slate-100 dark:border-slate-800/60">
@@ -318,6 +361,13 @@ export const ApplicationsPage: React.FC = () => {
       <CreateApplicationModal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
+      />
+
+      {/* Edit Application Modal */}
+      <EditApplicationModal
+        isOpen={Boolean(editingApplication)}
+        onClose={() => setEditingApplication(null)}
+        application={editingApplication}
       />
     </div>
   );
