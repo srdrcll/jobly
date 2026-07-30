@@ -67,7 +67,7 @@ export const AiCareerInsightsSection: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft space-y-1">
           <span className="text-xs text-slate-400 font-semibold flex items-center gap-1.5">
-            <TrendingUp className="w-4 h-4 text-indigo-400" /> Başvuru -> Mülakat Oranı
+            <TrendingUp className="w-4 h-4 text-indigo-400" /> Başvuru → Mülakat Oranı
           </span>
           <p className="text-2xl font-black text-foreground">%{insights.appToInterviewConversion}</p>
           <p className="text-[10px] text-slate-400">Toplam {insights.totalApps} başvurudan mülakata geçiş</p>
@@ -75,7 +75,7 @@ export const AiCareerInsightsSection: React.FC = () => {
 
         <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft space-y-1">
           <span className="text-xs text-slate-400 font-semibold flex items-center gap-1.5">
-            <Award className="w-4 h-4 text-amber-400" /> Mülakat -> Teklif Oranı
+            <Award className="w-4 h-4 text-amber-400" /> Mülakat → Teklif Oranı
           </span>
           <p className="text-2xl font-black text-foreground">%{insights.interviewToOfferConversion}</p>
           <p className="text-[10px] text-slate-400">Katılınan mülakatlardan teklif alma başarısı</p>
@@ -107,7 +107,7 @@ export const AiCareerInsightsSection: React.FC = () => {
           <div className="p-3 rounded-xl bg-indigo-900/40 border border-indigo-500/20 space-y-1">
             <span className="font-bold text-indigo-200">📌 Mülakat Dönüşüm Tavsiyesi:</span>
             <p className="text-slate-300 leading-relaxed">
-              Mülakat -> Teklif oranınızı %15 seviyesinin üzerine çıkarmak için teknik soruların sonuna STAR metoduna uygun rakamsal metrikler ekleyin.
+              Mülakat → Teklif oranınızı %15 seviyesinin üzerine çıkarmak için teknik soruların sonuna STAR metoduna uygun rakamsal metrikler ekleyin.
             </p>
           </div>
 
