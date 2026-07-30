@@ -35,4 +35,10 @@ export const queryKeys = {
     details: () => [...queryKeys.interviews.all, 'detail'] as const,
     detail: (id: string) => [...queryKeys.interviews.details(), id] as const,
   },
+  ai: {
+    all: ['ai'] as const,
+    conversations: () => [...queryKeys.ai.all, 'conversations'] as const,
+    conversation: (id: string) => [...queryKeys.ai.conversations(), id] as const,
+    settings: () => [...queryKeys.ai.all, 'settings'] as const,
+  },
 };

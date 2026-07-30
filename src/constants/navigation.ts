@@ -3,6 +3,7 @@ import {
   Briefcase, 
   Building2, 
   Calendar,
+  Bot,
   LayoutTemplate, 
   User, 
   Settings, 
@@ -39,6 +40,13 @@ export const MAIN_NAV_ITEMS: NavItem[] = [
     href: '/interviews',
     icon: Calendar,
     description: 'Teknik mülakatlar, randevular ve vaka takvimi'
+  },
+  {
+    title: 'AI Kariyer Asistanı',
+    href: '/ai-assistant',
+    icon: Bot,
+    badge: 'AI',
+    description: 'Özgeçmiş analizi, mülakat koçu ve kariyer rehberi'
   },
   {
     title: 'Şablonlar',

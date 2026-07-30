@@ -14,6 +14,7 @@ const ApplicationDetailPage = lazy(() => import('@/pages/ApplicationDetail').the
 const CompaniesPage = lazy(() => import('@/pages/Companies').then(m => ({ default: m.CompaniesPage })));
 const CompanyDetailPage = lazy(() => import('@/pages/CompanyDetail').then(m => ({ default: m.CompanyDetailPage })));
 const InterviewsPage = lazy(() => import('@/pages/Interviews').then(m => ({ default: m.InterviewsPage })));
+const AiAssistantPage = lazy(() => import('@/pages/AiAssistant').then(m => ({ default: m.AiAssistantPage })));
 const TemplatesPage = lazy(() => import('@/pages/Templates').then(m => ({ default: m.TemplatesPage })));
 const ProfilePage = lazy(() => import('@/pages/Profile').then(m => ({ default: m.ProfilePage })));
 const SettingsPage = lazy(() => import('@/pages/Settings').then(m => ({ default: m.SettingsPage })));
@@ -50,6 +51,7 @@ export function App() {
                 <Route path="/companies" element={<CompaniesPage />} />
                 <Route path="/companies/:id" element={<CompanyDetailPage />} />
                 <Route path="/interviews" element={<InterviewsPage />} />
+                <Route path="/ai-assistant" element={<AiAssistantPage />} />
                 <Route path="/templates" element={<TemplatesPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/settings" element={<SettingsPage />} />

@@ -1,0 +1,60 @@
+import { SuggestedPrompt } from '@/types/ai';
+
+export const SUGGESTED_PROMPTS: SuggestedPrompt[] = [
+  {
+    id: 'p-resume-1',
+    category: 'resume',
+    title: 'Özgeçmiş İncelemesi & ATS Uyumu',
+    prompt: 'Senior Frontend Developer pozisyonu için özgeçmişimi analiz et. Öne çıkarmam gereken teknik becerileri ve başarı metriklerini belirt.',
+    iconName: 'FileText',
+    tag: 'Özgeçmiş',
+  },
+  {
+    id: 'p-cover-1',
+    category: 'cover_letter',
+    title: 'Ön Mektup (Cover Letter) Taslağı',
+    prompt: 'Kullanıcı odaklı SaaS ürünü geliştiren bir startup için etkileyici ve dikkat çekici bir ön mektup yazmamda yardımcı ol.',
+    iconName: 'Mail',
+    tag: 'Ön Mektup',
+  },
+  {
+    id: 'p-interview-1',
+    category: 'interview_prep',
+    title: 'Teknik Mülakat Simülasyonu',
+    prompt: 'Bana React 19, TypeScript ve System Design konularında 3 zorlu mülakat sorusu sor ve cevaplarımı değerlendir.',
+    iconName: 'Target',
+    tag: 'Mülakat',
+  },
+  {
+    id: 'p-career-1',
+    category: 'career_advice',
+    title: 'Senior -> Tech Lead Kariyer Yolu',
+    prompt: 'Senior yazılım geliştiriciden Tech Lead / Engineering Manager rolüne geçiş yaparken geliştirmem gereken liderlik becerileri nelerdir?',
+    iconName: 'Compass',
+    tag: 'Kariyer',
+  },
+  {
+    id: 'p-strategy-1',
+    category: 'strategy',
+    title: 'İş Başvuru Stratejisi',
+    prompt: 'Haftada 10 kaliteli iş başvurusu yapmak ve İK yanıt oranımı %40 üzerine çıkarmak için nasıl bir haftalık rutin izlemeliyim?',
+    iconName: 'Zap',
+    tag: 'Strateji',
+  },
+  {
+    id: 'p-salary-1',
+    category: 'salary',
+    title: 'Maaş Pazarlığı Taktikleri',
+    prompt: 'İş teklifi aşamasında beklentimin %20 üzerinde bir maaş paketi ve yan haklar talep etmek için nasıl bir müzakere cümlesi kurmalıyım?',
+    iconName: 'DollarSign',
+    tag: 'Maaş',
+  },
+  {
+    id: 'p-linkedin-1',
+    category: 'linkedin',
+    title: 'LinkedIn Profil İyileştirme',
+    prompt: 'Tech recruiter\'ların dikkatini çekecek bir LinkedIn "Hakkında" (About) yazısı ve başlık (Headline) örneği hazırla.',
+    iconName: 'Linkedin',
+    tag: 'LinkedIn',
+  },
+];
