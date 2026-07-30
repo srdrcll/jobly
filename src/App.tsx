@@ -12,6 +12,7 @@ const DashboardPage = lazy(() => import('@/pages/Dashboard').then(m => ({ defaul
 const ApplicationsPage = lazy(() => import('@/pages/Applications').then(m => ({ default: m.ApplicationsPage })));
 const ApplicationDetailPage = lazy(() => import('@/pages/ApplicationDetail').then(m => ({ default: m.ApplicationDetailPage })));
 const CompaniesPage = lazy(() => import('@/pages/Companies').then(m => ({ default: m.CompaniesPage })));
+const CompanyDetailPage = lazy(() => import('@/pages/CompanyDetail').then(m => ({ default: m.CompanyDetailPage })));
 const TemplatesPage = lazy(() => import('@/pages/Templates').then(m => ({ default: m.TemplatesPage })));
 const ProfilePage = lazy(() => import('@/pages/Profile').then(m => ({ default: m.ProfilePage })));
 const SettingsPage = lazy(() => import('@/pages/Settings').then(m => ({ default: m.SettingsPage })));
@@ -46,6 +47,7 @@ export function App() {
                 <Route path="/applications" element={<ApplicationsPage />} />
                 <Route path="/applications/:id" element={<ApplicationDetailPage />} />
                 <Route path="/companies" element={<CompaniesPage />} />
+                <Route path="/companies/:id" element={<CompanyDetailPage />} />
                 <Route path="/templates" element={<TemplatesPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/settings" element={<SettingsPage />} />

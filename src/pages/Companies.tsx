@@ -326,7 +326,7 @@ export const CompaniesPage: React.FC = () => {
                   <tr
                     key={company.id}
                     className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors group cursor-pointer"
-                    onClick={() => setSelectedDetail(company)}
+                    onClick={() => navigate(`/companies/${company.id}`)}
                   >
                     {/* Company Name & Logo Initial */}
                     <td className="py-3.5 px-4">
@@ -428,7 +428,7 @@ export const CompaniesPage: React.FC = () => {
             {filteredCompanies.map((company) => (
               <div
                 key={company.id}
-                onClick={() => setSelectedDetail(company)}
+                onClick={() => navigate(`/companies/${company.id}`)}
                 className="p-4 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 space-y-3 cursor-pointer hover:border-indigo-500/40 transition-all shadow-sm"
               >
                 <div className="flex items-center justify-between gap-2">
