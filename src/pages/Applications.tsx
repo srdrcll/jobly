@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Briefcase, 
@@ -15,7 +15,8 @@ import {
   Target,
   Edit3,
   Trash2,
-  Eye
+  Eye,
+  SearchX
 } from 'lucide-react';
 import { PageHeader } from '@/components/common/PageHeader';
 import { Button } from '@/components/ui/Button';
@@ -28,6 +29,7 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@
 import { ConfirmationDialog } from '@/components/ui/ConfirmationDialog';
 import { CreateApplicationModal } from '@/components/applications/CreateApplicationModal';
 import { EditApplicationModal } from '@/components/applications/EditApplicationModal';
+import { useDebounce } from '@/hooks/useDebounce';
 import { 
   useApplicationsListQuery, 
   useDeleteApplicationMutation 
@@ -36,6 +38,9 @@ import { ApplicationStatus, DbApplication } from '@/types';
 
 export const ApplicationsPage: React.FC = () => {
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState('');
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
+
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [editingApplication, setEditingApplication] = useState<DbApplication | null>(null);
   const [deletingApplication, setDeletingApplication] = useState<DbApplication | null>(null);
@@ -43,6 +48,20 @@ export const ApplicationsPage: React.FC = () => {
 
   const { data: applications, isLoading, isError, error, refetch } = useApplicationsListQuery();
   const deleteMutation = useDeleteApplicationMutation();
+
+  // Real-time debounced search through company_name, position, and notes
+  const filteredApplications = useMemo(() => {
+    if (!applications) return [];
+    const query = debouncedSearchQuery.trim().toLowerCase();
+    if (!query) return applications;
+
+    return applications.filter((app) => {
+      const companyMatch = app.company_name?.toLowerCase().includes(query);
+      const positionMatch = app.position?.toLowerCase().includes(query);
+      const notesMatch = (app as any).notes?.toLowerCase().includes(query);
+      return companyMatch || positionMatch || notesMatch;
+    });
+  }, [applications, debouncedSearchQuery]);
 
   const formatDate = (dateString?: string | null) => {
     if (!dateString) return '—';
@@ -109,12 +128,14 @@ export const ApplicationsPage: React.FC = () => {
         }
       />
 
-      {/* Toolbar: Search, Filter, Sort (UI Controls) */}
+      {/* Toolbar: Real-Time Debounced Search */}
       <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="w-full sm:w-80">
           <SearchInput
-            placeholder="Şirket veya pozisyon ara..."
-            onChange={() => {}}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onClear={() => setSearchQuery('')}
+            placeholder="Şirket, pozisyon veya not ara..."
           />
         </div>
 
@@ -137,7 +158,7 @@ export const ApplicationsPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Content Section based on TanStack Query State */}
+      {/* Content Section based on State */}
       {isLoading ? (
         <div className="space-y-4">
           <div className="hidden md:block rounded-2xl border border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-900/60 p-6 space-y-4 shadow-soft">
@@ -194,6 +215,26 @@ export const ApplicationsPage: React.FC = () => {
           actionText="Yeni Başvuru Ekle"
           onAction={() => setIsCreateModalOpen(true)}
         />
+      ) : filteredApplications.length === 0 ? (
+        /* Search No Results Found State */
+        <div className="p-12 rounded-3xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft text-center space-y-4">
+          <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mx-auto">
+            <SearchX className="w-6 h-6" aria-hidden="true" />
+          </div>
+          <div className="space-y-1">
+            <h3 className="text-base font-bold text-foreground">Arama Sonucu Bulunamadı</h3>
+            <p className="text-xs text-slate-400 max-w-sm mx-auto">
+              "<span className="font-semibold text-foreground">{debouncedSearchQuery}</span>" ile eşleşen şirket, pozisyon veya not kaydı bulunamadı.
+            </p>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setSearchQuery('')}
+          >
+            Aramayı Temizle
+          </Button>
+        </div>
       ) : (
         <>
           {/* Desktop Table View */}
@@ -211,7 +252,7 @@ export const ApplicationsPage: React.FC = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {applications.map((app) => {
+                {filteredApplications.map((app) => {
                   const companyInitials = app.company_name
                     .split(' ')
                     .map((word) => word[0])
@@ -326,7 +367,7 @@ export const ApplicationsPage: React.FC = () => {
 
           {/* Mobile Card Layout */}
           <div className="block md:hidden space-y-3">
-            {applications.map((app) => {
+            {filteredApplications.map((app) => {
               const companyInitials = app.company_name
                 .split(' ')
                 .map((word) => word[0])
