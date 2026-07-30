@@ -118,3 +118,37 @@
 ### Mobile Experience
 ![Mobile Experience](docs/screenshots/mobile-experience.png)
 *Responsive touch-optimized view showcasing card layouts, mobile navigation drawer, and quick-action toolbars.*
+
+---
+
+## 🏗️ Architecture
+
+### High-Level Architecture
+
+```mermaid
+flowchart TD
+    User(["User / Client Browser"]) --> ReactUI["React UI"]
+    ReactUI --> FeatureModules["Feature Modules"]
+    FeatureModules --> Services["Services"]
+    Services --> RepositoryLayer["Repository Layer"]
+    RepositoryLayer --> Supabase["Supabase"]
+    Supabase --> PostgreSQL[("PostgreSQL")]
+```
+
+### Data Flow Architecture
+
+```mermaid
+flowchart TD
+    RC["React Component"] --> TQ["TanStack Query"]
+    TQ --> Service["Service Layer"]
+    Service --> Repository["Repository Layer"]
+    Repository --> Supabase["Supabase Backend"]
+```
+
+### Core Architectural Principles
+
+- **Separation of Concerns**: Each architectural layer maintains a single responsibility. UI components handle rendering and user interactions, services govern business logic and data validation, while repositories isolate direct database operations.
+- **Feature-Based Architecture**: Code is structured around domain modules (Applications, Authentication, Companies), keeping components, hooks, and utilities co-located for high maintainability.
+- **Repository Pattern**: Decouples business services from direct database SDK calls, enabling consistent data querying, simplified mock testing, and seamless backend refactoring.
+- **TanStack Query Responsibilities**: Orchestrates asynchronous server state, handles optimistic UI updates, manages background re-validation, and caches data to reduce unnecessary network traffic.
+- **Supabase Responsibilities**: Manages secure user authentication, real-time database subscriptions, PostgreSQL data storage, and Row Level Security (RLS) enforcement per user.
