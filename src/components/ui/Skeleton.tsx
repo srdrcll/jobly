@@ -72,3 +72,13 @@ export const TableRowSkeleton: React.FC = () => (
     <Skeleton variant="circular" className="w-8 h-8 shrink-0" />
   </div>
 );
+
+export const TableSkeleton: React.FC = () => (
+  <div className="space-y-2 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 p-4 shadow-sm">
+    <TableRowSkeleton />
+    <TableRowSkeleton />
+    <TableRowSkeleton />
+    <TableRowSkeleton />
+    <TableRowSkeleton />
+  </div>
+);
