@@ -90,3 +90,31 @@
 - ✅ **Supabase Auth & RLS** — Database-level Row Level Security ensuring candidates access only their own records.
 - ✅ **Zod Schema Validation** — Runtime type checking and input sanitization for all forms and request payloads.
 - ✅ **End-to-End Type Safety** — Full TypeScript integration from PostgreSQL database schemas to React components.
+
+---
+
+## 📸 Screenshots
+
+### Dashboard
+![Dashboard](docs/screenshots/dashboard.png)
+*High-level overview displaying application status counts, upcoming interview schedules, conversion metrics, and recent activity logs.*
+
+### Applications
+![Applications](docs/screenshots/applications.png)
+*Central application management interface featuring live search, custom filters, status tags, and bulk management capabilities.*
+
+### Create Application
+![Create Application](docs/screenshots/create-application.png)
+*Streamlined modal dialog for adding new job applications with salary inputs, company details, tags, and job posting URLs.*
+
+### Application Detail
+![Application Detail](docs/screenshots/application-detail.png)
+*In-depth view of a specific application including interview stages, custom notes, contact persons, and offer tracking.*
+
+### Authentication
+![Authentication](docs/screenshots/authentication.png)
+*Secure login and registration interface featuring form validation, error handling, and password recovery workflows.*
+
+### Mobile Experience
+![Mobile Experience](docs/screenshots/mobile-experience.png)
+*Responsive touch-optimized view showcasing card layouts, mobile navigation drawer, and quick-action toolbars.*
