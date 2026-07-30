@@ -69,7 +69,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         </div>
 
         {error ? (
-          <p className="text-[11px] text-rose-400 font-medium" role="alert">{error}</p>
+          <p className="text-[11px] text-rose-400 font-medium" role="alert" aria-live="assertive">{error}</p>
         ) : helperText ? (
           <p className="text-[11px] text-slate-400">{helperText}</p>
         ) : null}

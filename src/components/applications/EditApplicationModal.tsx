@@ -223,7 +223,7 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
               </select>
             </div>
             {errors.target_role?.message && (
-              <p className="text-[11px] text-rose-400 font-medium" role="alert">{errors.target_role.message}</p>
+              <p className="text-[11px] text-rose-400 font-medium" role="alert" aria-live="assertive">{errors.target_role.message}</p>
             )}
           </div>
 
@@ -329,7 +329,7 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
               {...register('notes')}
             />
             {errors.notes?.message && (
-              <p className="text-[11px] text-rose-400 font-medium" role="alert">{errors.notes.message}</p>
+              <p className="text-[11px] text-rose-400 font-medium" role="alert" aria-live="assertive">{errors.notes.message}</p>
             )}
           </div>
         </div>
