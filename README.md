@@ -1,16 +1,16 @@
 <div align="center">
 
   <h1>🧭 Kariyer Pusulası</h1>
-  <h3><i>Personal Applicant Tracking System (ATS) for Ambitious Job Seekers</i></h3>
+  <h3><i>Personal Applicant Tracking System (ATS) & Candidate CRM for Ambitious Job Seekers</i></h3>
 
   <p>
-    <b>Take complete command of your job search with an intuitive, data-driven SaaS workspace.</b>
+    <b>Take complete command of your job search and networking with an intuitive, data-driven SaaS workspace.</b>
   </p>
 
   <p>
     <a href="#"><img src="https://img.shields.io/badge/Build-Passing-success?style=for-the-badge&logo=github-actions&logoColor=white" alt="Build" /></a>
-    <a href="#"><img src="https://img.shields.io/badge/Current_Release-v0.5.0-blue?style=for-the-badge&logo=git&logoColor=white" alt="Current Release" /></a>
-    <a href="#"><img src="https://img.shields.io/badge/Next_Milestone-Company_Management-purple?style=for-the-badge&logo=target&logoColor=white" alt="Next Milestone" /></a>
+    <a href="#"><img src="https://img.shields.io/badge/Current_Release-v0.6.0-blue?style=for-the-badge&logo=git&logoColor=white" alt="Current Release" /></a>
+    <a href="#"><img src="https://img.shields.io/badge/Next_Milestone-Interview_Management-purple?style=for-the-badge&logo=target&logoColor=white" alt="Next Milestone" /></a>
     <a href="#"><img src="https://img.shields.io/badge/License-MIT-amber?style=for-the-badge" alt="License" /></a>
     <a href="#"><img src="https://img.shields.io/badge/PRs-Welcome-emerald?style=for-the-badge&logo=github&logoColor=white" alt="PRs Welcome" /></a>
   </p>
@@ -21,18 +21,18 @@
 
 ### 📌 Purpose
 
-**Kariyer Pusulası** is a modern, candidate-centric Applicant Tracking System (ATS) built for job seekers. It replaces messy spreadsheets and lost emails with a structured SaaS workspace to track applications, interview timelines, and offer metrics. Inspired by tools like Linear and Notion, it brings clarity and speed to your career journey.
+**Kariyer Pusulası** is a modern, candidate-centric Applicant Tracking System (ATS) and Candidate CRM built for job seekers. It replaces messy spreadsheets and lost emails with a structured SaaS workspace to track applications, target companies, recruiter contacts, and interview timelines. Inspired by tools like Linear and Notion, it brings clarity and speed to your career journey.
 
 ---
 
 ### ✨ Key Features
 
 - 🎯 **End-to-End Application Pipeline** — Track job applications seamlessly across structured lifecycle stages (Applied, Screening, Interviewing, Offer, Rejected).
+- 🏢 **Company Management & Candidate CRM** — Store target companies, recruiter contacts, interaction logs, pinned notes, and company-specific follow-up tasks.
 - 📊 **Real-Time KPI Dashboard & Analytics** — Instant visual charts for status distribution, 6-month application trends, and 7-day activity metrics.
-- ⚡ **Real-Time Search & Smart Filters** — Instantly locate and filter applications by company, position, priority, or remote status with debounced live search.
+- ⚡ **Real-Time Search & Smart Filters** — Instantly locate and filter applications and companies by industry, size, priority, or remote status.
 - 🔐 **Enterprise-Grade Security** — Powered by Supabase Row Level Security (RLS) to ensure absolute data isolation and privacy for every job seeker.
 - 🎨 **Modern Minimalist UI/UX** — Ultra-responsive dark mode aesthetics built with glassmorphism, clean typography, and fluid micro-interactions.
-- 🚀 **Optimistic Data Operations** — High-speed interactivity driven by TanStack Query for zero-latency state updates and robust caching.
 
 ---
 
@@ -56,179 +56,34 @@
 
 - ✅ **Authentication & Security** — Email and password authentication, protected routes, and session persistence via Supabase Auth.
 - ✅ **Application Management** — Full lifecycle tracking (Applied, Interviewing, Offer, Rejected) with salary, notes, and detail views.
+- ✅ **Company Management & CRM** — Manage target companies, recruiters, interaction logs, pinned notes, and company-specific tasks.
 - ✅ **KPI Dashboard & Real-Time Analytics** — Live statistics cards, status distribution donut chart, monthly bar chart, and weekly activity line chart.
-- ✅ **Bulk Operations** — Batch updates, stage transitions, and bulk record deletion for candidate workflows.
-
-### 🔍 Search & UI Experience
-
-- ✅ **Real-Time Search & Filters** — Debounced instant search by company or position, paired with multi-column sorting.
-- ✅ **Responsive Table & Mobile Cards** — High-density desktop table layout auto-adapting to touch cards on mobile devices.
-- ✅ **Modern Dark Theme & UX States** — Glassmorphic UI, skeleton loading states, empty states, and toast notifications.
-
-### ⚡ Architecture & Performance
-
-- ✅ **TanStack Query State** — Smart caching, optimistic UI updates, and zero-latency client state synchronization.
-- ✅ **Supabase RLS & Zod Validation** — Database row-level security for total data isolation combined with strict schema validation.
-
----
-
-## 📸 Screenshots
-
-### Dashboard
-![Dashboard](docs/screenshots/dashboard.png)
-*High-level overview displaying application status counts, upcoming interview schedules, conversion metrics, and recent activity logs.*
-
-### Applications
-![Applications](docs/screenshots/applications.png)
-*Central application management interface featuring live search, custom filters, status tags, and bulk management capabilities.*
-
-### Application Detail
-![Application Detail](docs/screenshots/application-detail.png)
-*In-depth view of a specific application including interview stages, custom notes, contact persons, and offer tracking.*
-
-### Authentication
-![Authentication](docs/screenshots/authentication.png)
-*Secure login and registration interface featuring form validation, error handling, and password recovery workflows.*
-
-### Mobile
-![Mobile](docs/screenshots/mobile.png)
-*Responsive touch-optimized view showcasing card layouts, mobile navigation drawer, and quick-action toolbars.*
-
----
-
-## 🏗️ Architecture
-
-### High-Level Architecture
-
-```mermaid
-flowchart TD
-    User(["User / Client Browser"]) --> ReactUI["React UI"]
-    ReactUI --> FeatureModules["Feature Modules"]
-    FeatureModules --> Services["Services"]
-    Services --> RepositoryLayer["Repository Layer"]
-    RepositoryLayer --> Supabase["Supabase"]
-    Supabase --> PostgreSQL[("PostgreSQL")]
-```
-
-### Data Flow Architecture
-
-```mermaid
-flowchart TD
-    RC["React Component"] --> TQ["TanStack Query"]
-    TQ --> Service["Service Layer"]
-    Service --> Repository["Repository Layer"]
-    Repository --> Supabase["Supabase Backend"]
-```
-
-### Core Architectural Principles
-
-- **Separation of Concerns**: Each architectural layer maintains a single responsibility. UI components handle rendering and user interactions, services govern business logic and data validation, while repositories isolate direct database operations.
-- **Feature-Based Architecture**: Code is structured around domain modules (Applications, Authentication, Companies), keeping components, hooks, and utilities co-located for high maintainability.
-- **Repository Pattern**: Decouples business services from direct database SDK calls, enabling consistent data querying, simplified mock testing, and seamless backend refactoring.
-- **TanStack Query Responsibilities**: Orchestrates asynchronous server state, handles optimistic UI updates, manages background re-validation, and caches data to reduce unnecessary network traffic.
-- **Supabase Responsibilities**: Manages secure user authentication, real-time database subscriptions, PostgreSQL data storage, and Row Level Security (RLS) enforcement per user.
-
----
-
-## 📂 Project Structure
-
-```text
-src/
-├── components/          # Reusable UI primitives and domain components
-│   ├── dashboard/       # Dashboard widgets, KPI cards, charts & insights
-│   ├── applications/    # Application forms & modals
-│   ├── auth/            # Protected/Public route guards
-│   ├── common/          # Page headers, badges & empty states
-│   └── ui/              # Buttons, inputs, modals & table components
-├── constants/           # Route paths & queryKeys
-├── context/             # Auth & Toast context providers
-├── hooks/               # Custom hooks & TanStack Query hooks
-├── lib/                 # Supabase client, error handlers & Zod schemas
-├── pages/               # Dashboard, Applications, Profile & Auth pages
-├── repositories/        # Supabase direct SQL data access layer
-├── services/            # Business & domain logic services
-├── types/               # TypeScript interfaces & database schemas
-└── utils/               # Analytics, activity & interview helpers
-```
-
----
-
-## ⚙️ Getting Started
-
-### Prerequisites
-- **Node.js**: v18.0.0 or higher
-- **npm** or **pnpm**
-- **Supabase Account**: For authentication & database backend
-
-### Environment Setup
-Create a `.env` file in the root directory:
-
-```env
-VITE_SUPABASE_URL=your_supabase_project_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
-
-### Local Development
-
-```bash
-# Clone the repository
-git clone https://github.com/srdrcll/kariyer-pusulasi.git
-
-# Navigate to project directory
-cd kariyer-pusulasi
-
-# Install dependencies
-npm install
-
-# Run local development server
-npm run dev
-```
-
----
-
-## 💡 Why Kariyer Pusulası?
-
-Most Applicant Tracking Systems (ATS) are built for recruiters and hiring teams. **Kariyer Pusulası** takes a different approach—it is designed entirely for job seekers.
-
-Managing dozens of applications across multiple platforms can quickly become overwhelming. Spreadsheets become outdated, emails get buried, and important interview dates are easily missed.
-
-Kariyer Pusulası provides a modern, centralized workspace where candidates can organize applications, monitor interview progress, analyze job search performance, and make more informed career decisions.
-
-The long-term vision is to evolve beyond application tracking into an intelligent career companion powered by analytics and AI-driven insights.
+- ✅ **Bulk Operations** — Batch updates, stage transitions, bulk archive, and bulk record deletion for candidate workflows.
 
 ---
 
 ## 🗺️ Product Roadmap
 
 ### ✅ Phase 1 — Foundation
-- [x] Project setup
-- [x] Authentication
-- [x] Database architecture
-- [x] User profiles
+- [x] Project setup & Authentication
+- [x] Database architecture & Supabase RLS
 
 ### ✅ Phase 2 — Applications
-- [x] Application CRUD
-- [x] Advanced Search
-- [x] Filters & Sorting
-- [x] Bulk Actions
-- [x] Production Hardening
+- [x] Application CRUD & Advanced Search
+- [x] Filters, Sorting & Bulk Actions
 
 ### ✅ Phase 3 — Dashboard & Analytics (v0.5.0 Released)
 - [x] KPI Dashboard (6 Live Metrics Cards)
-- [x] Application Funnel & Status Distribution Donut Chart
-- [x] 6-Month Applications Bar Chart
-- [x] 7-Day Activity Line Chart
-- [x] Recent Activity Feed & 24h Urgency Interview Widgets
-- [x] Dynamic AI Career Insights & Quick Actions
+- [x] Real-time Recharts visualizations
 
-### 🔜 Phase 4 — Productivity
-- [ ] Company Management & CRM
-- [ ] Interview Tracker & Calendar
-- [ ] Notes & Documents Manager
-- [ ] Goal Tracking
+### ✅ Phase 4 — Company Management & CRM (v0.6.0 Released)
+- [x] Company CRUD & Dedicated Profiles (`/companies/:id`)
+- [x] Recruiter Directory & Networking
+- [x] Interaction Log (LinkedIn, Email, Calls, Meetings)
+- [x] Pinned Notes & Task Tracking
+- [x] Company Analytics Charts & Bulk Actions
 
-### 🤖 Phase 5 — AI Features
-- [ ] Resume Analyzer & Job Matcher
-- [ ] Cover Letter Assistant
-- [ ] Personalized Interview Q&A
-- [ ] AI Career Insights Engine
+### 🔜 Phase 5 — Interview Management
+- [ ] Interactive Interview Calendar
+- [ ] Automated Reminders & Notifications
+- [ ] Stage Performance Tracking
