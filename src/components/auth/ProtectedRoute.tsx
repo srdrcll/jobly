@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Compass, Loader2 } from 'lucide-react';
 
 export const ProtectedRoute: React.FC = () => {
-  const { user, loading } = useAuth();
+  const { session, loading } = useAuth();
   const location = useLocation();
 
   if (loading) {
@@ -24,7 +24,8 @@ export const ProtectedRoute: React.FC = () => {
     );
   }
 
-  if (!user) {
+  // Validate that a real Supabase session with access_token exists
+  if (!session?.access_token || !session?.user) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 

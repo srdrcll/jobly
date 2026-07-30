@@ -76,7 +76,7 @@ export function App() {
             <Route path="/landing" element={<LandingPage />} />
 
             {/* Catch-all redirect */}
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            <Route path="*" element={<Navigate to="/login" replace />} />
           </Route>
         </Routes>
       </Suspense>

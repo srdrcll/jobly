@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Loader2 } from 'lucide-react';
 
 export const PublicRoute: React.FC = () => {
-  const { user, loading } = useAuth();
+  const { session, loading } = useAuth();
 
   if (loading) {
     return (
@@ -14,7 +14,8 @@ export const PublicRoute: React.FC = () => {
     );
   }
 
-  if (user) {
+  // If a valid session exists, redirect to dashboard
+  if (session?.access_token && session?.user) {
     return <Navigate to="/dashboard" replace />;
   }
 

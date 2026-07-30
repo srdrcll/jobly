@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { User, Session } from '@supabase/supabase-js';
+import React, { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
+import { User, Session, AuthChangeEvent } from '@supabase/supabase-js';
 import { supabase, getTurkishAuthErrorMessage } from '@/lib/supabase';
 import { useToast } from '@/hooks/useToast';
 
@@ -23,33 +23,64 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const user = session?.user ?? null;
 
+  const clearSession = useCallback(() => {
+    setSession(null);
+  }, []);
+
   useEffect(() => {
-    // Initial Session Restore
+    let isMounted = true;
+
+    // Initial Session Restore — validates with Supabase server
     const initSession = async () => {
       try {
-        const { data: { session: initialSession } } = await supabase.auth.getSession();
-        if (initialSession) {
-          setSession(initialSession);
+        const { data: { session: serverSession }, error } = await supabase.auth.getSession();
+        if (isMounted) {
+          if (error || !serverSession) {
+            clearSession();
+          } else {
+            setSession(serverSession);
+          }
         }
       } catch (err: unknown) {
         console.error('Auth init error:', err);
+        if (isMounted) {
+          clearSession();
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     initSession();
 
-    // Subscribe to Auth State Changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, currentSession) => {
-      setSession(currentSession);
-      setLoading(false);
-    });
+    // Subscribe to Auth State Changes from Supabase
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event: AuthChangeEvent, currentSession: Session | null) => {
+        if (!isMounted) return;
+
+        switch (event) {
+          case 'SIGNED_IN':
+          case 'TOKEN_REFRESHED':
+            setSession(currentSession);
+            break;
+          case 'SIGNED_OUT':
+            clearSession();
+            break;
+          default:
+            setSession(currentSession);
+            break;
+        }
+        setLoading(false);
+      }
+    );
 
     return () => {
+      isMounted = false;
       subscription.unsubscribe();
     };
-  }, []);
+  }, [clearSession]);
 
   const login = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
     try {
@@ -105,11 +136,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const logout = async () => {
     try {
       await supabase.auth.signOut();
-      setSession(null);
+      clearSession();
       toast.info('Oturum Kapatıldı', 'Güvenli bir şekilde çıkış yaptınız.');
     } catch (err: unknown) {
       console.error('Logout error:', err);
-      setSession(null);
+      clearSession();
     }
   };
 
