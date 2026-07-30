@@ -5,8 +5,6 @@ import {
   Search, 
   Clock, 
   Video, 
-  User, 
-  Building2, 
   ExternalLink, 
   Trash2, 
   Edit3, 
@@ -23,6 +21,7 @@ import { InterviewStatusBadge } from '@/components/interviews/InterviewStatusBad
 import { CreateInterviewModal } from '@/components/interviews/CreateInterviewModal';
 import { EditInterviewModal } from '@/components/interviews/EditInterviewModal';
 import { InterviewDetailModal } from '@/components/interviews/InterviewDetailModal';
+import { InterviewWidgets } from '@/components/interviews/prep/InterviewWidgets';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { TableSkeleton } from '@/components/ui/Skeleton';
@@ -168,7 +167,10 @@ export const InterviewsPage: React.FC = () => {
         </div>
       </div>
 
-      {/* 3. Toolbar: Search, Filters & Sorting */}
+      {/* 3. Interview Reusable Widgets (Upcoming & Monthly Pace) */}
+      <InterviewWidgets interviews={interviews} onSelectInterview={(item) => setSelectedDetail(item)} />
+
+      {/* 4. Toolbar: Search, Filters & Sorting */}
       <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft dark:shadow-soft-dark space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
           {/* Search Input */}
@@ -220,7 +222,7 @@ export const InterviewsPage: React.FC = () => {
         </div>
       </div>
 
-      {/* 4. Data Views (Table for Desktop, Cards for Mobile) */}
+      {/* 5. Data Views (Table for Desktop, Cards for Mobile) */}
       {isLoading ? (
         <TableSkeleton />
       ) : isError ? (
