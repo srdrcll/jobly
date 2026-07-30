@@ -3,7 +3,7 @@ import { useOutletContext } from 'react-router-dom';
 import { WelcomeSection } from '@/components/dashboard/WelcomeSection';
 import { QuickActionsSection } from '@/components/dashboard/QuickActionsSection';
 import { KpiCardsGrid } from '@/components/dashboard/KpiCardsGrid';
-import { AnalyticsPlaceholder } from '@/components/dashboard/AnalyticsPlaceholder';
+import { AnalyticsSection } from '@/components/dashboard/AnalyticsSection';
 import { RecentActivityPlaceholder } from '@/components/dashboard/RecentActivityPlaceholder';
 
 export const DashboardPage: React.FC = () => {
@@ -17,7 +17,7 @@ export const DashboardPage: React.FC = () => {
       {/* 2. Quick Actions Section (4 UI Action Buttons) */}
       <QuickActionsSection onOpenNewModal={context?.onOpenNewModal} />
 
-      {/* 3. Reusable KPI Metric Cards Grid (4 Cards) */}
+      {/* 3. Reusable KPI Metric Cards Grid */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
@@ -28,9 +28,11 @@ export const DashboardPage: React.FC = () => {
         <KpiCardsGrid onOpenNewModal={context?.onOpenNewModal} />
       </div>
 
-      {/* 4. Analytics & Activity Feed Container Placeholders */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <AnalyticsPlaceholder />
+      {/* 4. Analytics Visualizations Section (3 Real-time Charts) */}
+      <AnalyticsSection />
+
+      {/* 5. Activity Feed Container Placeholder (Sprint 5.4) */}
+      <div className="grid grid-cols-1 gap-6">
         <RecentActivityPlaceholder />
       </div>
     </div>
