@@ -1,0 +1,31 @@
+export const queryKeys = {
+  applications: {
+    all: ['applications'] as const,
+    lists: () => [...queryKeys.applications.all, 'list'] as const,
+    list: (filters?: Record<string, unknown>) => [...queryKeys.applications.lists(), filters] as const,
+    details: () => [...queryKeys.applications.all, 'detail'] as const,
+    detail: (id: string) => [...queryKeys.applications.details(), id] as const,
+  },
+  companies: {
+    all: ['companies'] as const,
+    lists: () => [...queryKeys.companies.all, 'list'] as const,
+    list: (search?: string) => [...queryKeys.companies.lists(), { search }] as const,
+    detail: (id: string) => [...queryKeys.companies.all, 'detail', id] as const,
+  },
+  templates: {
+    all: ['templates'] as const,
+    lists: () => [...queryKeys.templates.all, 'list'] as const,
+    list: (category?: string) => [...queryKeys.templates.lists(), { category }] as const,
+    detail: (id: string) => [...queryKeys.templates.all, 'detail', id] as const,
+  },
+  reminders: {
+    all: ['reminders'] as const,
+    lists: () => [...queryKeys.reminders.all, 'list'] as const,
+    byApplication: (appId: string) => [...queryKeys.reminders.all, 'application', appId] as const,
+  },
+  documents: {
+    all: ['documents'] as const,
+    lists: () => [...queryKeys.documents.all, 'list'] as const,
+    byApplication: (appId: string) => [...queryKeys.documents.all, 'application', appId] as const,
+  },
+};

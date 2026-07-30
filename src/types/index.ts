@@ -1,5 +1,6 @@
 import { ComponentType } from 'react';
 import { LucideProps } from 'lucide-react';
+import { Database } from './database';
 
 export type ApplicationStatus = 
   | 'saved' 
@@ -38,10 +39,31 @@ export interface ToastMessage {
   duration?: number;
 }
 
+// Database Entity Types
+export type DbApplication = Database['public']['Tables']['applications']['Row'];
+export type DbApplicationInsert = Database['public']['Tables']['applications']['Insert'];
+export type DbApplicationUpdate = Database['public']['Tables']['applications']['Update'];
+
+export type DbCompany = Database['public']['Tables']['companies']['Row'];
+export type DbCompanyInsert = Database['public']['Tables']['companies']['Insert'];
+export type DbCompanyUpdate = Database['public']['Tables']['companies']['Update'];
+
+export type DbTemplate = Database['public']['Tables']['templates']['Row'];
+export type DbTemplateInsert = Database['public']['Tables']['templates']['Insert'];
+export type DbTemplateUpdate = Database['public']['Tables']['templates']['Update'];
+
+export type DbReminder = Database['public']['Tables']['reminders']['Row'];
+export type DbReminderInsert = Database['public']['Tables']['reminders']['Insert'];
+export type DbReminderUpdate = Database['public']['Tables']['reminders']['Update'];
+
+export type DbDocument = Database['public']['Tables']['documents']['Row'];
+export type DbDocumentInsert = Database['public']['Tables']['documents']['Insert'];
+export type DbDocumentUpdate = Database['public']['Tables']['documents']['Update'];
+
+// Legacy UI compatibility models
 export interface ApplicationItem {
   id: string;
   companyName: string;
-  companyLogo?: string;
   position: string;
   location: string;
   workType: 'Remote' | 'Hybrid' | 'On-site';
