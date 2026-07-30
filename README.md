@@ -125,3 +125,16 @@ flowchart TD
 - **Repository Pattern**: Decouples business services from direct database SDK calls, enabling consistent data querying, simplified mock testing, and seamless backend refactoring.
 - **TanStack Query Responsibilities**: Orchestrates asynchronous server state, handles optimistic UI updates, manages background re-validation, and caches data to reduce unnecessary network traffic.
 - **Supabase Responsibilities**: Manages secure user authentication, real-time database subscriptions, PostgreSQL data storage, and Row Level Security (RLS) enforcement per user.
+
+---
+
+## 🗺️ Roadmap
+
+- ✅ **Authentication**
+- ✅ **Applications**
+- 🔄 **Dashboard**
+- ⬜ **Companies**
+- ⬜ **Interview Calendar**
+- ⬜ **Document Manager**
+- ⬜ **AI Resume Analyzer**
+- ⬜ **AI Career Insights**
