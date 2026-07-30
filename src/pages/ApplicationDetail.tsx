@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { 
   ArrowLeft, 
@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { StatusBadge } from '@/components/ui/StatusBadge';
-import { PriorityBadge } from '@/components/common/PriorityBadge';
+import { PriorityBadge, PriorityLevel } from '@/components/common/PriorityBadge';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { ConfirmationDialog } from '@/components/ui/ConfirmationDialog';
 import { EditApplicationModal } from '@/components/applications/EditApplicationModal';
@@ -31,6 +31,7 @@ import {
   useDeleteApplicationMutation 
 } from '@/hooks/queries/useApplicationsQuery';
 import { ApplicationStatus } from '@/types';
+import { formatDate, formatDateTime } from '@/lib/utils';
 
 export const ApplicationDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -42,35 +43,7 @@ export const ApplicationDetailPage: React.FC = () => {
   const { data: application, isLoading, isError, error, refetch } = useApplicationDetailQuery(id);
   const deleteMutation = useDeleteApplicationMutation();
 
-  const formatDate = (dateString?: string | null) => {
-    if (!dateString) return '—';
-    try {
-      return new Date(dateString).toLocaleDateString('tr-TR', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      });
-    } catch {
-      return dateString;
-    }
-  };
-
-  const formatDateTime = (dateString?: string | null) => {
-    if (!dateString) return '—';
-    try {
-      return new Date(dateString).toLocaleString('tr-TR', {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-    } catch {
-      return dateString;
-    }
-  };
-
-  const handleConfirmDelete = async () => {
+  const handleConfirmDelete = useCallback(async () => {
     if (!application?.id) return;
     try {
       await deleteMutation.mutateAsync(application.id);
@@ -79,7 +52,12 @@ export const ApplicationDetailPage: React.FC = () => {
     } catch {
       // Error handled by mutation callback
     }
-  };
+  }, [application?.id, deleteMutation, navigate]);
+
+  const handleOpenEdit = useCallback(() => setIsEditModalOpen(true), []);
+  const handleCloseEdit = useCallback(() => setIsEditModalOpen(false), []);
+  const handleOpenDelete = useCallback(() => setIsDeleteOpen(true), []);
+  const handleCloseDelete = useCallback(() => setIsDeleteOpen(false), []);
 
   if (isLoading) {
     return (
@@ -115,11 +93,16 @@ export const ApplicationDetailPage: React.FC = () => {
         </div>
         <div className="flex items-center justify-center gap-3 pt-2">
           <Link to="/applications">
-            <Button variant="outline" size="sm" leftIcon={<ArrowLeft className="w-4 h-4" />}>
+            <Button variant="outline" size="sm" leftIcon={<ArrowLeft className="w-4 h-4" aria-hidden="true" />}>
               Başvurulara Dön
             </Button>
           </Link>
-          <Button variant="primary" size="sm" onClick={() => refetch()} leftIcon={<RefreshCw className="w-4 h-4" />}>
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => refetch()}
+            leftIcon={<RefreshCw className="w-4 h-4" aria-hidden="true" />}
+          >
             Yeniden Dene
           </Button>
         </div>
@@ -136,7 +119,7 @@ export const ApplicationDetailPage: React.FC = () => {
           <p className="text-xs text-slate-400">İstenen başvuru kaydı veritabanında mevcut değil veya yetkiniz bulunmuyor.</p>
         </div>
         <Link to="/applications" className="inline-block">
-          <Button variant="primary" size="sm" leftIcon={<ArrowLeft className="w-4 h-4" />}>
+          <Button variant="primary" size="sm" leftIcon={<ArrowLeft className="w-4 h-4" aria-hidden="true" />}>
             Başvurulara Dön
           </Button>
         </Link>
@@ -144,6 +127,7 @@ export const ApplicationDetailPage: React.FC = () => {
     );
   }
 
+  // All fields are now properly typed — no more `as any` casts
   const companyInitials = application.company_name
     .split(' ')
     .map((word) => word[0])
@@ -151,12 +135,12 @@ export const ApplicationDetailPage: React.FC = () => {
     .substring(0, 2)
     .toUpperCase();
 
-  const targetRoleDisplay = (application as any).target_role || 'Software Engineer';
-  const priorityDisplay = (application as any).priority || 'Orta';
-  const jobUrl = (application as any).job_url;
-  const contactName = (application as any).contact_name;
-  const contactEmail = (application as any).contact_email;
-  const notes = (application as any).notes;
+  const targetRoleDisplay = application.target_role ?? 'Belirtilmedi';
+  const priorityDisplay = (application.priority ?? 'Orta') as PriorityLevel;
+  const jobUrl = application.job_url;
+  const contactName = application.contact_name;
+  const contactEmail = application.contact_email;
+  const notes = application.notes;
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto animate-fadeIn">
@@ -176,7 +160,7 @@ export const ApplicationDetailPage: React.FC = () => {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setIsEditModalOpen(true)}
+            onClick={handleOpenEdit}
             leftIcon={<Edit3 className="w-4 h-4 text-indigo-400" aria-hidden="true" />}
           >
             Düzenle
@@ -185,7 +169,7 @@ export const ApplicationDetailPage: React.FC = () => {
           <Button
             variant="destructive"
             size="sm"
-            onClick={() => setIsDeleteOpen(true)}
+            onClick={handleOpenDelete}
             leftIcon={<Trash2 className="w-4 h-4" aria-hidden="true" />}
           >
             Sil
@@ -240,14 +224,14 @@ export const ApplicationDetailPage: React.FC = () => {
             <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
               <Building2 className="w-3.5 h-3.5 text-indigo-400" aria-hidden="true" /> Çalışma Modeli
             </span>
-            <p className="text-xs font-bold text-foreground">{application.work_type || 'Belirtilmedi'}</p>
+            <p className="text-xs font-bold text-foreground">{application.work_type ?? 'Belirtilmedi'}</p>
           </div>
 
           <div className="space-y-1">
             <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
               <DollarSign className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" /> Maaş Beklentisi
             </span>
-            <p className="text-xs font-bold text-emerald-400">{application.salary || '—'}</p>
+            <p className="text-xs font-bold text-emerald-400">{application.salary ?? '—'}</p>
           </div>
         </div>
       </div>
@@ -265,7 +249,7 @@ export const ApplicationDetailPage: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
               <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/60 dark:border-slate-800/60 space-y-1">
                 <span className="text-slate-400 font-semibold block">İletişim Kişisi</span>
-                <p className="font-bold text-foreground">{contactName || 'Belirtilmedi'}</p>
+                <p className="font-bold text-foreground">{contactName ?? 'Belirtilmedi'}</p>
               </div>
 
               <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/60 dark:border-slate-800/60 space-y-1">
@@ -349,14 +333,14 @@ export const ApplicationDetailPage: React.FC = () => {
       {/* Edit Modal */}
       <EditApplicationModal
         isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
+        onClose={handleCloseEdit}
         application={application}
       />
 
       {/* Delete Confirmation Dialog */}
       <ConfirmationDialog
         isOpen={isDeleteOpen}
-        onClose={() => setIsDeleteOpen(false)}
+        onClose={handleCloseDelete}
         onConfirm={handleConfirmDelete}
         title="Başvuruyu Sil"
         message={`"${application.company_name} - ${application.position}" iş başvurusunu kalıcı olarak silmek istediğinize emin misiniz? Bu işlem geri alınamaz.`}

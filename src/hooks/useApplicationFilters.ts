@@ -121,7 +121,7 @@ export function useApplicationFilters(applications: DbApplication[] = [], search
       result = result.filter((app) => {
         const companyMatch = app.company_name?.toLowerCase().includes(trimmedQuery);
         const positionMatch = app.position?.toLowerCase().includes(trimmedQuery);
-        const notesMatch = (app as any).notes?.toLowerCase().includes(trimmedQuery);
+        const notesMatch = app.notes?.toLowerCase().includes(trimmedQuery);
         return companyMatch || positionMatch || notesMatch;
       });
     }
@@ -134,7 +134,7 @@ export function useApplicationFilters(applications: DbApplication[] = [], search
     // 3. Priority Multi-select Filter
     if (filters.priorities.length > 0) {
       result = result.filter((app) => {
-        const appPriority = ((app as any).priority || 'Orta') as PriorityLevel;
+        const appPriority = (app.priority ?? 'Orta') as PriorityLevel;
         return filters.priorities.includes(appPriority);
       });
     }
@@ -157,8 +157,8 @@ export function useApplicationFilters(applications: DbApplication[] = [], search
         case 'company-desc':
           return b.company_name.localeCompare(a.company_name, 'tr-TR');
         case 'priority-desc': {
-          const rankA = PRIORITY_RANK[(a as any).priority || 'Orta'] || 2;
-          const rankB = PRIORITY_RANK[(b as any).priority || 'Orta'] || 2;
+          const rankA = PRIORITY_RANK[a.priority ?? 'Orta'] ?? 2;
+          const rankB = PRIORITY_RANK[b.priority ?? 'Orta'] ?? 2;
           return rankB - rankA;
         }
         case 'date-desc':

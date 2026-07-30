@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { 
@@ -12,7 +12,8 @@ import {
   Mail, 
   FileText, 
   Sparkles, 
-  Save 
+  Save,
+  AlertTriangle
 } from 'lucide-react';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
@@ -38,6 +39,7 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
   application,
 }) => {
   const updateMutation = useUpdateApplicationMutation();
+  const [showUnsavedWarning, setShowUnsavedWarning] = useState(false);
 
   const {
     register,
@@ -51,31 +53,36 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
   useEffect(() => {
     if (isOpen && application) {
       reset({
-        company_name: application.company_name || '',
-        position: application.position || '',
-        target_role: (application as any).target_role || 'Software Engineer',
-        status: application.status || 'applied',
+        company_name: application.company_name ?? '',
+        position: application.position ?? '',
+        target_role: application.target_role ?? 'Software Engineer',
+        status: application.status ?? 'applied',
         applied_date: application.applied_date 
           ? new Date(application.applied_date).toISOString().split('T')[0] 
           : '',
-        job_url: (application as any).job_url || '',
-        salary: application.salary || '',
-        work_type: application.work_type || 'Remote',
-        contact_name: (application as any).contact_name || '',
-        contact_email: (application as any).contact_email || '',
-        priority: (application as any).priority || 'Orta',
-        notes: (application as any).notes || '',
-        notes_count: application.notes_count || 0,
+        job_url: application.job_url ?? '',
+        salary: application.salary ?? '',
+        work_type: application.work_type ?? 'Remote',
+        contact_name: application.contact_name ?? '',
+        contact_email: application.contact_email ?? '',
+        priority: application.priority ?? 'Orta',
+        notes: application.notes ?? '',
+        notes_count: application.notes_count ?? 0,
       });
     }
   }, [isOpen, application, reset]);
 
+  // Reset warning state when modal closes
+  useEffect(() => {
+    if (!isOpen) setShowUnsavedWarning(false);
+  }, [isOpen]);
+
   const handleAttemptClose = () => {
     if (isDirty) {
-      const confirmClose = window.confirm('Kaydedilmemiş değişiklikleriniz var. Kapatmak istediğinize emin misiniz?');
-      if (!confirmClose) return;
+      setShowUnsavedWarning(true);
+    } else {
+      onClose();
     }
-    onClose();
   };
 
   const onSubmit = async (values: ApplicationFormValues) => {
@@ -87,17 +94,17 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
         payload: {
           company_name: values.company_name,
           position: values.position,
-          target_role: values.target_role,
+          target_role: values.target_role ?? null,
           status: values.status,
           applied_date: values.applied_date ? new Date(values.applied_date).toISOString() : null,
           job_url: values.job_url || null,
           salary: values.salary || null,
-          work_type: values.work_type || null,
+          work_type: values.work_type ?? null,
           contact_name: values.contact_name || null,
           contact_email: values.contact_email || null,
-          priority: values.priority || 'Orta',
+          priority: values.priority ?? 'Orta',
           notes: values.notes || null,
-        } as any,
+        },
       });
       onClose();
     } catch {
@@ -105,13 +112,51 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
     }
   };
 
+  // Unsaved changes confirmation dialog
+  if (showUnsavedWarning) {
+    return (
+      <Modal
+        isOpen={isOpen}
+        onClose={() => setShowUnsavedWarning(false)}
+        title="Kaydedilmemiş Değişiklikler"
+        icon={<AlertTriangle className="w-5 h-5 text-amber-400" aria-hidden="true" />}
+        maxWidth="sm"
+        footer={
+          <div className="flex items-center justify-end gap-3 w-full">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowUnsavedWarning(false)}
+            >
+              Düzenlemeye Devam Et
+            </Button>
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={() => {
+                setShowUnsavedWarning(false);
+                onClose();
+              }}
+            >
+              Değişiklikleri Sil ve Çık
+            </Button>
+          </div>
+        }
+      >
+        <p className="text-sm text-slate-300 leading-relaxed">
+          Kaydedilmemiş değişiklikleriniz var. Çıkarsanız bu değişiklikler kaybolacaktır.
+        </p>
+      </Modal>
+    );
+  }
+
   return (
     <Modal
       isOpen={isOpen}
       onClose={handleAttemptClose}
       title="Başvuruyu Düzenle"
       description="İş başvurunuza ait bilgileri güncelleyin."
-      size="lg"
+      maxWidth="lg"
       footer={
         <div className="flex items-center justify-end gap-3 w-full">
           <Button
@@ -135,7 +180,7 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
         </div>
       }
     >
-      <form id="edit-application-form" onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form id="edit-application-form" onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
         {/* Required Fields */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
@@ -158,7 +203,7 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Target Role Select */}
           <div className="space-y-1.5 w-full">
-            <label className="block text-xs font-semibold text-slate-300">
+            <label htmlFor="edit-target-role" className="block text-xs font-semibold text-slate-300">
               Hedef Rol *
             </label>
             <div className="relative flex items-center w-full">
@@ -166,6 +211,7 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
                 <Target className="w-4 h-4" />
               </div>
               <select
+                id="edit-target-role"
                 className="w-full h-10 pl-10 pr-3.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
                 {...register('target_role')}
               >
@@ -177,13 +223,13 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
               </select>
             </div>
             {errors.target_role?.message && (
-              <p className="text-[11px] text-rose-400 font-medium">{errors.target_role.message}</p>
+              <p className="text-[11px] text-rose-400 font-medium" role="alert">{errors.target_role.message}</p>
             )}
           </div>
 
           {/* Status Select */}
           <div className="space-y-1.5 w-full">
-            <label className="block text-xs font-semibold text-slate-300">
+            <label htmlFor="edit-status" className="block text-xs font-semibold text-slate-300">
               Başvuru Durumu *
             </label>
             <div className="relative flex items-center w-full">
@@ -191,6 +237,7 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
                 <Sparkles className="w-4 h-4 text-indigo-400" />
               </div>
               <select
+                id="edit-status"
                 className="w-full h-10 pl-10 pr-3.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
                 {...register('status')}
               >
@@ -226,10 +273,11 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
             />
 
             <div className="space-y-1.5 w-full">
-              <label className="block text-xs font-semibold text-slate-300">
+              <label htmlFor="edit-work-type" className="block text-xs font-semibold text-slate-300">
                 Çalışma Modeli
               </label>
               <select
+                id="edit-work-type"
                 className="w-full h-10 px-3.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
                 {...register('work_type')}
               >
@@ -270,17 +318,18 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
 
           {/* Notes Area */}
           <div className="space-y-1.5 w-full">
-            <label className="block text-xs font-semibold text-slate-300 flex items-center gap-1.5">
+            <label htmlFor="edit-notes" className="block text-xs font-semibold text-slate-300 flex items-center gap-1.5">
               <FileText className="w-3.5 h-3.5 text-indigo-400" aria-hidden="true" /> Özel Notlar & Detaylar
             </label>
             <textarea
+              id="edit-notes"
               rows={3}
               placeholder="Mülakat detayları veya notlarınızı ekleyin..."
               className="w-full p-3 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-foreground placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 resize-none"
               {...register('notes')}
             />
             {errors.notes?.message && (
-              <p className="text-[11px] text-rose-400 font-medium">{errors.notes.message}</p>
+              <p className="text-[11px] text-rose-400 font-medium" role="alert">{errors.notes.message}</p>
             )}
           </div>
         </div>

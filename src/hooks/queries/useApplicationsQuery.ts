@@ -51,6 +51,12 @@ export function useCreateApplicationMutation() {
           status: newValues.status,
           applied_date: newValues.applied_date ?? new Date().toISOString(),
           notes_count: newValues.notes_count ?? 0,
+          target_role: newValues.target_role ?? null,
+          priority: newValues.priority ?? 'Orta',
+          job_url: newValues.job_url ?? null,
+          contact_name: newValues.contact_name ?? null,
+          contact_email: newValues.contact_email ?? null,
+          notes: newValues.notes ?? null,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         };

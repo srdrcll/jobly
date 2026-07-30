@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { formatDate } from '@/lib/utils';
 import { 
   Briefcase, 
   Plus, 
@@ -89,19 +90,6 @@ export const ApplicationsPage: React.FC = () => {
     filteredAndSortedApplications,
   } = useApplicationFilters(applications, debouncedSearchQuery);
 
-  const formatDate = useCallback((dateString?: string | null) => {
-    if (!dateString) return '—';
-    try {
-      return new Date(dateString).toLocaleDateString('tr-TR', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      });
-    } catch {
-      return dateString;
-    }
-  }, []);
-
   // Selection Handlers & Auto-Pruning for Filter Changes
   const visibleIds = filteredAndSortedApplications.map((a) => a.id);
 
@@ -137,7 +125,7 @@ export const ApplicationsPage: React.FC = () => {
     }
   }, [isAllSelected, visibleIds]);
 
-  const toggleSelectOne = useCallback((id: string, e: React.MouseEvent) => {
+  const toggleSelectOne = useCallback((id: string, e: React.SyntheticEvent) => {
     e.stopPropagation();
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
@@ -664,8 +652,8 @@ export const ApplicationsPage: React.FC = () => {
                     .substring(0, 2)
                     .toUpperCase();
 
-                  const targetRoleDisplay = (app as any).target_role || 'Software Engineer';
-                  const priorityDisplay = (app as any).priority || 'Orta';
+                  const targetRoleDisplay = app.target_role ?? 'Software Engineer';
+                  const priorityDisplay = (app.priority ?? 'Orta') as PriorityLevel;
                   const isMenuOpen = activeMenuId === app.id;
                   const isSelected = selectedIds.includes(app.id);
 
@@ -684,7 +672,7 @@ export const ApplicationsPage: React.FC = () => {
                         <input
                           type="checkbox"
                           checked={isSelected}
-                          onChange={(e) => toggleSelectOne(app.id, e as any)}
+                          onChange={(e) => toggleSelectOne(app.id, e)}
                           className="w-4 h-4 rounded border-slate-300 dark:border-slate-700 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
                           aria-label={`${app.company_name} başvurusunu seç`}
                         />
@@ -797,8 +785,8 @@ export const ApplicationsPage: React.FC = () => {
                 .substring(0, 2)
                 .toUpperCase();
 
-              const targetRoleDisplay = (app as any).target_role || 'Software Engineer';
-              const priorityDisplay = (app as any).priority || 'Orta';
+              const targetRoleDisplay = app.target_role ?? 'Software Engineer';
+              const priorityDisplay = (app.priority ?? 'Orta') as PriorityLevel;
               const isMenuOpen = activeMenuId === app.id;
               const isSelected = selectedIds.includes(app.id);
 
@@ -812,7 +800,7 @@ export const ApplicationsPage: React.FC = () => {
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3 min-w-0">
-                      <div onClick={(e) => toggleSelectOne(app.id, e as any)}>
+                      <div onClick={(e) => toggleSelectOne(app.id, e)}>
                         <input
                           type="checkbox"
                           checked={isSelected}

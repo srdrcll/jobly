@@ -27,6 +27,12 @@ export const applicationsService = {
       status: validated.status,
       applied_date: validated.applied_date ?? new Date().toISOString(),
       notes_count: validated.notes_count ?? 0,
+      target_role: validated.target_role ?? null,
+      priority: validated.priority ?? 'Orta',
+      job_url: validated.job_url ?? null,
+      contact_name: validated.contact_name ?? null,
+      contact_email: validated.contact_email ?? null,
+      notes: validated.notes ?? null,
     });
   },
 

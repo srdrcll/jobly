@@ -51,7 +51,7 @@ export const applicationsRepository = {
     if (!ids.length) return;
     const { error } = await supabase
       .from('applications')
-      .update({ status } as any)
+      .update({ status })
       .in('id', ids);
 
     if (error) throw handleDatabaseError(error);

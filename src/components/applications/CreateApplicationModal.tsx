@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { 
@@ -12,7 +12,8 @@ import {
   Mail, 
   FileText, 
   Sparkles, 
-  PlusCircle 
+  PlusCircle,
+  AlertTriangle
 } from 'lucide-react';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
@@ -25,6 +26,23 @@ import {
 import { useCreateApplicationMutation } from '@/hooks/queries/useApplicationsQuery';
 import { STATUS_CONFIG } from '@/constants/status';
 
+/** Default values extracted as a constant to prevent duplication. */
+const CREATE_DEFAULTS: ApplicationFormValues = {
+  company_name: '',
+  position: '',
+  target_role: 'Software Engineer',
+  status: 'applied',
+  applied_date: new Date().toISOString().split('T')[0],
+  job_url: '',
+  salary: '',
+  work_type: 'Remote',
+  contact_name: '',
+  contact_email: '',
+  priority: 'Orta',
+  notes: '',
+  notes_count: 0,
+};
+
 interface CreateApplicationModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -35,6 +53,7 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
   onClose,
 }) => {
   const createMutation = useCreateApplicationMutation();
+  const [showUnsavedWarning, setShowUnsavedWarning] = useState(false);
 
   const {
     register,
@@ -43,49 +62,24 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
     formState: { errors, isDirty, isSubmitting },
   } = useForm<ApplicationFormValues>({
     resolver: zodResolver(applicationSchema),
-    defaultValues: {
-      company_name: '',
-      position: '',
-      target_role: 'Software Engineer',
-      status: 'applied',
-      applied_date: new Date().toISOString().split('T')[0],
-      job_url: '',
-      salary: '',
-      work_type: 'Remote',
-      contact_name: '',
-      contact_email: '',
-      priority: 'Orta',
-      notes: '',
-      notes_count: 0,
-    },
+    defaultValues: CREATE_DEFAULTS,
   });
 
+  // Reset form and warning state when modal opens/closes
   useEffect(() => {
     if (isOpen) {
-      reset({
-        company_name: '',
-        position: '',
-        target_role: 'Software Engineer',
-        status: 'applied',
-        applied_date: new Date().toISOString().split('T')[0],
-        job_url: '',
-        salary: '',
-        work_type: 'Remote',
-        contact_name: '',
-        contact_email: '',
-        priority: 'Orta',
-        notes: '',
-        notes_count: 0,
-      });
+      reset({ ...CREATE_DEFAULTS, applied_date: new Date().toISOString().split('T')[0] });
+    } else {
+      setShowUnsavedWarning(false);
     }
   }, [isOpen, reset]);
 
   const handleAttemptClose = () => {
     if (isDirty) {
-      const confirmClose = window.confirm('Kaydedilmemiş değişiklikleriniz var. Kapatmak istediğinize emin misiniz?');
-      if (!confirmClose) return;
+      setShowUnsavedWarning(true);
+    } else {
+      onClose();
     }
-    onClose();
   };
 
   const onSubmit = async (values: ApplicationFormValues) => {
@@ -98,13 +92,51 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
     }
   };
 
+  // Unsaved changes confirmation dialog (accessible alternative to window.confirm)
+  if (showUnsavedWarning) {
+    return (
+      <Modal
+        isOpen={isOpen}
+        onClose={() => setShowUnsavedWarning(false)}
+        title="Kaydedilmemiş Değişiklikler"
+        icon={<AlertTriangle className="w-5 h-5 text-amber-400" aria-hidden="true" />}
+        maxWidth="sm"
+        footer={
+          <div className="flex items-center justify-end gap-3 w-full">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowUnsavedWarning(false)}
+            >
+              Doldurmaya Devam Et
+            </Button>
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={() => {
+                setShowUnsavedWarning(false);
+                onClose();
+              }}
+            >
+              Değişiklikleri Sil ve Çık
+            </Button>
+          </div>
+        }
+      >
+        <p className="text-sm text-slate-300 leading-relaxed">
+          Doldurduğunuz form alanları kaydedilmemiş. Çıkarsanız girdiğiniz bilgiler kaybolacaktır.
+        </p>
+      </Modal>
+    );
+  }
+
   return (
     <Modal
       isOpen={isOpen}
       onClose={handleAttemptClose}
       title="Yeni İş Başvurusu Ekle"
       description="Veritabanınıza yeni bir iş başvurusu kaydı ekleyin."
-      size="lg"
+      maxWidth="lg"
       footer={
         <div className="flex items-center justify-end gap-3 w-full">
           <Button
@@ -127,7 +159,7 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
         </div>
       }
     >
-      <form id="create-application-form" onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form id="create-application-form" onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
         {/* Required Fields Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
@@ -150,7 +182,7 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Target Role Select */}
           <div className="space-y-1.5 w-full">
-            <label className="block text-xs font-semibold text-slate-300">
+            <label htmlFor="create-target-role" className="block text-xs font-semibold text-slate-300">
               Hedef Rol *
             </label>
             <div className="relative flex items-center w-full">
@@ -158,6 +190,7 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
                 <Target className="w-4 h-4" />
               </div>
               <select
+                id="create-target-role"
                 className="w-full h-10 pl-10 pr-3.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
                 {...register('target_role')}
               >
@@ -169,13 +202,13 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
               </select>
             </div>
             {errors.target_role?.message && (
-              <p className="text-[11px] text-rose-400 font-medium">{errors.target_role.message}</p>
+              <p className="text-[11px] text-rose-400 font-medium" role="alert">{errors.target_role.message}</p>
             )}
           </div>
 
           {/* Status Select */}
           <div className="space-y-1.5 w-full">
-            <label className="block text-xs font-semibold text-slate-300">
+            <label htmlFor="create-status" className="block text-xs font-semibold text-slate-300">
               Başvuru Durumu *
             </label>
             <div className="relative flex items-center w-full">
@@ -183,6 +216,7 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
                 <Sparkles className="w-4 h-4 text-indigo-400" />
               </div>
               <select
+                id="create-status"
                 className="w-full h-10 pl-10 pr-3.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
                 {...register('status')}
               >
@@ -218,10 +252,11 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
             />
 
             <div className="space-y-1.5 w-full">
-              <label className="block text-xs font-semibold text-slate-300">
+              <label htmlFor="create-work-type" className="block text-xs font-semibold text-slate-300">
                 Çalışma Modeli
               </label>
               <select
+                id="create-work-type"
                 className="w-full h-10 px-3.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
                 {...register('work_type')}
               >
@@ -262,17 +297,18 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
 
           {/* Notes Area */}
           <div className="space-y-1.5 w-full">
-            <label className="block text-xs font-semibold text-slate-300 flex items-center gap-1.5">
+            <label htmlFor="create-notes" className="block text-xs font-semibold text-slate-300 flex items-center gap-1.5">
               <FileText className="w-3.5 h-3.5 text-indigo-400" aria-hidden="true" /> Özel Notlar & Detaylar
             </label>
             <textarea
+              id="create-notes"
               rows={3}
               placeholder="Mülakat süreci, teknoloji mülakatı detayları veya başvuru notlarınızı ekleyin..."
               className="w-full p-3 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-foreground placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 resize-none"
               {...register('notes')}
             />
             {errors.notes?.message && (
-              <p className="text-[11px] text-rose-400 font-medium">{errors.notes.message}</p>
+              <p className="text-[11px] text-rose-400 font-medium" role="alert">{errors.notes.message}</p>
             )}
           </div>
         </div>

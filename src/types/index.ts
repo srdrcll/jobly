@@ -4,7 +4,7 @@ import { Database } from './database';
 
 export type ApplicationStatus = 
   | 'saved' 
-  | 'applied' 
+  | 'applied'
   | 'contacted'
   | 'interview' 
   | 'case_study' 
@@ -61,19 +61,6 @@ export type DbDocument = Database['public']['Tables']['documents']['Row'];
 export type DbDocumentInsert = Database['public']['Tables']['documents']['Insert'];
 export type DbDocumentUpdate = Database['public']['Tables']['documents']['Update'];
 
-// Legacy UI compatibility models
-export interface ApplicationItem {
-  id: string;
-  companyName: string;
-  position: string;
-  location: string;
-  workType: 'Remote' | 'Hybrid' | 'On-site';
-  salary?: string;
-  status: ApplicationStatus;
-  appliedDate: string;
-  lastUpdated: string;
-  notesCount: number;
-}
 
 export interface CompanyItem {
   id: string;
