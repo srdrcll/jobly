@@ -1,7 +1,11 @@
 import { CoachSession, CareerGoal } from '@/types/aiCoach';
+import { getUserStorageKey } from '@/utils/userStorageUtils';
 
-const SESSIONS_KEY = 'kp_ai_coach_sessions_v1';
-const GOALS_KEY = 'kp_ai_career_goals_v1';
+const SESSIONS_KEY_BASE = 'kp_ai_coach_sessions_v1';
+const GOALS_KEY_BASE = 'kp_ai_career_goals_v1';
+
+const getSessionsKey = () => getUserStorageKey(SESSIONS_KEY_BASE);
+const getGoalsKey = () => getUserStorageKey(GOALS_KEY_BASE);
 
 function getDefaultGoals(): CareerGoal[] {
   return [
@@ -38,7 +42,7 @@ function getDefaultGoals(): CareerGoal[] {
 export const aiCoachRepository = {
   getSessions(): CoachSession[] {
     try {
-      const raw = localStorage.getItem(SESSIONS_KEY);
+      const raw = localStorage.getItem(getSessionsKey());
       return raw ? JSON.parse(raw) : [];
     } catch {
       return [];
@@ -49,7 +53,7 @@ export const aiCoachRepository = {
     try {
       const list = this.getSessions();
       list.unshift(session);
-      localStorage.setItem(SESSIONS_KEY, JSON.stringify(list));
+      localStorage.setItem(getSessionsKey(), JSON.stringify(list));
     } catch (e) {
       console.error('Failed to save coach session', e);
     }
@@ -58,15 +62,15 @@ export const aiCoachRepository = {
   deleteSession(id: string): void {
     const list = this.getSessions();
     const filtered = list.filter((s) => s.id !== id);
-    localStorage.setItem(SESSIONS_KEY, JSON.stringify(filtered));
+    localStorage.setItem(getSessionsKey(), JSON.stringify(filtered));
   },
 
   getGoals(): CareerGoal[] {
     try {
-      const raw = localStorage.getItem(GOALS_KEY);
+      const raw = localStorage.getItem(getGoalsKey());
       if (!raw) {
         const init = getDefaultGoals();
-        localStorage.setItem(GOALS_KEY, JSON.stringify(init));
+        localStorage.setItem(getGoalsKey(), JSON.stringify(init));
         return init;
       }
       return JSON.parse(raw);
@@ -84,7 +88,7 @@ export const aiCoachRepository = {
 
     const list = this.getGoals();
     list.unshift(newGoal);
-    localStorage.setItem(GOALS_KEY, JSON.stringify(list));
+    localStorage.setItem(getGoalsKey(), JSON.stringify(list));
     return newGoal;
   },
 
@@ -93,13 +97,13 @@ export const aiCoachRepository = {
     const target = list.find((g) => g.id === id);
     if (target) {
       target.completed = !target.completed;
-      localStorage.setItem(GOALS_KEY, JSON.stringify(list));
+      localStorage.setItem(getGoalsKey(), JSON.stringify(list));
     }
   },
 
   deleteGoal(id: string): void {
     const list = this.getGoals();
     const filtered = list.filter((g) => g.id !== id);
-    localStorage.setItem(GOALS_KEY, JSON.stringify(filtered));
+    localStorage.setItem(getGoalsKey(), JSON.stringify(filtered));
   },
 };

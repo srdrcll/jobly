@@ -1,7 +1,11 @@
 import { AiConversation, AiMessage, AiSettings } from '@/types/ai';
+import { getUserStorageKey } from '@/utils/userStorageUtils';
 
-const CONVERSATIONS_KEY = 'kp_ai_conversations_v1';
-const SETTINGS_KEY = 'kp_ai_settings_v1';
+const CONVERSATIONS_KEY_BASE = 'kp_ai_conversations_v1';
+const SETTINGS_KEY_BASE = 'kp_ai_settings_v1';
+
+const getConversationsKey = () => getUserStorageKey(CONVERSATIONS_KEY_BASE);
+const getSettingsKey = () => getUserStorageKey(SETTINGS_KEY_BASE);
 
 const DEFAULT_SETTINGS: AiSettings = {
   model: 'gemini-1.5-pro',
@@ -37,10 +41,10 @@ function getInitialConversations(): AiConversation[] {
 export const aiRepository = {
   getConversations(): AiConversation[] {
     try {
-      const raw = localStorage.getItem(CONVERSATIONS_KEY);
+      const raw = localStorage.getItem(getConversationsKey());
       if (!raw) {
         const init = getInitialConversations();
-        localStorage.setItem(CONVERSATIONS_KEY, JSON.stringify(init));
+        localStorage.setItem(getConversationsKey(), JSON.stringify(init));
         return init;
       }
       return JSON.parse(raw);
@@ -99,7 +103,7 @@ export const aiRepository = {
     };
 
     conversations.unshift(newConv);
-    localStorage.setItem(CONVERSATIONS_KEY, JSON.stringify(conversations));
+    localStorage.setItem(getConversationsKey(), JSON.stringify(conversations));
     return newConv;
   },
 
@@ -109,7 +113,7 @@ export const aiRepository = {
     if (target) {
       target.title = newTitle;
       target.updatedAt = new Date().toISOString();
-      localStorage.setItem(CONVERSATIONS_KEY, JSON.stringify(conversations));
+      localStorage.setItem(getConversationsKey(), JSON.stringify(conversations));
     }
   },
 
@@ -118,7 +122,7 @@ export const aiRepository = {
     const target = conversations.find((c) => c.id === id);
     if (target) {
       target.isFavorite = !target.isFavorite;
-      localStorage.setItem(CONVERSATIONS_KEY, JSON.stringify(conversations));
+      localStorage.setItem(getConversationsKey(), JSON.stringify(conversations));
     }
   },
 
@@ -127,14 +131,14 @@ export const aiRepository = {
     const target = conversations.find((c) => c.id === id);
     if (target) {
       target.isArchived = !target.isArchived;
-      localStorage.setItem(CONVERSATIONS_KEY, JSON.stringify(conversations));
+      localStorage.setItem(getConversationsKey(), JSON.stringify(conversations));
     }
   },
 
   deleteConversation(id: string): void {
     const conversations = this.getConversations();
     const filtered = conversations.filter((c) => c.id !== id);
-    localStorage.setItem(CONVERSATIONS_KEY, JSON.stringify(filtered));
+    localStorage.setItem(getConversationsKey(), JSON.stringify(filtered));
   },
 
   addMessage(conversationId: string, role: 'user' | 'assistant', content: string): AiMessage {
@@ -153,7 +157,7 @@ export const aiRepository = {
     if (conv) {
       conv.messages.push(newMessage);
       conv.updatedAt = now;
-      localStorage.setItem(CONVERSATIONS_KEY, JSON.stringify(conversations));
+      localStorage.setItem(getConversationsKey(), JSON.stringify(conversations));
     }
 
     return newMessage;
@@ -174,7 +178,7 @@ export const aiRepository = {
 
   getSettings(): AiSettings {
     try {
-      const raw = localStorage.getItem(SETTINGS_KEY);
+      const raw = localStorage.getItem(getSettingsKey());
       return raw ? JSON.parse(raw) : DEFAULT_SETTINGS;
     } catch {
       return DEFAULT_SETTINGS;
@@ -183,7 +187,7 @@ export const aiRepository = {
 
   saveSettings(settings: AiSettings): void {
     try {
-      localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+      localStorage.setItem(getSettingsKey(), JSON.stringify(settings));
     } catch (e) {
       console.error('Failed to save AI settings', e);
     }

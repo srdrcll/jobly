@@ -1,12 +1,16 @@
 import { ResumeReviewRecord, CoverLetterReviewRecord } from '@/types/aiReview';
+import { getUserStorageKey } from '@/utils/userStorageUtils';
 
-const RESUME_REVIEWS_KEY = 'kp_ai_resume_reviews_v1';
-const COVER_REVIEWS_KEY = 'kp_ai_cover_reviews_v1';
+const RESUME_REVIEWS_KEY_BASE = 'kp_ai_resume_reviews_v1';
+const COVER_REVIEWS_KEY_BASE = 'kp_ai_cover_reviews_v1';
+
+const getResumeReviewsKey = () => getUserStorageKey(RESUME_REVIEWS_KEY_BASE);
+const getCoverReviewsKey = () => getUserStorageKey(COVER_REVIEWS_KEY_BASE);
 
 export const aiReviewRepository = {
   getResumeReviews(): ResumeReviewRecord[] {
     try {
-      const raw = localStorage.getItem(RESUME_REVIEWS_KEY);
+      const raw = localStorage.getItem(getResumeReviewsKey());
       return raw ? JSON.parse(raw) : [];
     } catch {
       return [];
@@ -21,7 +25,7 @@ export const aiReviewRepository = {
       review.version = existingSameFile.length + 1;
 
       list.unshift(review);
-      localStorage.setItem(RESUME_REVIEWS_KEY, JSON.stringify(list));
+      localStorage.setItem(getResumeReviewsKey(), JSON.stringify(list));
     } catch (e) {
       console.error('Failed to save resume review', e);
     }
@@ -30,12 +34,12 @@ export const aiReviewRepository = {
   deleteResumeReview(id: string): void {
     const list = this.getResumeReviews();
     const filtered = list.filter((r) => r.id !== id);
-    localStorage.setItem(RESUME_REVIEWS_KEY, JSON.stringify(filtered));
+    localStorage.setItem(getResumeReviewsKey(), JSON.stringify(filtered));
   },
 
   getCoverLetterReviews(): CoverLetterReviewRecord[] {
     try {
-      const raw = localStorage.getItem(COVER_REVIEWS_KEY);
+      const raw = localStorage.getItem(getCoverReviewsKey());
       return raw ? JSON.parse(raw) : [];
     } catch {
       return [];
@@ -49,7 +53,7 @@ export const aiReviewRepository = {
       review.version = existingSameTitle.length + 1;
 
       list.unshift(review);
-      localStorage.setItem(COVER_REVIEWS_KEY, JSON.stringify(list));
+      localStorage.setItem(getCoverReviewsKey(), JSON.stringify(list));
     } catch (e) {
       console.error('Failed to save cover letter review', e);
     }
@@ -58,6 +62,6 @@ export const aiReviewRepository = {
   deleteCoverLetterReview(id: string): void {
     const list = this.getCoverLetterReviews();
     const filtered = list.filter((r) => r.id !== id);
-    localStorage.setItem(COVER_REVIEWS_KEY, JSON.stringify(filtered));
+    localStorage.setItem(getCoverReviewsKey(), JSON.stringify(filtered));
   },
 };

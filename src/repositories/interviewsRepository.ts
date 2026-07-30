@@ -2,11 +2,13 @@ import { supabase } from '@/lib/supabase';
 import { DbInterview, DbInterviewInsert, DbInterviewUpdate } from '@/types';
 import { handleDatabaseError } from '@/lib/errors';
 
-const LOCAL_STORAGE_KEY = 'kp_interviews_fallback_v1';
+import { getUserStorageKey } from '@/utils/userStorageUtils';
+
+const BASE_STORAGE_KEY = 'kp_interviews_fallback_v1';
 
 function getLocalInterviews(): DbInterview[] {
   try {
-    const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+    const raw = localStorage.getItem(getUserStorageKey(BASE_STORAGE_KEY));
     return raw ? JSON.parse(raw) : [];
   } catch {
     return [];
@@ -15,7 +17,7 @@ function getLocalInterviews(): DbInterview[] {
 
 function saveLocalInterviews(items: DbInterview[]) {
   try {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(items));
+    localStorage.setItem(getUserStorageKey(BASE_STORAGE_KEY), JSON.stringify(items));
   } catch (e) {
     console.error('Failed to save fallback interviews to localStorage', e);
   }
