@@ -3,6 +3,7 @@ import { z } from 'zod';
 export const applicationStatusEnum = z.enum([
   'saved',
   'applied',
+  'contacted',
   'interview',
   'case_study',
   'offer',
