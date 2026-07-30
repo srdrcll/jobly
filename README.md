@@ -9,8 +9,8 @@
 
   <p>
     <a href="#"><img src="https://img.shields.io/badge/Build-Passing-success?style=for-the-badge&logo=github-actions&logoColor=white" alt="Build" /></a>
-    <a href="#"><img src="https://img.shields.io/badge/Current_Release-v0.4.0-blue?style=for-the-badge&logo=git&logoColor=white" alt="Current Release" /></a>
-    <a href="#"><img src="https://img.shields.io/badge/Next_Milestone-Dashboard_%26_Analytics-purple?style=for-the-badge&logo=target&logoColor=white" alt="Next Milestone" /></a>
+    <a href="#"><img src="https://img.shields.io/badge/Current_Release-v0.5.0-blue?style=for-the-badge&logo=git&logoColor=white" alt="Current Release" /></a>
+    <a href="#"><img src="https://img.shields.io/badge/Next_Milestone-Company_Management-purple?style=for-the-badge&logo=target&logoColor=white" alt="Next Milestone" /></a>
     <a href="#"><img src="https://img.shields.io/badge/License-MIT-amber?style=for-the-badge" alt="License" /></a>
     <a href="#"><img src="https://img.shields.io/badge/PRs-Welcome-emerald?style=for-the-badge&logo=github&logoColor=white" alt="PRs Welcome" /></a>
   </p>
@@ -28,6 +28,7 @@
 ### ✨ Key Features
 
 - 🎯 **End-to-End Application Pipeline** — Track job applications seamlessly across structured lifecycle stages (Applied, Screening, Interviewing, Offer, Rejected).
+- 📊 **Real-Time KPI Dashboard & Analytics** — Instant visual charts for status distribution, 6-month application trends, and 7-day activity metrics.
 - ⚡ **Real-Time Search & Smart Filters** — Instantly locate and filter applications by company, position, priority, or remote status with debounced live search.
 - 🔐 **Enterprise-Grade Security** — Powered by Supabase Row Level Security (RLS) to ensure absolute data isolation and privacy for every job seeker.
 - 🎨 **Modern Minimalist UI/UX** — Ultra-responsive dark mode aesthetics built with glassmorphism, clean typography, and fluid micro-interactions.
@@ -55,6 +56,7 @@
 
 - ✅ **Authentication & Security** — Email and password authentication, protected routes, and session persistence via Supabase Auth.
 - ✅ **Application Management** — Full lifecycle tracking (Applied, Interviewing, Offer, Rejected) with salary, notes, and detail views.
+- ✅ **KPI Dashboard & Real-Time Analytics** — Live statistics cards, status distribution donut chart, monthly bar chart, and weekly activity line chart.
 - ✅ **Bulk Operations** — Batch updates, stage transitions, and bulk record deletion for candidate workflows.
 
 ### 🔍 Search & UI Experience
@@ -132,17 +134,21 @@ flowchart TD
 
 ```text
 src/
-├── components/          # Reusable UI components
-├── features/
-│   ├── applications/    # Application management module
-│   ├── auth/            # Authentication module
-│   └── dashboard/       # Dashboard (planned)
-├── hooks/               # Shared custom hooks
-├── lib/                 # Utilities and configurations
-├── repositories/        # Data access layer
-├── services/            # Business logic
-├── types/               # TypeScript definitions
-└── utils/               # Shared helper functions
+├── components/          # Reusable UI primitives and domain components
+│   ├── dashboard/       # Dashboard widgets, KPI cards, charts & insights
+│   ├── applications/    # Application forms & modals
+│   ├── auth/            # Protected/Public route guards
+│   ├── common/          # Page headers, badges & empty states
+│   └── ui/              # Buttons, inputs, modals & table components
+├── constants/           # Route paths & queryKeys
+├── context/             # Auth & Toast context providers
+├── hooks/               # Custom hooks & TanStack Query hooks
+├── lib/                 # Supabase client, error handlers & Zod schemas
+├── pages/               # Dashboard, Applications, Profile & Auth pages
+├── repositories/        # Supabase direct SQL data access layer
+├── services/            # Business & domain logic services
+├── types/               # TypeScript interfaces & database schemas
+└── utils/               # Analytics, activity & interview helpers
 ```
 
 ---
@@ -207,21 +213,22 @@ The long-term vision is to evolve beyond application tracking into an intelligen
 - [x] Bulk Actions
 - [x] Production Hardening
 
-### 🚧 Phase 3 — Dashboard & Analytics
-- [ ] KPI Dashboard
-- [ ] Application Funnel
-- [ ] Activity Timeline
-- [ ] Weekly & Monthly Statistics
-- [ ] Charts & Data Visualization
+### ✅ Phase 3 — Dashboard & Analytics (v0.5.0 Released)
+- [x] KPI Dashboard (6 Live Metrics Cards)
+- [x] Application Funnel & Status Distribution Donut Chart
+- [x] 6-Month Applications Bar Chart
+- [x] 7-Day Activity Line Chart
+- [x] Recent Activity Feed & 24h Urgency Interview Widgets
+- [x] Dynamic AI Career Insights & Quick Actions
 
 ### 🔜 Phase 4 — Productivity
-- [ ] Company Management
-- [ ] Interview Tracker
-- [ ] Notes & Documents
+- [ ] Company Management & CRM
+- [ ] Interview Tracker & Calendar
+- [ ] Notes & Documents Manager
 - [ ] Goal Tracking
 
 ### 🤖 Phase 5 — AI Features
-- [ ] Resume Analyzer
+- [ ] Resume Analyzer & Job Matcher
 - [ ] Cover Letter Assistant
-- [ ] Interview Preparation
-- [ ] Personalized Career Insights
+- [ ] Personalized Interview Q&A
+- [ ] AI Career Insights Engine

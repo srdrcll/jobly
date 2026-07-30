@@ -6,55 +6,56 @@ Build a modern career management platform that helps job seekers organize applic
 
 ---
 
-## Version 0.5 — Dashboard & Analytics
+## ✅ Version 0.5 — Dashboard & Analytics (Released)
 
-- KPI Dashboard
-- Charts & Visualizations
-- Weekly & Monthly Statistics
-- Recent Activity Feed
-- Quick Actions Toolbar
+- [x] KPI Dashboard (6 Live Metrics Cards)
+- [x] Application Status Distribution Donut Chart
+- [x] 6-Month Applications Bar Chart
+- [x] 7-Day Activity Line Chart
+- [x] Recent Activity Feed & 24h Urgency Interview Widgets
+- [x] Dynamic AI Career Insights Engine & Quick Actions
 
 ---
 
-## Version 0.6 — Company Management
+## Version 0.6 — Company Management & CRM
 
-- Company CRM
-- Key Contacts
-- Interview History
-- Notes & Benchmarking
+- Company CRM & Target Companies List
+- Key Contacts & Recruiter Directory
+- Interview History per Company
+- Company Notes & Tech Stack Benchmarking
 
 ---
 
 ## Version 0.7 — Interview Management
 
-- Interview Calendar
-- Event Reminders
-- Timeline View
-- Feedback & Stage Tracking
+- Interactive Interview Calendar
+- Automated Reminders & Notifications
+- Interview Timeline View
+- Feedback & Stage Performance Tracking
 
 ---
 
 ## Version 0.8 — Document Center
 
-- Resume Versions
-- Cover Letters
-- Certificates & Diplomas
-- Application Portfolio Attachments
+- Resume Versions Manager
+- Tailored Cover Letters
+- Certificates & Portfolio Attachments
+- Application Files Storage
 
 ---
 
-## Version 0.9 — AI Features
+## Version 0.9 — AI Intelligence
 
-- Resume Review & Match Scoring
-- Cover Letter Assistant
-- Personalized Interview Preparation
-- AI Career Insights
+- Resume vs Job Match Score
+- AI Cover Letter Assistant
+- Personalized Interview Q&A Generator
+- AI Career Predictive Insights
 
 ---
 
 ## Version 1.0 — Public Release
 
-- Production Deployment
+- Production Public Release
 - Final UI Polish
 - Performance & Query Optimization
 - Comprehensive Public Documentation

@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [v0.5.0] - 2026-07-30
+
+### 🚀 Added
+- **KPI Summary Cards (6 Live Metrics)**: Total Applications, Active Applications, Interviews, Offers, Rejections, and Success Rate (%).
+- **Interactive Analytics Visualizations**:
+  - Status Distribution Donut Chart with percentages and legend
+  - 6-Month Applications Bar Chart
+  - 7-Day Activity Line Chart with day labels
+- **Recent Activity Feed**: Chronological activity stream tracking creations, status transitions, and interview schedules.
+- **Upcoming Interviews Widget**: Nearest interview list with 24-hour urgency highlights and empty states.
+- **Dynamic AI Career Insights**: Automatic recommendations engine generating up to 3 actionable career tips.
+- **Quick Action Cards**: 4 interactive shortcuts (Add Application, View Applications, View Analytics, Manage Profile) with keyboard accessibility.
+
+### ⚡ Performance & Quality
+- Configured TanStack Query cache policies (`staleTime: 2m`, `gcTime: 10m`).
+- Wrapped expensive data aggregations inside `useMemo` hooks.
+- Added comprehensive ARIA tags, keyboard navigation handlers, and focus rings.
+
+---
+
 ## [v0.4.0] - 2026-07-30
 
 ### Added
@@ -15,14 +35,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Search**: Debounced real-time search across company names and job titles.
 - **Filters**: Advanced multi-criteria filtering and column sorting.
 - **Bulk Actions**: Batch update and deletion for candidate workflows.
-
-### Changed
-- **Performance Improvements**: Intelligent TanStack Query caching and zero-latency optimistic UI updates.
-- **UI Consistency**: Standardized dark mode glassmorphic primitives, modals, buttons, and toast notifications.
-
-### Fixed
-- **Responsive Issues**: Layout math across data-dense desktop tables and mobile touch cards.
-- **Validation Bugs**: Form payload sanitization and Zod runtime schema validation.
 
 ---
 
