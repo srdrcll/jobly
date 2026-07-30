@@ -1,15 +1,13 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { User, Session } from '@supabase/supabase-js';
-import { supabase, isSupabaseConfigured, getTurkishAuthErrorMessage } from '@/lib/supabase';
+import { supabase, getTurkishAuthErrorMessage } from '@/lib/supabase';
 import { useToast } from '@/hooks/useToast';
 
 interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
-  isConfigured: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
-  demoLogin: () => void;
   register: (email: string, password: string, fullName: string) => Promise<{ success: boolean; error?: string; requiresVerification?: boolean }>;
   logout: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ success: boolean; error?: string }>;
@@ -18,30 +16,8 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const DEMO_USER: User = {
-  id: 'demo-user-888',
-  app_metadata: { provider: 'email' },
-  user_metadata: { full_name: 'Serdar Çil' },
-  aud: 'authenticated',
-  created_at: new Date().toISOString(),
-  email: 'serdar.cil@example.com',
-  role: 'authenticated',
-  updated_at: new Date().toISOString(),
-};
-
-const DEMO_SESSION: Session = {
-  access_token: 'demo-access-token-123456',
-  token_type: 'bearer',
-  user: DEMO_USER,
-  expires_in: 86400,
-  refresh_token: 'demo-refresh-token-123456',
-};
-
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [session, setSession] = useState<Session | null>(() => {
-    const savedDemo = localStorage.getItem('kp-demo-session');
-    return savedDemo ? JSON.parse(savedDemo) : null;
-  });
+  const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { toast } = useToast();
 
@@ -51,11 +27,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     // Initial Session Restore
     const initSession = async () => {
       try {
-        if (!session) {
-          const { data: { session: initialSession } } = await supabase.auth.getSession();
-          if (initialSession) {
-            setSession(initialSession);
-          }
+        const { data: { session: initialSession } } = await supabase.auth.getSession();
+        if (initialSession) {
+          setSession(initialSession);
         }
       } catch (err: unknown) {
         console.error('Auth init error:', err);
@@ -68,10 +42,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     // Subscribe to Auth State Changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, currentSession) => {
-      if (currentSession) {
-        setSession(currentSession);
-        localStorage.removeItem('kp-demo-session');
-      }
+      setSession(currentSession);
       setLoading(false);
     });
 
@@ -80,19 +51,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
   }, []);
 
-  const demoLogin = () => {
-    setSession(DEMO_SESSION);
-    localStorage.setItem('kp-demo-session', JSON.stringify(DEMO_SESSION));
-    toast.success('Demo Girişi Yapıldı', 'Kariyer Pusulası paneline hoş geldiniz!');
-  };
-
-  const login = async (email: string, password: string) => {
-    // Handle demo account fallback
-    if (email.toLowerCase().includes('demo') || password === 'demo123456' || !isSupabaseConfigured) {
-      demoLogin();
-      return { success: true };
-    }
-
+  const login = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -104,20 +63,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         return { success: false, error: trMessage };
       }
 
+      if (!data.session) {
+        return { success: false, error: 'Oturum oluşturulamadı. Lütfen tekrar deneyin.' };
+      }
+
       setSession(data.session);
-      localStorage.removeItem('kp-demo-session');
       return { success: true };
     } catch (err: unknown) {
       return { success: false, error: getTurkishAuthErrorMessage(err) };
     }
   };
 
-  const register = async (email: string, password: string, fullName: string) => {
-    if (!isSupabaseConfigured) {
-      demoLogin();
-      return { success: true, requiresVerification: false };
-    }
-
+  const register = async (email: string, password: string, fullName: string): Promise<{ success: boolean; error?: string; requiresVerification?: boolean }> => {
     try {
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -147,14 +104,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const logout = async () => {
     try {
-      localStorage.removeItem('kp-demo-session');
-      if (isSupabaseConfigured) {
-        await supabase.auth.signOut();
-      }
+      await supabase.auth.signOut();
       setSession(null);
       toast.info('Oturum Kapatıldı', 'Güvenli bir şekilde çıkış yaptınız.');
     } catch (err: unknown) {
       console.error('Logout error:', err);
+      setSession(null);
     }
   };
 
@@ -197,9 +152,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         user,
         session,
         loading,
-        isConfigured: isSupabaseConfigured,
         login,
-        demoLogin,
         register,
         logout,
         resetPassword,
