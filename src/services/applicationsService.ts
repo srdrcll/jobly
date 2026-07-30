@@ -1,6 +1,6 @@
 import { applicationsRepository } from '@/repositories/applicationsRepository';
 import { applicationSchema, ApplicationFormValues } from '@/lib/validations/applicationSchema';
-import { DbApplication, DbApplicationUpdate } from '@/types';
+import { DbApplication, DbApplicationUpdate, ApplicationStatus } from '@/types';
 import { AppError } from '@/lib/errors';
 
 export const applicationsService = {
@@ -35,8 +35,18 @@ export const applicationsService = {
     return await applicationsRepository.update(id, payload);
   },
 
+  async bulkUpdateStatus(ids: string[], status: ApplicationStatus): Promise<void> {
+    if (!ids.length) throw new AppError('Güncellenecek başvuru seçilmedi.');
+    await applicationsRepository.bulkUpdateStatus(ids, status);
+  },
+
   async deleteApplication(id: string): Promise<void> {
     if (!id) throw new AppError('Silinecek başvuru seçilmedi.');
     await applicationsRepository.delete(id);
+  },
+
+  async bulkDelete(ids: string[]): Promise<void> {
+    if (!ids.length) throw new AppError('Silinecek başvuru seçilmedi.');
+    await applicationsRepository.bulkDelete(ids);
   },
 };

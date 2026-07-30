@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '@/constants/queryKeys';
 import { applicationsService } from '@/services/applicationsService';
 import { ApplicationFormValues } from '@/lib/validations/applicationSchema';
-import { DbApplication, DbApplicationUpdate } from '@/types';
+import { DbApplication, DbApplicationUpdate, ApplicationStatus } from '@/types';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 
@@ -96,6 +96,26 @@ export function useUpdateApplicationMutation() {
   });
 }
 
+export function useBulkUpdateStatusMutation() {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationFn: ({ ids, status }: { ids: string[]; status: ApplicationStatus }) =>
+      applicationsService.bulkUpdateStatus(ids, status),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.applications.lists() });
+      toast.success(
+        'Toplu Durum Güncellendi',
+        `${variables.ids.length} iş başvurusunun durumu başarıyla güncellendi.`
+      );
+    },
+    onError: (error: Error) => {
+      toast.error('Güncelleme Başarısız', error.message || 'Başvurular güncellenirken sorun oluştu.');
+    },
+  });
+}
+
 export function useDeleteApplicationMutation() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -108,6 +128,25 @@ export function useDeleteApplicationMutation() {
     },
     onError: (error: Error) => {
       toast.error('Silme Başarısız', error.message || 'Başvuru silinirken sorun oluştu.');
+    },
+  });
+}
+
+export function useBulkDeleteMutation() {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationFn: (ids: string[]) => applicationsService.bulkDelete(ids),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.applications.lists() });
+      toast.success(
+        'Toplu Silme Başarılı',
+        `${variables.length} iş başvurusu veritabanından kalıcı olarak silindi.`
+      );
+    },
+    onError: (error: Error) => {
+      toast.error('Silme Başarısız', error.message || 'Başvurular silinirken sorun oluştu.');
     },
   });
 }

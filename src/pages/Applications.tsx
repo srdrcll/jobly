@@ -19,7 +19,9 @@ import {
   SearchX,
   X,
   Check,
-  SlidersHorizontal
+  SlidersHorizontal,
+  CheckSquare,
+  Sparkles
 } from 'lucide-react';
 import { PageHeader } from '@/components/common/PageHeader';
 import { Button } from '@/components/ui/Button';
@@ -36,7 +38,9 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { useApplicationFilters, SortOption } from '@/hooks/useApplicationFilters';
 import { 
   useApplicationsListQuery, 
-  useDeleteApplicationMutation 
+  useDeleteApplicationMutation,
+  useBulkUpdateStatusMutation,
+  useBulkDeleteMutation
 } from '@/hooks/queries/useApplicationsQuery';
 import { ApplicationStatus, DbApplication } from '@/types';
 import { STATUS_CONFIG } from '@/constants/status';
@@ -54,6 +58,12 @@ export const ApplicationsPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
+  // Bulk Selection State
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [isBulkStatusMenuOpen, setIsBulkStatusMenuOpen] = useState(false);
+  const [isBulkDeleteOpen, setIsBulkDeleteOpen] = useState(false);
+
+  // Modals & Single Action States
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [editingApplication, setEditingApplication] = useState<DbApplication | null>(null);
   const [deletingApplication, setDeletingApplication] = useState<DbApplication | null>(null);
@@ -65,6 +75,8 @@ export const ApplicationsPage: React.FC = () => {
 
   const { data: applications, isLoading, isError, error, refetch } = useApplicationsListQuery();
   const deleteMutation = useDeleteApplicationMutation();
+  const bulkUpdateMutation = useBulkUpdateStatusMutation();
+  const bulkDeleteMutation = useBulkDeleteMutation();
 
   const {
     filters,
@@ -87,6 +99,48 @@ export const ApplicationsPage: React.FC = () => {
       });
     } catch {
       return dateString;
+    }
+  };
+
+  // Selection Handlers
+  const visibleIds = filteredAndSortedApplications.map((a) => a.id);
+  const isAllSelected = visibleIds.length > 0 && visibleIds.every((id) => selectedIds.includes(id));
+  const isSomeSelected = selectedIds.length > 0;
+
+  const toggleSelectAll = () => {
+    if (isAllSelected) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(visibleIds);
+    }
+  };
+
+  const toggleSelectOne = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+  };
+
+  const handleBulkStatusChange = async (status: ApplicationStatus) => {
+    if (selectedIds.length === 0) return;
+    try {
+      await bulkUpdateMutation.mutateAsync({ ids: selectedIds, status });
+      setSelectedIds([]);
+      setIsBulkStatusMenuOpen(false);
+    } catch {
+      // Handled by mutation error callback
+    }
+  };
+
+  const handleConfirmBulkDelete = async () => {
+    if (selectedIds.length === 0) return;
+    try {
+      await bulkDeleteMutation.mutateAsync(selectedIds);
+      setSelectedIds([]);
+      setIsBulkDeleteOpen(false);
+    } catch {
+      // Handled by mutation error callback
     }
   };
 
@@ -126,6 +180,7 @@ export const ApplicationsPage: React.FC = () => {
     setActiveMenuId(null);
     setIsFilterPopoverOpen(false);
     setIsSortPopoverOpen(false);
+    setIsBulkStatusMenuOpen(false);
   };
 
   const totalCount = applications?.length || 0;
@@ -150,6 +205,77 @@ export const ApplicationsPage: React.FC = () => {
           </Button>
         }
       />
+
+      {/* Floating Bulk Actions Toolbar */}
+      {isSomeSelected && (
+        <div 
+          onClick={(e) => e.stopPropagation()}
+          className="p-4 rounded-2xl bg-indigo-950/90 dark:bg-slate-900/95 border border-indigo-500/40 shadow-2xl flex flex-wrap items-center justify-between gap-4 animate-fadeIn text-white z-20"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 font-bold text-xs">
+              <CheckSquare className="w-4 h-4" aria-hidden="true" />
+            </div>
+            <span className="text-xs font-extrabold text-foreground">
+              {selectedIds.length} başvuru seçildi
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2.5 flex-wrap">
+            {/* Bulk Status Update Dropdown */}
+            <div className="relative">
+              <Button
+                variant="outline"
+                size="sm"
+                className="bg-slate-800 text-slate-200 border-slate-700 hover:bg-slate-700 font-bold"
+                onClick={() => setIsBulkStatusMenuOpen((prev) => !prev)}
+                isLoading={bulkUpdateMutation.isPending}
+                leftIcon={<Sparkles className="w-3.5 h-3.5 text-indigo-400" aria-hidden="true" />}
+              >
+                Durum Değiştir
+              </Button>
+
+              {isBulkStatusMenuOpen && (
+                <div className="absolute right-0 top-12 w-48 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl py-2 z-40 animate-fadeIn text-left">
+                  <span className="px-3.5 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block border-b border-slate-100 dark:border-slate-800 mb-1">
+                    Yeni Durum Seçin
+                  </span>
+                  {Object.entries(STATUS_CONFIG).map(([key, config]) => (
+                    <button
+                      key={key}
+                      onClick={() => handleBulkStatusChange(key as ApplicationStatus)}
+                      className="w-full px-3.5 py-2 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-indigo-500/10 hover:text-indigo-400 transition-colors"
+                    >
+                      {config.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Bulk Delete Trigger */}
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={() => setIsBulkDeleteOpen(true)}
+              isLoading={bulkDeleteMutation.isPending}
+              leftIcon={<Trash2 className="w-3.5 h-3.5" aria-hidden="true" />}
+            >
+              Toplu Sil ({selectedIds.length})
+            </Button>
+
+            {/* Clear Selection */}
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-slate-400 border-slate-700 hover:text-white"
+              onClick={() => setSelectedIds([])}
+            >
+              Seçimi Temizle
+            </Button>
+          </div>
+        </div>
+      )}
 
       {/* Toolbar: Search, Filter, Sort Controls */}
       <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft flex flex-col sm:flex-row items-center justify-between gap-4 relative">
@@ -478,6 +604,16 @@ export const ApplicationsPage: React.FC = () => {
             <Table>
               <TableHeader>
                 <TableRow>
+                  {/* Select All Checkbox Column */}
+                  <TableHead className="w-10">
+                    <input
+                      type="checkbox"
+                      checked={isAllSelected}
+                      onChange={toggleSelectAll}
+                      className="w-4 h-4 rounded border-slate-300 dark:border-slate-700 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+                      aria-label="Tüm gösterilen başvuruları seç"
+                    />
+                  </TableHead>
                   <TableHead>Şirket</TableHead>
                   <TableHead>Pozisyon & Konum</TableHead>
                   <TableHead>Hedef Rol</TableHead>
@@ -499,13 +635,25 @@ export const ApplicationsPage: React.FC = () => {
                   const targetRoleDisplay = (app as any).target_role || 'Software Engineer';
                   const priorityDisplay = (app as any).priority || 'Orta';
                   const isMenuOpen = activeMenuId === app.id;
+                  const isSelected = selectedIds.includes(app.id);
 
                   return (
                     <TableRow 
                       key={app.id} 
                       onClick={() => handleNavigateDetail(app.id)}
-                      className="cursor-pointer"
+                      className={`cursor-pointer transition-colors ${isSelected ? 'bg-indigo-500/10 dark:bg-indigo-500/15' : ''}`}
                     >
+                      {/* Row Checkbox Cell */}
+                      <TableCell onClick={(e) => e.stopPropagation()}>
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={(e) => toggleSelectOne(app.id, e as any)}
+                          className="w-4 h-4 rounded border-slate-300 dark:border-slate-700 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+                          aria-label={`${app.company_name} başvurusunu seç`}
+                        />
+                      </TableCell>
+
                       {/* Company Column */}
                       <TableCell>
                         <div className="flex items-center gap-3">
@@ -614,16 +762,27 @@ export const ApplicationsPage: React.FC = () => {
               const targetRoleDisplay = (app as any).target_role || 'Software Engineer';
               const priorityDisplay = (app as any).priority || 'Orta';
               const isMenuOpen = activeMenuId === app.id;
+              const isSelected = selectedIds.includes(app.id);
 
               return (
                 <div
                   key={app.id}
                   onClick={() => handleNavigateDetail(app.id)}
-                  className="p-4 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft space-y-3 relative cursor-pointer hover:border-indigo-500/30 transition-colors"
+                  className={`p-4 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft space-y-3 relative cursor-pointer transition-colors ${
+                    isSelected ? 'border-indigo-500/60 bg-indigo-500/5 dark:bg-indigo-500/10' : ''
+                  }`}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 font-bold text-xs shrink-0">
+                      <div onClick={(e) => toggleSelectOne(app.id, e as any)}>
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => {}}
+                          className="w-4 h-4 rounded border-slate-300 dark:border-slate-700 text-indigo-600 focus:ring-indigo-500 cursor-pointer mt-1"
+                        />
+                      </div>
+                      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 font-bold text-xs shrink-0">
                         {companyInitials}
                       </div>
                       <div className="min-w-0">
@@ -706,7 +865,7 @@ export const ApplicationsPage: React.FC = () => {
         application={editingApplication}
       />
 
-      {/* Delete Confirmation Dialog */}
+      {/* Single Delete Confirmation Dialog */}
       <ConfirmationDialog
         isOpen={Boolean(deletingApplication)}
         onClose={() => setDeletingApplication(null)}
@@ -721,6 +880,19 @@ export const ApplicationsPage: React.FC = () => {
         cancelText="İptal"
         variant="danger"
         isLoading={deleteMutation.isPending}
+      />
+
+      {/* Bulk Delete Confirmation Dialog */}
+      <ConfirmationDialog
+        isOpen={isBulkDeleteOpen}
+        onClose={() => setIsBulkDeleteOpen(false)}
+        onConfirm={handleConfirmBulkDelete}
+        title="Toplu Başvuru Silme"
+        message={`Seçilen ${selectedIds.length} iş başvurusunu veritabanından kalıcı olarak silmek istediğinize emin misiniz? Bu işlem geri alınamaz.`}
+        confirmText={`Seçilen ${selectedIds.length} Başvuruyu Sil`}
+        cancelText="İptal"
+        variant="danger"
+        isLoading={bulkDeleteMutation.isPending}
       />
     </div>
   );
