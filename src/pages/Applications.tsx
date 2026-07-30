@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Briefcase, 
@@ -89,7 +89,7 @@ export const ApplicationsPage: React.FC = () => {
     filteredAndSortedApplications,
   } = useApplicationFilters(applications, debouncedSearchQuery);
 
-  const formatDate = (dateString?: string | null) => {
+  const formatDate = useCallback((dateString?: string | null) => {
     if (!dateString) return '—';
     try {
       return new Date(dateString).toLocaleDateString('tr-TR', {
@@ -100,7 +100,7 @@ export const ApplicationsPage: React.FC = () => {
     } catch {
       return dateString;
     }
-  };
+  }, []);
 
   // Selection Handlers & Auto-Pruning for Filter Changes
   const visibleIds = filteredAndSortedApplications.map((a) => a.id);
@@ -112,25 +112,39 @@ export const ApplicationsPage: React.FC = () => {
     }
   }, [debouncedSearchQuery, filters]);
 
+  // Global ESC Key Listener for Keyboard Accessibility
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setActiveMenuId(null);
+        setIsFilterPopoverOpen(false);
+        setIsSortPopoverOpen(false);
+        setIsBulkStatusMenuOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   const isAllSelected = visibleIds.length > 0 && visibleIds.every((id) => selectedIds.includes(id));
   const isSomeSelected = selectedIds.length > 0;
 
-  const toggleSelectAll = () => {
+  const toggleSelectAll = useCallback(() => {
     if (isAllSelected) {
       setSelectedIds([]);
     } else {
       setSelectedIds(visibleIds);
     }
-  };
+  }, [isAllSelected, visibleIds]);
 
-  const toggleSelectOne = (id: string, e: React.MouseEvent) => {
+  const toggleSelectOne = useCallback((id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
     );
-  };
+  }, []);
 
-  const handleBulkStatusChange = async (status: ApplicationStatus) => {
+  const handleBulkStatusChange = useCallback(async (status: ApplicationStatus) => {
     if (selectedIds.length === 0) return;
     try {
       await bulkUpdateMutation.mutateAsync({ ids: selectedIds, status });
@@ -139,9 +153,9 @@ export const ApplicationsPage: React.FC = () => {
     } catch {
       // Handled by mutation error callback
     }
-  };
+  }, [selectedIds, bulkUpdateMutation]);
 
-  const handleConfirmBulkDelete = async () => {
+  const handleConfirmBulkDelete = useCallback(async () => {
     if (selectedIds.length === 0) return;
     try {
       await bulkDeleteMutation.mutateAsync(selectedIds);
@@ -150,30 +164,30 @@ export const ApplicationsPage: React.FC = () => {
     } catch {
       // Handled by mutation error callback
     }
-  };
+  }, [selectedIds, bulkDeleteMutation]);
 
-  const toggleMenu = (id: string, e: React.MouseEvent) => {
+  const toggleMenu = useCallback((id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     setActiveMenuId((prev) => (prev === id ? null : id));
-  };
+  }, []);
 
-  const handleNavigateDetail = (id: string) => {
+  const handleNavigateDetail = useCallback((id: string) => {
     navigate(`/applications/${id}`);
-  };
+  }, [navigate]);
 
-  const handleOpenEdit = (app: DbApplication, e: React.MouseEvent) => {
+  const handleOpenEdit = useCallback((app: DbApplication, e: React.MouseEvent) => {
     e.stopPropagation();
     setActiveMenuId(null);
     setEditingApplication(app);
-  };
+  }, []);
 
-  const handleOpenDelete = (app: DbApplication, e: React.MouseEvent) => {
+  const handleOpenDelete = useCallback((app: DbApplication, e: React.MouseEvent) => {
     e.stopPropagation();
     setActiveMenuId(null);
     setDeletingApplication(app);
-  };
+  }, []);
 
-  const handleConfirmDelete = async () => {
+  const handleConfirmDelete = useCallback(async () => {
     if (!deletingApplication?.id) return;
 
     try {
@@ -182,14 +196,14 @@ export const ApplicationsPage: React.FC = () => {
     } catch {
       // Error handled by mutation callback
     }
-  };
+  }, [deletingApplication, deleteMutation]);
 
-  const closeAllPopovers = () => {
+  const closeAllPopovers = useCallback(() => {
     setActiveMenuId(null);
     setIsFilterPopoverOpen(false);
     setIsSortPopoverOpen(false);
     setIsBulkStatusMenuOpen(false);
-  };
+  }, []);
 
   const totalCount = applications?.length || 0;
   const currentDisplayedCount = filteredAndSortedApplications.length;
@@ -218,10 +232,10 @@ export const ApplicationsPage: React.FC = () => {
       {isSomeSelected && (
         <div 
           onClick={(e) => e.stopPropagation()}
-          className="p-4 rounded-2xl bg-slate-900/90 dark:bg-slate-950/95 backdrop-blur-md border border-indigo-500/40 shadow-2xl flex flex-wrap items-center justify-between gap-4 animate-fadeIn text-white z-20 sticky top-4"
+          className="p-4 rounded-2xl bg-slate-900/90 dark:bg-slate-950/95 backdrop-blur-md border border-indigo-500/40 shadow-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-fadeIn text-white z-20 sticky top-4"
         >
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500/30 to-purple-500/30 border border-indigo-500/40 flex items-center justify-center text-indigo-400 font-bold text-xs shadow-xs">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500/30 to-purple-500/30 border border-indigo-500/40 flex items-center justify-center text-indigo-400 font-bold text-xs shadow-xs shrink-0">
               <CheckSquare className="w-4 h-4" aria-hidden="true" />
             </div>
             <div>
@@ -234,12 +248,14 @@ export const ApplicationsPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-2.5 flex-wrap">
+          <div className="flex items-center gap-2.5 flex-wrap w-full sm:w-auto justify-end">
             {/* Bulk Status Update Dropdown */}
             <div className="relative">
               <Button
                 variant="outline"
                 size="sm"
+                aria-haspopup="true"
+                aria-expanded={isBulkStatusMenuOpen}
                 className="bg-slate-800 text-slate-200 border-slate-700 hover:bg-slate-700 font-bold shadow-xs"
                 onClick={() => setIsBulkStatusMenuOpen((prev) => !prev)}
                 isLoading={bulkUpdateMutation.isPending}
@@ -308,6 +324,7 @@ export const ApplicationsPage: React.FC = () => {
             <Button
               variant={activeFiltersCount > 0 ? 'primary' : 'outline'}
               size="sm"
+              aria-haspopup="true"
               aria-expanded={isFilterPopoverOpen}
               aria-controls="filter-popover-menu"
               aria-label="Filtreleme Menüsünü Aç/Kapat"
@@ -430,6 +447,7 @@ export const ApplicationsPage: React.FC = () => {
             <Button
               variant="outline"
               size="sm"
+              aria-haspopup="true"
               aria-expanded={isSortPopoverOpen}
               aria-controls="sort-popover-menu"
               aria-label="Sıralama Menüsünü Aç/Kapat"
@@ -733,6 +751,8 @@ export const ApplicationsPage: React.FC = () => {
                           className="p-1.5 rounded-lg text-slate-400 hover:text-foreground hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                           title="İşlem Menüsü"
                           aria-label="İşlem Menüsü"
+                          aria-haspopup="true"
+                          aria-expanded={isMenuOpen}
                         >
                           <MoreHorizontal className="w-4 h-4" aria-hidden="true" />
                         </button>
@@ -816,6 +836,8 @@ export const ApplicationsPage: React.FC = () => {
                         className="p-1.5 text-slate-400 hover:text-foreground rounded-lg"
                         title="İşlem Menüsü"
                         aria-label="İşlem Menüsü"
+                        aria-haspopup="true"
+                        aria-expanded={isMenuOpen}
                       >
                         <MoreHorizontal className="w-4 h-4" aria-hidden="true" />
                       </button>
