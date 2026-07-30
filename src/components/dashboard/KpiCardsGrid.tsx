@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { 
   Briefcase, 
   Clock, 
@@ -38,20 +38,10 @@ export function calculateKpiMetrics(applications: DbApplication[] = []): KpiMetr
   }
 
   const total = applications.length;
-
-  // Active: Not rejected and not saved (ongoing recruitment pipeline)
-  const active = applications.filter(a => a.status !== 'rejected' && a.status !== 'saved').length;
-
-  // Interviews: interview or case_study or contacted
-  const interviews = applications.filter(a => a.status === 'interview' || a.status === 'case_study' || a.status === 'contacted').length;
-
-  // Offers
-  const offers = applications.filter(a => a.status === 'offer').length;
-
-  // Rejections
-  const rejections = applications.filter(a => a.status === 'rejected').length;
-
-  // Success Rate (%): Percentage of applications reaching interview or offer
+  const active = applications.filter((a) => a.status !== 'rejected' && a.status !== 'saved').length;
+  const interviews = applications.filter((a) => a.status === 'interview' || a.status === 'case_study' || a.status === 'contacted').length;
+  const offers = applications.filter((a) => a.status === 'offer').length;
+  const rejections = applications.filter((a) => a.status === 'rejected').length;
   const positiveOutcomes = offers + interviews;
   const successRate = total > 0 ? Number(((positiveOutcomes / total) * 100).toFixed(1)) : 0;
 
@@ -72,26 +62,32 @@ interface KpiCardsGridProps {
 export const KpiCardsGrid: React.FC<KpiCardsGridProps> = ({ onOpenNewModal }) => {
   const { data: applications = [], isLoading, isError, error, refetch } = useApplicationsListQuery();
 
+  // Memoize metric calculations to prevent re-computation on unrelated re-renders
+  const metrics = useMemo(() => calculateKpiMetrics(applications), [applications]);
+
   // 1. Loading Skeleton State
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+      <section aria-label="Yükleniyor..." className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
         <CardSkeleton />
         <CardSkeleton />
         <CardSkeleton />
         <CardSkeleton />
         <CardSkeleton />
         <CardSkeleton />
-      </div>
+      </section>
     );
   }
 
   // 2. Query Error State
   if (isError) {
     return (
-      <div className="p-5 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-300 flex items-center justify-between gap-4">
+      <div 
+        role="alert"
+        className="p-5 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-300 flex items-center justify-between gap-4"
+      >
         <div className="flex items-center gap-3">
-          <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />
+          <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" aria-hidden="true" />
           <div className="text-xs">
             <p className="font-bold text-rose-200">İstatistikler Yüklenemedi</p>
             <p className="text-rose-300/80">{error?.message || 'Veritabanı bağlantısı sırasında bir sorun oluştu.'}</p>
@@ -102,7 +98,8 @@ export const KpiCardsGrid: React.FC<KpiCardsGridProps> = ({ onOpenNewModal }) =>
           size="sm"
           onClick={() => refetch()}
           leftIcon={<RefreshCw className="w-3.5 h-3.5" />}
-          className="border-rose-500/30 text-rose-300 hover:bg-rose-500/20 shrink-0"
+          className="border-rose-500/30 text-rose-300 hover:bg-rose-500/20 shrink-0 focus-visible:ring-2 focus-visible:ring-rose-500"
+          aria-label="İstatistikleri tekrar yükle"
         >
           Tekrar Dene
         </Button>
@@ -110,12 +107,10 @@ export const KpiCardsGrid: React.FC<KpiCardsGridProps> = ({ onOpenNewModal }) =>
     );
   }
 
-  // 3. Compute Metrics
-  const metrics = calculateKpiMetrics(applications);
   const isEmpty = applications.length === 0;
 
   return (
-    <div className="space-y-4 animate-fadeIn">
+    <section aria-label="Canlı İstatistik Metrikleri" className="space-y-4 animate-fadeIn">
       {/* Empty State Banner (If no applications exist yet) */}
       {isEmpty && (
         <div className="p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
@@ -131,7 +126,8 @@ export const KpiCardsGrid: React.FC<KpiCardsGridProps> = ({ onOpenNewModal }) =>
               size="sm"
               leftIcon={<Plus className="w-4 h-4" />}
               onClick={onOpenNewModal}
-              className="shrink-0"
+              className="shrink-0 focus-visible:ring-2 focus-visible:ring-indigo-500"
+              aria-label="İlk İş Başvurusunu Ekle"
             >
               İlk Başvuruyu Ekle
             </Button>
@@ -141,7 +137,6 @@ export const KpiCardsGrid: React.FC<KpiCardsGridProps> = ({ onOpenNewModal }) =>
 
       {/* Responsive 6 KPI Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-        {/* KPI 1: Total Applications */}
         <KpiCard
           title="Toplam Başvuru"
           value={metrics.total}
@@ -152,7 +147,6 @@ export const KpiCardsGrid: React.FC<KpiCardsGridProps> = ({ onOpenNewModal }) =>
           iconBgClass="bg-indigo-500/10 text-indigo-500 border border-indigo-500/20"
         />
 
-        {/* KPI 2: Active Applications */}
         <KpiCard
           title="Aktif Başvurular"
           value={metrics.active}
@@ -163,7 +157,6 @@ export const KpiCardsGrid: React.FC<KpiCardsGridProps> = ({ onOpenNewModal }) =>
           iconBgClass="bg-purple-500/10 text-purple-400 border border-purple-500/20"
         />
 
-        {/* KPI 3: Interviews */}
         <KpiCard
           title="Mülakat Sürecinde"
           value={metrics.interviews}
@@ -174,7 +167,6 @@ export const KpiCardsGrid: React.FC<KpiCardsGridProps> = ({ onOpenNewModal }) =>
           iconBgClass="bg-amber-500/10 text-amber-500 border border-amber-500/20"
         />
 
-        {/* KPI 4: Offers */}
         <KpiCard
           title="Alınan Teklifler"
           value={metrics.offers}
@@ -185,7 +177,6 @@ export const KpiCardsGrid: React.FC<KpiCardsGridProps> = ({ onOpenNewModal }) =>
           iconBgClass="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
         />
 
-        {/* KPI 5: Rejections */}
         <KpiCard
           title="Reddedilenler"
           value={metrics.rejections}
@@ -196,7 +187,6 @@ export const KpiCardsGrid: React.FC<KpiCardsGridProps> = ({ onOpenNewModal }) =>
           iconBgClass="bg-rose-500/10 text-rose-400 border border-rose-500/20"
         />
 
-        {/* KPI 6: Success Rate (%) */}
         <KpiCard
           title="Başarı Oranı"
           value={`%${metrics.successRate}`}
@@ -207,6 +197,6 @@ export const KpiCardsGrid: React.FC<KpiCardsGridProps> = ({ onOpenNewModal }) =>
           iconBgClass="bg-teal-500/10 text-teal-400 border border-teal-500/20"
         />
       </div>
-    </div>
+    </section>
   );
 };
