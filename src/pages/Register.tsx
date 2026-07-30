@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { UserPlus, Mail, Lock, User, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 
 export const RegisterPage: React.FC = () => {
@@ -10,18 +11,33 @@ export const RegisterPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+  const { register } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
 
-    setTimeout(() => {
-      setIsLoading(false);
-      toast.success('Hesap Oluşturuldu', 'Kariyer Pusulası hesabınız oluşturuldu, giriş yapılıyor.');
-      navigate('/dashboard');
-    }, 800);
+    if (password.length < 6) {
+      toast.error('Geçersiz Şifre', 'Şifreniz en az 6 karakterden oluşmalıdır.');
+      return;
+    }
+
+    setIsLoading(true);
+    const res = await register(email, password, fullName);
+    setIsLoading(false);
+
+    if (res.success) {
+      if (res.requiresVerification) {
+        toast.info('Doğrulama E-postası Gönderildi', 'Hesabınızı aktif etmek için lütfen e-postanıza gönderilen doğrulama bağlantısına tıklayın.');
+        navigate('/login');
+      } else {
+        toast.success('Kayıt Başarılı', 'Kariyer Pusulası hesabınız oluşturuldu.');
+        navigate('/dashboard');
+      }
+    } else {
+      toast.error('Kayıt Başarısız', res.error || 'Kayıt olunurken bir hata oluştu.');
+    }
   };
 
   return (
@@ -39,6 +55,7 @@ export const RegisterPage: React.FC = () => {
           label="Ad Soyad"
           type="text"
           required
+          disabled={isLoading}
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
           placeholder="örn. Serdar Çil"
@@ -49,6 +66,7 @@ export const RegisterPage: React.FC = () => {
           label="E-Posta Adresi"
           type="email"
           required
+          disabled={isLoading}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="ornek@domain.com"
@@ -59,9 +77,10 @@ export const RegisterPage: React.FC = () => {
           label="Şifre"
           type="password"
           required
+          disabled={isLoading}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="En az 8 karakter"
+          placeholder="En az 6 karakter"
           leftIcon={<Lock className="w-4 h-4" aria-hidden="true" />}
         />
 

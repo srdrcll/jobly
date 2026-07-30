@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   User, 
   Mail, 
@@ -6,31 +6,76 @@ import {
   Briefcase, 
   Globe, 
   Award, 
-  Edit3 
+  Lock, 
+  ShieldCheck, 
+  Save, 
+  Calendar 
 } from 'lucide-react';
 import { PageHeader } from '@/components/common/PageHeader';
 import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 
 export const ProfilePage: React.FC = () => {
+  const { user, updatePassword } = useAuth();
   const { toast } = useToast();
 
-  const handleSaveProfile = () => {
-    toast.success('Profil Güncellendi', 'Kariyer profil değişiklikleriniz kaydedildi.');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+
+  const fullName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Kullanıcı';
+  const email = user?.email || 'ornek@domain.com';
+
+  const avatarInitials = fullName
+    .split(' ')
+    .map((part: string) => part.charAt(0))
+    .join('')
+    .substring(0, 2)
+    .toUpperCase();
+
+  const createdAt = user?.created_at
+    ? new Date(user.created_at).toLocaleDateString('tr-TR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    : 'Bilinmiyor';
+
+  const handlePasswordChange = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (newPassword !== confirmPassword) {
+      toast.error('Şifreler Eşleşmiyor', 'Lütfen yeni şifrenizi tekrar doğrulayın.');
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      toast.error('Geçersiz Şifre', 'Şifreniz en az 6 karakterden oluşmalıdır.');
+      return;
+    }
+
+    setIsUpdatingPassword(true);
+    const res = await updatePassword(newPassword);
+    setIsUpdatingPassword(false);
+
+    if (res.success) {
+      toast.success('Şifre Güncellendi', 'Hesap şifreniz başarıyla değiştirildi.');
+      setNewPassword('');
+      setConfirmPassword('');
+    } else {
+      toast.error('Güncelleme Başarısız', res.error || 'Şifre değiştirilirken bir sorun oluştu.');
+    }
   };
 
   return (
     <div className="space-y-6 animate-fadeIn max-w-4xl mx-auto">
       <PageHeader
         title="Profilim"
-        description="Kişisel özgeçmiş detaylarınız, yetenekleriniz ve kariyer hedefleriniz."
+        description="Doğrulanmış Supabase oturum bilgileriniz ve hesap güvenliği."
         icon={User}
-        badge="Pro Üye"
-        actionSlot={
-          <Button variant="primary" size="sm" leftIcon={<Edit3 className="w-4 h-4" aria-hidden="true" />} onClick={handleSaveProfile}>
-            Profili Düzenle
-          </Button>
-        }
+        badge="Aktif Oturum"
       />
 
       {/* Main Profile Header Card */}
@@ -39,86 +84,95 @@ export const ProfilePage: React.FC = () => {
 
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
           <div className="w-24 h-24 rounded-3xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white text-3xl font-black shadow-xl shrink-0">
-            SÇ
+            {avatarInitials}
           </div>
 
           <div className="flex-1 text-center sm:text-left space-y-2">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
-                <h2 className="text-2xl font-extrabold text-foreground">Serdar Çil</h2>
-                <p className="text-sm font-semibold text-indigo-500">Senior Full Stack Engineer & UI/UX Designer</p>
+                <h2 className="text-2xl font-extrabold text-foreground">{fullName}</h2>
+                <p className="text-sm font-semibold text-indigo-500">{email}</p>
               </div>
               <span className="self-center sm:self-auto px-3 py-1 text-xs font-bold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" /> İş Fırsatlarına Açık
+                <ShieldCheck className="w-4 h-4 text-emerald-400" aria-hidden="true" /> Doğrulanmış Kullanıcı
               </span>
             </div>
 
             <p className="text-xs text-slate-400 leading-relaxed pt-1">
-              8+ yıllık modern web mimarisi, React, TypeScript, Next.js ve TailwindCSS deneyimine sahip full stack mühendis. Yüksek performanslı SaaS platformları tasarlamada uzman.
+              Supabase Auth ile korunan oturum. İş başvurularınız ve kariyer hedefleriniz bu hesap altında saklanır.
             </p>
 
             <div className="pt-4 flex flex-wrap items-center justify-center sm:justify-start gap-4 text-xs text-slate-400 border-t border-slate-100 dark:border-slate-800/60">
               <span className="flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-indigo-400" aria-hidden="true" /> İstanbul, Türkiye
+                <Mail className="w-3.5 h-3.5 text-indigo-400" aria-hidden="true" /> {email}
               </span>
               <span className="flex items-center gap-1.5">
-                <Mail className="w-3.5 h-3.5 text-indigo-400" aria-hidden="true" /> serdar.cil@example.com
-              </span>
-              <span className="flex items-center gap-1.5">
-                <Globe className="w-3.5 h-3.5 text-indigo-400" aria-hidden="true" /> serdarcil.dev
+                <Calendar className="w-3.5 h-3.5 text-indigo-400" aria-hidden="true" /> Kayıt Tarihi: {createdAt}
               </span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Profile Details Sections */}
+      {/* Password Change & Security Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Skills & Stack */}
-        <div className="p-6 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft">
-          <h3 className="text-base font-bold text-foreground mb-4 flex items-center gap-2">
-            <Award className="w-4 h-4 text-indigo-400" aria-hidden="true" /> Yetenekler & Teknolojiler
+        {/* Security / Password Update Form */}
+        <div className="p-6 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft space-y-4">
+          <h3 className="text-base font-bold text-foreground flex items-center gap-2">
+            <Lock className="w-4 h-4 text-indigo-400" aria-hidden="true" /> Şifre Değiştir
           </h3>
-          <div className="flex flex-wrap gap-2">
-            {[
-              'React 18',
-              'TypeScript',
-              'Next.js',
-              'TailwindCSS',
-              'Node.js',
-              'GraphQL',
-              'Vite',
-              'System Design',
-              'UI/UX Architecture',
-              'Jest / RTL',
-            ].map((skill) => (
-              <span
-                key={skill}
-                className="px-3 py-1 text-xs font-semibold rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-300 border border-slate-200 dark:border-slate-700/60"
-              >
-                {skill}
-              </span>
-            ))}
-          </div>
+          <form onSubmit={handlePasswordChange} className="space-y-3">
+            <Input
+              label="Yeni Şifre"
+              type="password"
+              required
+              disabled={isUpdatingPassword}
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              placeholder="En az 6 karakter"
+              leftIcon={<Lock className="w-4 h-4" aria-hidden="true" />}
+            />
+
+            <Input
+              label="Yeni Şifre (Tekrar)"
+              type="password"
+              required
+              disabled={isUpdatingPassword}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="••••••••"
+              leftIcon={<Lock className="w-4 h-4" aria-hidden="true" />}
+            />
+
+            <Button
+              type="submit"
+              variant="primary"
+              size="sm"
+              isLoading={isUpdatingPassword}
+              leftIcon={<Save className="w-4 h-4" aria-hidden="true" />}
+            >
+              Şifreyi Güncelle
+            </Button>
+          </form>
         </div>
 
-        {/* Career Preferences */}
-        <div className="p-6 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft">
-          <h3 className="text-base font-bold text-foreground mb-4 flex items-center gap-2">
-            <Briefcase className="w-4 h-4 text-indigo-400" aria-hidden="true" /> Kariyer Tercihleri
+        {/* Account Info Card */}
+        <div className="p-6 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft space-y-4">
+          <h3 className="text-base font-bold text-foreground flex items-center gap-2">
+            <Award className="w-4 h-4 text-indigo-400" aria-hidden="true" /> Oturum Detayları
           </h3>
           <div className="space-y-3 text-xs text-slate-300">
             <div className="flex justify-between py-1.5 border-b border-slate-100 dark:border-slate-800/60">
-              <span className="text-slate-400">Hedef Pozisyon:</span>
-              <span className="font-semibold text-foreground">Lead / Staff Frontend Engineer</span>
+              <span className="text-slate-400">User ID (UUID):</span>
+              <span className="font-mono text-[11px] text-indigo-400 truncate max-w-[180px]">{user?.id || '—'}</span>
             </div>
             <div className="flex justify-between py-1.5 border-b border-slate-100 dark:border-slate-800/60">
-              <span className="text-slate-400">Çalışma Tipi:</span>
-              <span className="font-semibold text-foreground">Remote veya Hybrid</span>
+              <span className="text-slate-400">E-Posta Doğrulandı mı:</span>
+              <span className="font-semibold text-emerald-400">{user?.email_confirmed_at ? 'Evet' : 'Evet (Test Modu)'}</span>
             </div>
             <div className="flex justify-between py-1.5">
-              <span className="text-slate-400">Maaş Beklentisi:</span>
-              <span className="font-semibold text-emerald-400">95,000 TRY+ / Ay veya $90k+ USD</span>
+              <span className="text-slate-400">Son Giriş:</span>
+              <span className="font-semibold text-foreground">Bugün</span>
             </div>
           </div>
         </div>

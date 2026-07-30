@@ -3,9 +3,11 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { RootLayout } from '@/layouts/RootLayout';
 import { DashboardLayout } from '@/layouts/DashboardLayout';
 import { AuthLayout } from '@/layouts/AuthLayout';
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
+import { PublicRoute } from '@/components/auth/PublicRoute';
 import { CardSkeleton } from '@/components/ui/Skeleton';
 
-// Code-Split Route Pages for Optimal Performance
+// Code-Split Route Pages
 const DashboardPage = lazy(() => import('@/pages/Dashboard').then(m => ({ default: m.DashboardPage })));
 const ApplicationsPage = lazy(() => import('@/pages/Applications').then(m => ({ default: m.ApplicationsPage })));
 const CompaniesPage = lazy(() => import('@/pages/Companies').then(m => ({ default: m.CompaniesPage })));
@@ -15,6 +17,8 @@ const SettingsPage = lazy(() => import('@/pages/Settings').then(m => ({ default:
 const LandingPage = lazy(() => import('@/pages/Landing').then(m => ({ default: m.LandingPage })));
 const LoginPage = lazy(() => import('@/pages/Login').then(m => ({ default: m.LoginPage })));
 const RegisterPage = lazy(() => import('@/pages/Register').then(m => ({ default: m.RegisterPage })));
+const ForgotPasswordPage = lazy(() => import('@/pages/ForgotPassword').then(m => ({ default: m.ForgotPasswordPage })));
+const ResetPasswordPage = lazy(() => import('@/pages/ResetPassword').then(m => ({ default: m.ResetPasswordPage })));
 
 const LoadingFallback = () => (
   <div className="p-8 max-w-5xl mx-auto space-y-4 animate-fadeIn">
@@ -33,24 +37,30 @@ export function App() {
       <Suspense fallback={<LoadingFallback />}>
         <Routes>
           <Route element={<RootLayout />}>
-            {/* Main SaaS App Layout */}
-            <Route element={<DashboardLayout />}>
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
-              <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/applications" element={<ApplicationsPage />} />
-              <Route path="/companies" element={<CompaniesPage />} />
-              <Route path="/templates" element={<TemplatesPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/settings" element={<SettingsPage />} />
+            {/* Protected SaaS App Routes */}
+            <Route element={<ProtectedRoute />}>
+              <Route element={<DashboardLayout />}>
+                <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/applications" element={<ApplicationsPage />} />
+                <Route path="/companies" element={<CompaniesPage />} />
+                <Route path="/templates" element={<TemplatesPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/settings" element={<SettingsPage />} />
+              </Route>
             </Route>
 
-            {/* Auth & Marketing Layout */}
-            <Route element={<AuthLayout />}>
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
+            {/* Public Only Auth Routes (Redirects to /dashboard if logged in) */}
+            <Route element={<PublicRoute />}>
+              <Route element={<AuthLayout />}>
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+                <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                <Route path="/reset-password" element={<ResetPasswordPage />} />
+              </Route>
             </Route>
 
-            {/* Standalone Landing Page */}
+            {/* Public Marketing Landing Page */}
             <Route path="/landing" element={<LandingPage />} />
 
             {/* Catch-all redirect */}

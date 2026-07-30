@@ -13,6 +13,7 @@ import {
   ShieldCheck 
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks/useAuth';
 
 interface SidebarProps {
   isCollapsed: boolean;
@@ -25,6 +26,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onToggleCollapse,
   onMobileClose,
 }) => {
+  const { user, logout } = useAuth();
+
+  const fullName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Kullanıcı';
+  const avatarInitials = fullName
+    .split(' ')
+    .map((part: string) => part.charAt(0))
+    .join('')
+    .substring(0, 2)
+    .toUpperCase();
+
   return (
     <aside
       className={cn(
@@ -195,29 +206,33 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div className="p-2.5 rounded-2xl bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
             <div className="flex items-center gap-2.5 min-w-0">
               <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-xs shrink-0 shadow-sm">
-                SÇ
+                {avatarInitials}
               </div>
               <div className="flex flex-col min-w-0">
-                <span className="text-xs font-bold text-foreground truncate">Serdar Çil</span>
+                <span className="text-xs font-bold text-foreground truncate">{fullName}</span>
                 <span className="text-[10px] text-slate-400 truncate flex items-center gap-1">
                   <ShieldCheck className="w-3 h-3 text-emerald-500 inline" aria-hidden="true" /> Pro Plan
                 </span>
               </div>
             </div>
-            <NavLink
-              to="/login"
+            <button
+              onClick={() => logout()}
               className="p-1.5 text-slate-400 hover:text-rose-500 transition-colors rounded-lg"
               title="Çıkış Yap"
               aria-label="Çıkış Yap"
             >
               <LogOut className="w-4 h-4" aria-hidden="true" />
-            </NavLink>
+            </button>
           </div>
         ) : (
           <div className="flex justify-center">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-xs shadow-md">
-              SÇ
-            </div>
+            <button
+              onClick={() => logout()}
+              className="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-xs shadow-md hover:opacity-90 transition-opacity"
+              title="Çıkış Yap"
+            >
+              {avatarInitials}
+            </button>
           </div>
         )}
       </div>

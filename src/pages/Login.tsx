@@ -1,26 +1,35 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { LogIn, Mail, Lock, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 
 export const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+  const { login } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/dashboard';
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    setTimeout(() => {
-      setIsLoading(false);
+    const res = await login(email, password);
+    setIsLoading(false);
+
+    if (res.success) {
       toast.success('Giriş Başarılı', 'Kariyer Pusulası paneline yönlendiriliyorsunuz.');
-      navigate('/dashboard');
-    }, 800);
+      navigate(from, { replace: true });
+    } else {
+      toast.error('Giriş Başarısız', res.error || 'E-posta veya şifrenizi kontrol edin.');
+    }
   };
 
   return (
@@ -38,6 +47,7 @@ export const LoginPage: React.FC = () => {
           label="E-Posta Adresi"
           type="email"
           required
+          disabled={isLoading}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="ornek@domain.com"
@@ -47,11 +57,14 @@ export const LoginPage: React.FC = () => {
         <div className="space-y-1.5">
           <div className="flex items-center justify-between">
             <label className="block text-xs font-semibold text-slate-300">Şifre</label>
-            <a href="#" className="text-[11px] text-indigo-400 hover:underline">Şifremi Unuttum?</a>
+            <Link to="/forgot-password" className="text-[11px] text-indigo-400 hover:underline">
+              Şifremi Unuttum?
+            </Link>
           </div>
           <Input
             type="password"
             required
+            disabled={isLoading}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
