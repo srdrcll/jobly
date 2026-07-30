@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '@/constants/queryKeys';
 import { applicationsService } from '@/services/applicationsService';
 import { ApplicationFormValues } from '@/lib/validations/applicationSchema';
-import { DbApplicationUpdate } from '@/types';
+import { DbApplication, DbApplicationUpdate } from '@/types';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 
@@ -25,12 +25,46 @@ export function useCreateApplicationMutation() {
       if (!user?.id) throw new Error('Oturum açmış kullanıcı bulunamadı.');
       return applicationsService.createApplication(user.id, values);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.applications.lists() });
-      toast.success('Başvuru Oluşturuldu', 'Yeni iş başvurusu başarıyla veritabanına eklendi.');
+    onMutate: async (newValues) => {
+      await queryClient.cancelQueries({ queryKey: queryKeys.applications.lists() });
+      const previousApplications = queryClient.getQueryData<DbApplication[]>(queryKeys.applications.lists());
+
+      if (previousApplications && user?.id) {
+        const optimisticApp: DbApplication = {
+          id: `temp-${Date.now()}`,
+          user_id: user.id,
+          company_id: newValues.company_id ?? null,
+          company_name: newValues.company_name,
+          position: newValues.position,
+          location: newValues.location ?? null,
+          work_type: newValues.work_type ?? null,
+          salary: newValues.salary ?? null,
+          status: newValues.status,
+          applied_date: newValues.applied_date ?? new Date().toISOString(),
+          notes_count: newValues.notes_count ?? 0,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+
+        queryClient.setQueryData<DbApplication[]>(
+          queryKeys.applications.lists(),
+          [optimisticApp, ...previousApplications]
+        );
+      }
+
+      return { previousApplications };
     },
-    onError: (error: Error) => {
+    onError: (error: Error, _variables, context) => {
+      if (context?.previousApplications) {
+        queryClient.setQueryData(queryKeys.applications.lists(), context.previousApplications);
+      }
       toast.error('İşlem Başarısız', error.message || 'Başvuru eklenirken bir sorun oluştu.');
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.applications.lists() });
+    },
+    onSuccess: () => {
+      toast.success('Başvuru Oluşturuldu', 'Yeni iş başvurusu başarıyla veritabanına eklendi.');
     },
   });
 }

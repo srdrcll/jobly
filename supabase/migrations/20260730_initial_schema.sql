@@ -36,6 +36,10 @@ CREATE TRIGGER update_companies_updated_at
 BEFORE UPDATE ON companies
 FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+-- Indexes for companies
+CREATE INDEX IF NOT EXISTS idx_companies_user_id ON companies(user_id);
+CREATE INDEX IF NOT EXISTS idx_companies_status ON companies(status);
+
 -- RLS: companies
 ALTER TABLE companies ENABLE ROW LEVEL SECURITY;
 
@@ -80,6 +84,12 @@ CREATE TRIGGER update_applications_updated_at
 BEFORE UPDATE ON applications
 FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+-- Indexes for applications
+CREATE INDEX IF NOT EXISTS idx_applications_user_id ON applications(user_id);
+CREATE INDEX IF NOT EXISTS idx_applications_company_id ON applications(company_id);
+CREATE INDEX IF NOT EXISTS idx_applications_status ON applications(status);
+CREATE INDEX IF NOT EXISTS idx_applications_created_at ON applications(created_at DESC);
+
 -- RLS: applications
 ALTER TABLE applications ENABLE ROW LEVEL SECURITY;
 
@@ -121,6 +131,10 @@ CREATE TRIGGER update_templates_updated_at
 BEFORE UPDATE ON templates
 FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+-- Indexes for templates
+CREATE INDEX IF NOT EXISTS idx_templates_user_id ON templates(user_id);
+CREATE INDEX IF NOT EXISTS idx_templates_category ON templates(category);
+
 -- RLS: templates
 ALTER TABLE templates ENABLE ROW LEVEL SECURITY;
 
@@ -161,6 +175,11 @@ CREATE TRIGGER update_reminders_updated_at
 BEFORE UPDATE ON reminders
 FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+-- Indexes for reminders
+CREATE INDEX IF NOT EXISTS idx_reminders_user_id ON reminders(user_id);
+CREATE INDEX IF NOT EXISTS idx_reminders_application_id ON reminders(application_id);
+CREATE INDEX IF NOT EXISTS idx_reminders_due_date ON reminders(due_date ASC);
+
 -- RLS: reminders
 ALTER TABLE reminders ENABLE ROW LEVEL SECURITY;
 
@@ -200,6 +219,10 @@ CREATE TABLE IF NOT EXISTS documents (
 CREATE TRIGGER update_documents_updated_at
 BEFORE UPDATE ON documents
 FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- Indexes for documents
+CREATE INDEX IF NOT EXISTS idx_documents_user_id ON documents(user_id);
+CREATE INDEX IF NOT EXISTS idx_documents_application_id ON documents(application_id);
 
 -- RLS: documents
 ALTER TABLE documents ENABLE ROW LEVEL SECURITY;

@@ -7,7 +7,9 @@ export const reminderSchema = z.object({
     .min(1, 'Başlık boş bırakılamaz.')
     .max(120, 'Başlık en fazla 120 karakter olabilir.'),
   description: z.string().max(300).nullable().optional(),
-  due_date: z.string({ required_error: 'Tarih seçimi zorunludur.' }),
+  due_date: z
+    .string({ required_error: 'Tarih seçimi zorunludur.' })
+    .min(1, 'Tarih alanı boş bırakılamaz.'),
   is_completed: z.boolean().default(false),
 });
 
