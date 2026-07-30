@@ -4,13 +4,13 @@
   <h3><i>Personal Applicant Tracking System (ATS) & Candidate CRM for Ambitious Job Seekers</i></h3>
 
   <p>
-    <b>Take complete command of your job search and networking with an intuitive, data-driven SaaS workspace.</b>
+    <b>Take complete command of your job search, interviews, and networking with an intuitive, data-driven SaaS workspace.</b>
   </p>
 
   <p>
     <a href="#"><img src="https://img.shields.io/badge/Build-Passing-success?style=for-the-badge&logo=github-actions&logoColor=white" alt="Build" /></a>
-    <a href="#"><img src="https://img.shields.io/badge/Current_Release-v0.6.0-blue?style=for-the-badge&logo=git&logoColor=white" alt="Current Release" /></a>
-    <a href="#"><img src="https://img.shields.io/badge/Next_Milestone-Interview_Management-purple?style=for-the-badge&logo=target&logoColor=white" alt="Next Milestone" /></a>
+    <a href="#"><img src="https://img.shields.io/badge/Current_Release-v0.7.0-blue?style=for-the-badge&logo=git&logoColor=white" alt="Current Release" /></a>
+    <a href="#"><img src="https://img.shields.io/badge/Next_Milestone-Document_Center-purple?style=for-the-badge&logo=target&logoColor=white" alt="Next Milestone" /></a>
     <a href="#"><img src="https://img.shields.io/badge/License-MIT-amber?style=for-the-badge" alt="License" /></a>
     <a href="#"><img src="https://img.shields.io/badge/PRs-Welcome-emerald?style=for-the-badge&logo=github&logoColor=white" alt="PRs Welcome" /></a>
   </p>
@@ -28,9 +28,10 @@
 ### ✨ Key Features
 
 - 🎯 **End-to-End Application Pipeline** — Track job applications seamlessly across structured lifecycle stages (Applied, Screening, Interviewing, Offer, Rejected).
+- 📅 **Interview Management & Interactive Calendar** — Schedule technical interviews, İK randevuları, interactive month calendar, prep checklists, and self-evaluations.
 - 🏢 **Company Management & Candidate CRM** — Store target companies, recruiter contacts, interaction logs, pinned notes, and company-specific follow-up tasks.
-- 📊 **Real-Time KPI Dashboard & Analytics** — Instant visual charts for status distribution, 6-month application trends, and 7-day activity metrics.
-- ⚡ **Real-Time Search & Smart Filters** — Instantly locate and filter applications and companies by industry, size, priority, or remote status.
+- 📊 **Real-Time KPI Dashboard & Analytics** — Instant visual charts for status distribution, 6-month application trends, interview success rates, and weekly activity metrics.
+- ⚡ **Real-Time Search & Smart Filters** — Instantly locate and filter applications, companies, and interviews by industry, stage, result, or meeting type.
 - 🔐 **Enterprise-Grade Security** — Powered by Supabase Row Level Security (RLS) to ensure absolute data isolation and privacy for every job seeker.
 - 🎨 **Modern Minimalist UI/UX** — Ultra-responsive dark mode aesthetics built with glassmorphism, clean typography, and fluid micro-interactions.
 
@@ -57,8 +58,8 @@
 - ✅ **Authentication & Security** — Email and password authentication, protected routes, and session persistence via Supabase Auth.
 - ✅ **Application Management** — Full lifecycle tracking (Applied, Interviewing, Offer, Rejected) with salary, notes, and detail views.
 - ✅ **Company Management & CRM** — Manage target companies, recruiters, interaction logs, pinned notes, and company-specific tasks.
+- ✅ **Interview Management & Calendar (v0.7.0)** — Complete interview scheduling, interactive month grid calendar, preparation checklists, post-interview evaluations, and countdown widgets.
 - ✅ **KPI Dashboard & Real-Time Analytics** — Live statistics cards, status distribution donut chart, monthly bar chart, and weekly activity line chart.
-- ✅ **Bulk Operations** — Batch updates, stage transitions, bulk archive, and bulk record deletion for candidate workflows.
 
 ---
 
@@ -79,11 +80,13 @@
 ### ✅ Phase 4 — Company Management & CRM (v0.6.0 Released)
 - [x] Company CRUD & Dedicated Profiles (`/companies/:id`)
 - [x] Recruiter Directory & Networking
-- [x] Interaction Log (LinkedIn, Email, Calls, Meetings)
-- [x] Pinned Notes & Task Tracking
-- [x] Company Analytics Charts & Bulk Actions
 
-### 🔜 Phase 5 — Interview Management
-- [ ] Interactive Interview Calendar
-- [ ] Automated Reminders & Notifications
-- [ ] Stage Performance Tracking
+### ✅ Phase 5 — Interview Management & Calendar (v0.7.0 Released)
+- [x] Interview CRUD & Dedicated Route (`/interviews`)
+- [x] Interactive Month Calendar View
+- [x] Preparation Checklists & Post-Interview Evaluations
+- [x] Countdown Banner & Real-Time Analytics Charts
+
+### 🔜 Phase 6 — Document Center & Resume Management
+- [ ] Document Storage & Version Control
+- [ ] Cover Letter & Resume Generator
