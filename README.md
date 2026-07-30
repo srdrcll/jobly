@@ -1,152 +1,47 @@
-# 🧭 Kariyer Pusulası (Career Compass)
+<div align="center">
 
-![React](https://img.shields.io/badge/React-19-blue)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
-![Supabase](https://img.shields.io/badge/Supabase-Backend-green)
-![Status](https://img.shields.io/badge/Status-Production%20Ready-success)
-![License](https://img.shields.io/badge/License-MIT-yellow)
+  <h1>🧭 Kariyer Pusulası</h1>
+  <h3><i>Personal Applicant Tracking System (ATS) for Ambitious Job Seekers</i></h3>
 
-> Modern, minimalist ve yüksek performanslı iş başvurusu, şirket ve mülakat takip SaaS platformu. Linear, Notion, Vercel ve Stripe panellerinden ilham alınarak tasarlanmıştır.
+  <p>
+    <b>Take complete command of your job search with an intuitive, data-driven SaaS workspace.</b>
+  </p>
 
----
+  <p>
+    <a href="#"><img src="https://img.shields.io/badge/Status-Active_Development-brightgreen?style=for-the-badge&logo=rocket&logoColor=white" alt="Status" /></a>
+    <a href="#"><img src="https://img.shields.io/badge/Version-v0.4.0-blue?style=for-the-badge&logo=git&logoColor=white" alt="Version" /></a>
+    <a href="#"><img src="https://img.shields.io/badge/License-MIT-amber?style=for-the-badge" alt="License" /></a>
+    <a href="#"><img src="https://img.shields.io/badge/PRs-Welcome-emerald?style=for-the-badge&logo=github&logoColor=white" alt="PRs Welcome" /></a>
+  </p>
 
-# 🚀 Release Notes: Kariyer Pusulası v0.4.0
-
-The Applications module has reached production-ready quality.
-
-This release introduces a complete Applicant Tracking System (ATS) workflow with authentication, advanced application management, search, filtering, bulk operations, and production hardening.
-
----
-
-## ✨ Highlights
-
-### 🔐 Authentication
-
-- Secure Supabase Authentication
-- Login / Register
-- Password Reset
-- Email Verification
-- Protected Routes
-- Session Persistence
+</div>
 
 ---
 
-### 📋 Application Management
+### 📌 Purpose
 
-- Create Application
-- Edit Application
-- Delete Application
-- Application Detail Page
+**Kariyer Pusulası** is a modern, candidate-centric Applicant Tracking System (ATS) engineered specifically for job seekers, not recruiters. Traditional job hunting relies on scattered spreadsheets and lost email threads; Kariyer Pusulası centralizes application tracking, interview timelines, company research, and analytics into a cohesive, high-performance SaaS workspace inspired by top-tier tools like Linear and Notion.
 
 ---
 
-### 🔍 Search & Organization
+### ✨ Key Features
 
-- Real-time Search
-- Advanced Filtering
-- Sorting
-- Bulk Actions
-- Responsive Table & Card Views
-
----
-
-### 🛡️ Security
-
-- Supabase Row Level Security (RLS)
-- User Data Isolation
-- Secure API Access
-- Input Validation with Zod
+- 🎯 **End-to-End Application Pipeline** — Track job applications seamlessly across structured lifecycle stages (Applied, Screening, Interviewing, Offer, Rejected).
+- ⚡ **Real-Time Search & Smart Filters** — Instantly locate and filter applications by company, position, priority, or remote status with debounced live search.
+- 🔐 **Enterprise-Grade Security** — Powered by Supabase Row Level Security (RLS) to ensure absolute data isolation and privacy for every job seeker.
+- 🎨 **Modern Minimalist UI/UX** — Ultra-responsive dark mode aesthetics built with glassmorphism, clean typography, and fluid micro-interactions.
+- 🚀 **Optimistic Data Operations** — High-speed interactivity driven by TanStack Query for zero-latency state updates and robust caching.
 
 ---
 
-### ⚡ Performance
+### 🛠️ Tech Stack
 
-- TanStack Query
-- Optimistic Updates
-- Debounced Search
-- Memoized Filtering
-- Efficient Data Fetching
-
----
-
-### 🎨 User Experience
-
-- Dark Theme
-- Glassmorphism UI
-- Loading States
-- Empty States
-- Error States
-- Toast Notifications
-- Mobile Responsive Design
-
----
-
-### 🧩 Tech Stack
-
-- React
-- TypeScript
-- Vite
-- TailwindCSS
-- React Router
-- Supabase
-- TanStack Query
-- React Hook Form
-- Zod
-
----
-
-## 📈 Project Status
-
-Current Progress:
-- ✅ Foundation
-- ✅ Authentication
-- ✅ Database Architecture
-- ✅ Applications Module (Production Ready)
-
----
-
-## 🔜 Next Release
-
-Dashboard & Analytics:
-- KPI Dashboard
-- Charts
-- Interview Timeline
-- Activity Feed
-- Business Insights
-
----
-
-## 🚀 Proje Yapısı
-
-```
-src/
-├── components/          # Reusable UI Primitives ve Ortak Bileşenler
-│   ├── applications/    # CreateApplicationModal, EditApplicationModal
-│   ├── auth/            # ProtectedRoute, PublicRoute
-│   ├── common/          # PageHeader, StatisticCard, EmptyState, PriorityBadge
-│   └── ui/              # Button, Input, StatusBadge, Modal, Toast, Skeleton, Table
-├── constants/           # Navigasyon rotaları, queryKeys ve durum renk tanımları
-├── context/             # AuthContext, ToastContext
-├── hooks/               # useAuth, useToast, useDebounce, useApplicationFilters, queries/
-├── layouts/             # DashboardLayout, AuthLayout, RootLayout, Sidebar, TopNavbar
-├── lib/                 # supabase, errors, queryClient, utils, validations/
-├── pages/               # Dashboard, Applications, ApplicationDetail, Companies, Templates, Profile, Settings, Landing, Login, Register
-├── repositories/        # applicationsRepository (Supabase Direct SQL)
-├── services/            # applicationsService (Business Logic & Zod Validation)
-└── types/               # Sıkı TypeScript arayüzleri & Database types
-```
-
----
-
-## ⚙️ Kurulum ve Çalıştırma
-
-```bash
-# Bağımlılıkları yükleyin
-npm install
-
-# Geliştirme sunucusunu başlatın
-npm run dev
-
-# Üretim derlemesi oluşturun
-npm run build
-```
+<p align="center">
+  <img src="https://img.shields.io/badge/React_19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19" />
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
+  <img src="https://img.shields.io/badge/Supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
+  <img src="https://img.shields.io/badge/TanStack_Query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white" alt="TanStack Query" />
+  <img src="https://img.shields.io/badge/Zod-3E67B1?style=for-the-badge&logo=zod&logoColor=white" alt="Zod" />
+</p>
