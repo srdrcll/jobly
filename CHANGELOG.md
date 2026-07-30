@@ -7,42 +7,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.4.0] - 2026-07-30
+## [v0.4.0] - 2026-07-30
 
-### 🚀 Added
-- **Applications Module**: Complete Applicant Tracking System workflow with full CRUD capabilities.
-- **Real-Time Search & Filtering**: Debounced live search across company names and job titles with multi-criteria filtering.
-- **Bulk Operations**: Multi-select application management for batch updates and deletion.
-- **Responsive Layout**: High-density desktop table layout auto-adapting to touch cards on mobile devices.
-- **Zod Validation**: Strict schema validation across all application forms and API payloads.
+### Added
+- **Authentication**: Secure Supabase Login, Register, and Password Reset flow.
+- **Applications Module**: Full lifecycle Application CRUD management.
+- **Search**: Debounced real-time search across company names and job titles.
+- **Filters**: Advanced multi-criteria filtering and column sorting.
+- **Bulk Actions**: Batch update and deletion for candidate workflows.
 
-### 🛡️ Security & Performance
-- Enforced Supabase Row Level Security (RLS) policies for user data isolation.
-- Integrated TanStack Query for optimistic UI updates and zero-latency state synchronization.
+### Changed
+- **Performance Improvements**: Intelligent TanStack Query caching and zero-latency optimistic UI updates.
+- **UI Consistency**: Standardized dark mode glassmorphic primitives, modals, buttons, and toast notifications.
 
----
-
-## [0.3.0] - 2026-07-25
-
-### 🚀 Added
-- PostgreSQL database schemas for `applications`, `profiles`, and `companies`.
-- Supabase direct SQL repository layer (`src/repositories/`).
-- Initial Row Level Security (RLS) policies.
+### Fixed
+- **Responsive Issues**: Layout math across data-dense desktop tables and mobile touch cards.
+- **Validation Bugs**: Form payload sanitization and Zod runtime schema validation.
 
 ---
 
-## [0.2.0] - 2026-07-20
+## [v0.3.0] - 2026-07-25
 
-### 🚀 Added
-- Supabase Authentication integration (Login, Registration, Password Reset).
-- Protected & Public client-side route guards (`src/components/auth/`).
-- Session persistence and `AuthContext` state provider.
+### Added
+- Database Architecture & PostgreSQL schemas for `applications`, `profiles`, and `companies`.
+- Supabase direct SQL Repository layer pattern (`src/repositories/`).
+- Supabase Row Level Security (RLS) policies for user data isolation.
 
 ---
 
-## [0.1.0] - 2026-07-15
+## [v0.2.0] - 2026-07-20
 
-### 🚀 Added
-- Initialized React 19 + TypeScript + Vite project foundation.
-- Configured Tailwind CSS with custom glassmorphism design tokens.
-- Standardized UI component primitives (`Button`, `Input`, `Modal`, `StatusBadge`).
+### Added
+- Supabase Auth integration and Protected/Public route guards.
+- User session persistence and `AuthContext` state provider.
+
+---
+
+## [v0.1.0] - 2026-07-15
+
+### Added
+- React 19 + TypeScript + Vite project foundation.
+- Tailwind CSS styling and glassmorphic UI design tokens.
