@@ -14,6 +14,9 @@ import { CompanyProfileTimeline } from '@/components/companies/CompanyProfileTim
 import { CompanyProfileContacts } from '@/components/companies/CompanyProfileContacts';
 import { CompanyProfileRelatedApps } from '@/components/companies/CompanyProfileRelatedApps';
 import { CompanyProfileAttachments } from '@/components/companies/CompanyProfileAttachments';
+import { CompanyCrmInteractions } from '@/components/companies/crm/CompanyCrmInteractions';
+import { CompanyCrmNotes } from '@/components/companies/crm/CompanyCrmNotes';
+import { CompanyCrmTasks } from '@/components/companies/crm/CompanyCrmTasks';
 import { EditCompanyModal } from '@/components/companies/EditCompanyModal';
 import { CardSkeleton } from '@/components/ui/Skeleton';
 import { Button } from '@/components/ui/Button';
@@ -107,16 +110,25 @@ export const CompanyDetailPage: React.FC = () => {
       {/* Section 2: Application Relationship Statistics */}
       <CompanyProfileMetrics metrics={metrics} />
 
-      {/* Section 3: 2-Column Grid for Timeline & Contacts */}
+      {/* Section 3: CRM Tasks & Follow-up Actions */}
+      <CompanyCrmTasks companyId={company.id} />
+
+      {/* Section 4: 2-Column Grid for Interactions Log & Pinned Notes */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <CompanyCrmInteractions companyId={company.id} />
+        <CompanyCrmNotes companyId={company.id} />
+      </div>
+
+      {/* Section 5: Timeline & Contacts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <CompanyProfileTimeline timelineEvents={timelineEvents} />
         <CompanyProfileContacts contacts={contacts} />
       </div>
 
-      {/* Section 4: Related Applications List */}
+      {/* Section 6: Related Applications List */}
       <CompanyProfileRelatedApps applications={companyApplications} />
 
-      {/* Section 5: Attachments & Document Infrastructure */}
+      {/* Section 7: Attachments & Document Infrastructure */}
       <CompanyProfileAttachments companyName={company.name} />
 
       {/* Edit Modal */}

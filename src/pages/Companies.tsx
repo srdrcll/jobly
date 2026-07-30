@@ -30,7 +30,7 @@ import { EditCompanyModal } from '@/components/companies/EditCompanyModal';
 import { CompanyDetailModal } from '@/components/companies/CompanyDetailModal';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { TableSkeleton } from '@/components/ui/Skeleton';
+import { CompanyCrmWidgets } from '@/components/companies/crm/CompanyCrmWidgets';
 
 export const CompaniesPage: React.FC = () => {
   // Queries & Mutations
@@ -182,6 +182,9 @@ export const CompaniesPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* CRM Attention & Favorite Quick Widgets */}
+      <CompanyCrmWidgets companies={companies} />
 
       {/* 3. Toolbar: Search, Filters & Sorting */}
       <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft dark:shadow-soft-dark space-y-4">
