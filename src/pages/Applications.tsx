@@ -18,7 +18,8 @@ import {
   Eye,
   SearchX,
   X,
-  Check
+  Check,
+  SlidersHorizontal
 } from 'lucide-react';
 import { PageHeader } from '@/components/common/PageHeader';
 import { Button } from '@/components/ui/Button';
@@ -127,6 +128,9 @@ export const ApplicationsPage: React.FC = () => {
     setIsSortPopoverOpen(false);
   };
 
+  const totalCount = applications?.length || 0;
+  const currentDisplayedCount = filteredAndSortedApplications.length;
+
   return (
     <div className="space-y-6 animate-fadeIn" onClick={closeAllPopovers}>
       {/* Page Header */}
@@ -167,6 +171,7 @@ export const ApplicationsPage: React.FC = () => {
               aria-expanded={isFilterPopoverOpen}
               aria-controls="filter-popover-menu"
               aria-label="Filtreleme Menüsünü Aç/Kapat"
+              className={activeFiltersCount > 0 ? 'bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-md shadow-indigo-600/20' : ''}
               onClick={() => {
                 setIsFilterPopoverOpen((prev) => !prev);
                 setIsSortPopoverOpen(false);
@@ -185,7 +190,9 @@ export const ApplicationsPage: React.FC = () => {
                 className="absolute right-0 top-12 w-80 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-4 z-40 space-y-4 animate-fadeIn"
               >
                 <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
-                  <h4 className="text-xs font-bold text-foreground">Filtreleri Özelleştir</h4>
+                  <h4 className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                    <SlidersHorizontal className="w-3.5 h-3.5 text-indigo-400" /> Filtreleri Özelleştir
+                  </h4>
                   {activeFiltersCount > 0 && (
                     <button
                       onClick={clearFilters}
@@ -212,7 +219,7 @@ export const ApplicationsPage: React.FC = () => {
                           onClick={() => toggleStatus(st)}
                           className={`text-xs px-2.5 py-1 rounded-lg border transition-all ${
                             isSelected
-                              ? 'bg-indigo-500/20 text-indigo-400 border-indigo-500/40 font-bold'
+                              ? 'bg-indigo-500/20 text-indigo-400 border-indigo-500/40 font-bold shadow-xs'
                               : 'bg-slate-100 dark:bg-slate-800/80 text-slate-400 border-transparent hover:text-foreground'
                           }`}
                         >
@@ -238,7 +245,7 @@ export const ApplicationsPage: React.FC = () => {
                           onClick={() => togglePriority(p)}
                           className={`text-xs px-2.5 py-1 rounded-lg border transition-all ${
                             isSelected
-                              ? 'bg-indigo-500/20 text-indigo-400 border-indigo-500/40 font-bold'
+                              ? 'bg-amber-500/20 text-amber-400 border-amber-500/40 font-bold shadow-xs'
                               : 'bg-slate-100 dark:bg-slate-800/80 text-slate-400 border-transparent hover:text-foreground'
                           }`}
                         >
@@ -264,7 +271,7 @@ export const ApplicationsPage: React.FC = () => {
                           onClick={() => toggleWorkModel(m)}
                           className={`text-xs px-2.5 py-1 rounded-lg border transition-all ${
                             isSelected
-                              ? 'bg-indigo-500/20 text-indigo-400 border-indigo-500/40 font-bold'
+                              ? 'bg-indigo-500/20 text-indigo-400 border-indigo-500/40 font-bold shadow-xs'
                               : 'bg-slate-100 dark:bg-slate-800/80 text-slate-400 border-transparent hover:text-foreground'
                           }`}
                         >
@@ -329,54 +336,60 @@ export const ApplicationsPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Active Filter Pills Display Bar */}
-      {activeFiltersCount > 0 && (
-        <div className="flex flex-wrap items-center gap-2 px-1">
-          <span className="text-xs font-semibold text-slate-400">Aktif Filtreler:</span>
-          {filters.statuses.map((st) => (
-            <span
-              key={st}
-              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20"
-            >
-              Durum: {STATUS_CONFIG[st].label}
-              <button onClick={() => toggleStatus(st)} className="hover:text-foreground" aria-label={`Filtreyi Kaldır: ${STATUS_CONFIG[st].label}`}>
-                <X className="w-3 h-3" aria-hidden="true" />
-              </button>
-            </span>
-          ))}
-
-          {filters.priorities.map((p) => (
-            <span
-              key={p}
-              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20"
-            >
-              Öncelik: {p}
-              <button onClick={() => togglePriority(p)} className="hover:text-foreground" aria-label={`Filtreyi Kaldır: ${p}`}>
-                <X className="w-3 h-3" aria-hidden="true" />
-              </button>
-            </span>
-          ))}
-
-          {filters.workModels.map((m) => (
-            <span
-              key={m}
-              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-full bg-slate-500/10 text-slate-300 border border-slate-500/20"
-            >
-              Model: {m}
-              <button onClick={() => toggleWorkModel(m)} className="hover:text-foreground" aria-label={`Filtreyi Kaldır: ${m}`}>
-                <X className="w-3 h-3" aria-hidden="true" />
-              </button>
-            </span>
-          ))}
-
-          <button
-            onClick={clearFilters}
-            className="text-xs font-bold text-rose-400 hover:underline ml-2"
-          >
-            Filtreleri Temizle
-          </button>
+      {/* Results Summary & Active Filter Chips Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1">
+        <div className="text-xs text-slate-400 font-medium">
+          Toplam <span className="font-bold text-foreground">{currentDisplayedCount}</span> / {totalCount} başvuru gösteriliyor
         </div>
-      )}
+
+        {activeFiltersCount > 0 && (
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-semibold text-slate-400">Aktif:</span>
+            {filters.statuses.map((st) => (
+              <span
+                key={st}
+                className="inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-semibold rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20"
+              >
+                {STATUS_CONFIG[st].label}
+                <button onClick={() => toggleStatus(st)} className="hover:text-foreground" aria-label={`Filtreyi Kaldır: ${STATUS_CONFIG[st].label}`}>
+                  <X className="w-3 h-3" aria-hidden="true" />
+                </button>
+              </span>
+            ))}
+
+            {filters.priorities.map((p) => (
+              <span
+                key={p}
+                className="inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-semibold rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20"
+              >
+                {p}
+                <button onClick={() => togglePriority(p)} className="hover:text-foreground" aria-label={`Filtreyi Kaldır: ${p}`}>
+                  <X className="w-3 h-3" aria-hidden="true" />
+                </button>
+              </span>
+            ))}
+
+            {filters.workModels.map((m) => (
+              <span
+                key={m}
+                className="inline-flex items-center gap-1 px-2.5 py-0.5 text-xs font-semibold rounded-full bg-slate-500/10 text-slate-300 border border-slate-500/20"
+              >
+                {m}
+                <button onClick={() => toggleWorkModel(m)} className="hover:text-foreground" aria-label={`Filtreyi Kaldır: ${m}`}>
+                  <X className="w-3 h-3" aria-hidden="true" />
+                </button>
+              </span>
+            ))}
+
+            <button
+              onClick={clearFilters}
+              className="text-xs font-bold text-rose-400 hover:underline ml-1"
+            >
+              Temizle
+            </button>
+          </div>
+        )}
+      </div>
 
       {/* Content Section based on State */}
       {isLoading ? (
