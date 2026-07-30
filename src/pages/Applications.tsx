@@ -164,6 +164,9 @@ export const ApplicationsPage: React.FC = () => {
             <Button
               variant={activeFiltersCount > 0 ? 'primary' : 'outline'}
               size="sm"
+              aria-expanded={isFilterPopoverOpen}
+              aria-controls="filter-popover-menu"
+              aria-label="Filtreleme Menüsünü Aç/Kapat"
               onClick={() => {
                 setIsFilterPopoverOpen((prev) => !prev);
                 setIsSortPopoverOpen(false);
@@ -175,7 +178,12 @@ export const ApplicationsPage: React.FC = () => {
 
             {/* Filter Popover Dropdown */}
             {isFilterPopoverOpen && (
-              <div className="absolute right-0 top-12 w-80 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-4 z-40 space-y-4 animate-fadeIn">
+              <div 
+                id="filter-popover-menu"
+                role="region"
+                aria-label="Filtreleme Seçenekleri"
+                className="absolute right-0 top-12 w-80 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-4 z-40 space-y-4 animate-fadeIn"
+              >
                 <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
                   <h4 className="text-xs font-bold text-foreground">Filtreleri Özelleştir</h4>
                   {activeFiltersCount > 0 && (
@@ -275,6 +283,9 @@ export const ApplicationsPage: React.FC = () => {
             <Button
               variant="outline"
               size="sm"
+              aria-expanded={isSortPopoverOpen}
+              aria-controls="sort-popover-menu"
+              aria-label="Sıralama Menüsünü Aç/Kapat"
               onClick={() => {
                 setIsSortPopoverOpen((prev) => !prev);
                 setIsFilterPopoverOpen(false);
@@ -286,7 +297,12 @@ export const ApplicationsPage: React.FC = () => {
 
             {/* Sort Popover Dropdown */}
             {isSortPopoverOpen && (
-              <div className="absolute right-0 top-12 w-64 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl py-2 z-40 animate-fadeIn">
+              <div 
+                id="sort-popover-menu"
+                role="region"
+                aria-label="Sıralama Seçenekleri"
+                className="absolute right-0 top-12 w-64 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl py-2 z-40 animate-fadeIn"
+              >
                 <span className="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider block border-b border-slate-100 dark:border-slate-800 mb-1">
                   Sıralama Ölçütü
                 </span>
@@ -323,7 +339,7 @@ export const ApplicationsPage: React.FC = () => {
               className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20"
             >
               Durum: {STATUS_CONFIG[st].label}
-              <button onClick={() => toggleStatus(st)} className="hover:text-foreground">
+              <button onClick={() => toggleStatus(st)} className="hover:text-foreground" aria-label={`Filtreyi Kaldır: ${STATUS_CONFIG[st].label}`}>
                 <X className="w-3 h-3" aria-hidden="true" />
               </button>
             </span>
@@ -335,7 +351,7 @@ export const ApplicationsPage: React.FC = () => {
               className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20"
             >
               Öncelik: {p}
-              <button onClick={() => togglePriority(p)} className="hover:text-foreground">
+              <button onClick={() => togglePriority(p)} className="hover:text-foreground" aria-label={`Filtreyi Kaldır: ${p}`}>
                 <X className="w-3 h-3" aria-hidden="true" />
               </button>
             </span>
@@ -347,7 +363,7 @@ export const ApplicationsPage: React.FC = () => {
               className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-full bg-slate-500/10 text-slate-300 border border-slate-500/20"
             >
               Model: {m}
-              <button onClick={() => toggleWorkModel(m)} className="hover:text-foreground">
+              <button onClick={() => toggleWorkModel(m)} className="hover:text-foreground" aria-label={`Filtreyi Kaldır: ${m}`}>
                 <X className="w-3 h-3" aria-hidden="true" />
               </button>
             </span>

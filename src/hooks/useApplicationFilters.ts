@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { DbApplication, ApplicationStatus } from '@/types';
 import { PriorityLevel } from '@/components/common/PriorityBadge';
 
@@ -15,6 +15,8 @@ export interface ApplicationFilterState {
   workModels: ('Remote' | 'Hybrid' | 'On-site')[];
   sortBy: SortOption;
 }
+
+const STORAGE_KEY = 'kp_application_filters_v1';
 
 const INITIAL_FILTER_STATE: ApplicationFilterState = {
   statuses: [],
@@ -34,8 +36,35 @@ const PRIORITY_RANK: Record<string, number> = {
   Low: 1,
 };
 
+function getStoredFilters(): ApplicationFilterState {
+  try {
+    const stored = sessionStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      return {
+        statuses: Array.isArray(parsed.statuses) ? parsed.statuses : [],
+        priorities: Array.isArray(parsed.priorities) ? parsed.priorities : [],
+        workModels: Array.isArray(parsed.workModels) ? parsed.workModels : [],
+        sortBy: parsed.sortBy || 'date-desc',
+      };
+    }
+  } catch {
+    // Fallback to initial state on parse error
+  }
+  return INITIAL_FILTER_STATE;
+}
+
 export function useApplicationFilters(applications: DbApplication[] = [], searchQuery: string = '') {
-  const [filters, setFilters] = useState<ApplicationFilterState>(INITIAL_FILTER_STATE);
+  const [filters, setFilters] = useState<ApplicationFilterState>(getStoredFilters);
+
+  // Persist filter state to sessionStorage on state change
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(filters));
+    } catch {
+      // Storage quota or restriction fallback
+    }
+  }, [filters]);
 
   const toggleStatus = useCallback((status: ApplicationStatus) => {
     setFilters((prev) => ({
@@ -69,12 +98,13 @@ export function useApplicationFilters(applications: DbApplication[] = [], search
   }, []);
 
   const clearFilters = useCallback(() => {
-    setFilters((prev) => ({
-      ...prev,
+    setFilters({
       statuses: [],
       priorities: [],
       workModels: [],
-    }));
+      sortBy: 'date-desc',
+    });
+    sessionStorage.removeItem(STORAGE_KEY);
   }, []);
 
   const activeFiltersCount = 
