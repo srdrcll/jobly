@@ -48,4 +48,9 @@ export const queryKeys = {
     coverLetters: () => [...queryKeys.aiReview.all, 'coverLetters'] as const,
     coverLetter: (id: string) => [...queryKeys.aiReview.coverLetters(), id] as const,
   },
+  aiCoach: {
+    all: ['aiCoach'] as const,
+    sessions: () => [...queryKeys.aiCoach.all, 'sessions'] as const,
+    goals: () => [...queryKeys.aiCoach.all, 'goals'] as const,
+  },
 };

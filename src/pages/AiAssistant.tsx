@@ -9,7 +9,10 @@ import {
   MessageSquare,
   FileText,
   Mail,
-  History
+  History,
+  Target,
+  Sparkles,
+  TrendingUp
 } from 'lucide-react';
 import { 
   useAiConversationsQuery, 
@@ -29,14 +32,18 @@ import { ResumeReviewSection } from '@/components/ai/review/ResumeReviewSection'
 import { CoverLetterReviewSection } from '@/components/ai/review/CoverLetterReviewSection';
 import { ReviewVersionHistory } from '@/components/ai/review/ReviewVersionHistory';
 import { AiReviewWidgets } from '@/components/ai/review/AiReviewWidgets';
+import { AiInterviewCoachSection } from '@/components/ai/coach/AiInterviewCoachSection';
+import { AiCareerInsightsSection } from '@/components/ai/coach/AiCareerInsightsSection';
+import { AiCareerGoalsSection } from '@/components/ai/coach/AiCareerGoalsSection';
+import { AiCoachWidgets } from '@/components/ai/coach/AiCoachWidgets';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { Input } from '@/components/ui/Input';
 import { SuggestedPrompt } from '@/types/ai';
 
 export const AiAssistantPage: React.FC = () => {
-  // Main Module Tab: 'chat' | 'resume' | 'cover' | 'history'
-  const [mainTab, setMainTab] = useState<'chat' | 'resume' | 'cover' | 'history'>('chat');
+  // Main Module Tab: 'chat' | 'coach' | 'insights' | 'goals' | 'resume' | 'cover' | 'history'
+  const [mainTab, setMainTab] = useState<'chat' | 'coach' | 'insights' | 'goals' | 'resume' | 'cover' | 'history'>('chat');
 
   // Queries & Mutations
   const { data: conversations = [] } = useAiConversationsQuery();
@@ -129,15 +136,15 @@ export const AiAssistantPage: React.FC = () => {
         <div>
           <h1 className="text-2xl font-black text-foreground tracking-tight flex items-center gap-2.5">
             <Bot className="w-7 h-7 text-purple-500" />
-            Yapay Zekâ Kariyer Asistanı & İnceleme
+            Yapay Zekâ Kariyer Asistanı & Mülakat Koçu
           </h1>
           <p className="text-xs text-slate-400 mt-1">
-            Özgeçmiş analizi, ön mektup değerlendirmesi ve kişiselleştirilmiş mülakat rehberliği.
+            Mülakat simülasyonu, kariyer dönüşüm analitiği, CV taraması ve hedef takibi.
           </p>
         </div>
 
         {/* Tab Switcher */}
-        <div className="p-1 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center gap-1">
+        <div className="p-1 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-wrap items-center gap-1">
           <button
             type="button"
             onClick={() => setMainTab('chat')}
@@ -148,6 +155,39 @@ export const AiAssistantPage: React.FC = () => {
             }`}
           >
             <MessageSquare className="w-3.5 h-3.5" /> AI Chat
+          </button>
+          <button
+            type="button"
+            onClick={() => setMainTab('coach')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+              mainTab === 'coach'
+                ? 'bg-purple-600 text-white shadow-sm'
+                : 'text-slate-400 hover:text-foreground'
+            }`}
+          >
+            <Target className="w-3.5 h-3.5" /> Mülakat Koçu
+          </button>
+          <button
+            type="button"
+            onClick={() => setMainTab('insights')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+              mainTab === 'insights'
+                ? 'bg-purple-600 text-white shadow-sm'
+                : 'text-slate-400 hover:text-foreground'
+            }`}
+          >
+            <TrendingUp className="w-3.5 h-3.5" /> Insights
+          </button>
+          <button
+            type="button"
+            onClick={() => setMainTab('goals')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+              mainTab === 'goals'
+                ? 'bg-purple-600 text-white shadow-sm'
+                : 'text-slate-400 hover:text-foreground'
+            }`}
+          >
+            <Sparkles className="w-3.5 h-3.5" /> Hedefler
           </button>
           <button
             type="button"
@@ -171,22 +211,15 @@ export const AiAssistantPage: React.FC = () => {
           >
             <Mail className="w-3.5 h-3.5" /> Ön Mektup
           </button>
-          <button
-            type="button"
-            onClick={() => setMainTab('history')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
-              mainTab === 'history'
-                ? 'bg-purple-600 text-white shadow-sm'
-                : 'text-slate-400 hover:text-foreground'
-            }`}
-          >
-            <History className="w-3.5 h-3.5" /> Geçmiş
-          </button>
         </div>
       </div>
 
-      {/* 2. Top Summary KPI Widgets */}
-      <AiReviewWidgets />
+      {/* 2. Summary KPI Widgets */}
+      {mainTab === 'coach' || mainTab === 'insights' || mainTab === 'goals' ? (
+        <AiCoachWidgets />
+      ) : (
+        <AiReviewWidgets />
+      )}
 
       {/* 3. TAB 1: AI CHAT INTERFACE */}
       {mainTab === 'chat' && (
@@ -310,13 +343,22 @@ export const AiAssistantPage: React.FC = () => {
         </div>
       )}
 
-      {/* 4. TAB 2: RESUME REVIEW */}
+      {/* 4. TAB 2: AI INTERVIEW COACH */}
+      {mainTab === 'coach' && <AiInterviewCoachSection />}
+
+      {/* 5. TAB 3: CAREER INSIGHTS */}
+      {mainTab === 'insights' && <AiCareerInsightsSection />}
+
+      {/* 6. TAB 4: CAREER GOALS */}
+      {mainTab === 'goals' && <AiCareerGoalsSection />}
+
+      {/* 7. TAB 5: RESUME REVIEW */}
       {mainTab === 'resume' && <ResumeReviewSection />}
 
-      {/* 5. TAB 3: COVER LETTER REVIEW */}
+      {/* 8. TAB 6: COVER LETTER REVIEW */}
       {mainTab === 'cover' && <CoverLetterReviewSection />}
 
-      {/* 6. TAB 4: REVIEW VERSION HISTORY */}
+      {/* 9. TAB 7: REVIEW VERSION HISTORY */}
       {mainTab === 'history' && <ReviewVersionHistory />}
 
       {/* Settings Modal */}
