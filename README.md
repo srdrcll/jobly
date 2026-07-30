@@ -9,8 +9,8 @@
 
   <p>
     <a href="#"><img src="https://img.shields.io/badge/Build-Passing-success?style=for-the-badge&logo=github-actions&logoColor=white" alt="Build" /></a>
-    <a href="#"><img src="https://img.shields.io/badge/Status-Active_Development-brightgreen?style=for-the-badge&logo=rocket&logoColor=white" alt="Status" /></a>
-    <a href="#"><img src="https://img.shields.io/badge/Version-v0.4.0-blue?style=for-the-badge&logo=git&logoColor=white" alt="Version" /></a>
+    <a href="#"><img src="https://img.shields.io/badge/Current_Release-v0.4.0-blue?style=for-the-badge&logo=git&logoColor=white" alt="Current Release" /></a>
+    <a href="#"><img src="https://img.shields.io/badge/Next_Milestone-Dashboard_%26_Analytics-purple?style=for-the-badge&logo=target&logoColor=white" alt="Next Milestone" /></a>
     <a href="#"><img src="https://img.shields.io/badge/License-MIT-amber?style=for-the-badge" alt="License" /></a>
     <a href="#"><img src="https://img.shields.io/badge/PRs-Welcome-emerald?style=for-the-badge&logo=github&logoColor=white" alt="PRs Welcome" /></a>
   </p>
@@ -21,7 +21,7 @@
 
 ### 📌 Purpose
 
-**Kariyer Pusulası** is a modern, candidate-centric Applicant Tracking System (ATS) engineered specifically for job seekers, not recruiters. Traditional job hunting relies on scattered spreadsheets and lost email threads; Kariyer Pusulası centralizes application tracking, interview timelines, company research, and analytics into a cohesive, high-performance SaaS workspace inspired by top-tier tools like Linear and Notion.
+**Kariyer Pusulası** is a modern, candidate-centric Applicant Tracking System (ATS) built for job seekers. It replaces messy spreadsheets and lost emails with a structured SaaS workspace to track applications, interview timelines, and offer metrics. Inspired by tools like Linear and Notion, it brings clarity and speed to your career journey.
 
 ---
 
@@ -51,46 +51,22 @@
 
 ## 🚀 Features
 
-### 🔐 Authentication
+### 💻 Core Workflow
 
-- ✅ **Secure Login & Registration** — Email and password authentication powered by Supabase Auth with encrypted tokens.
-- ✅ **Password Reset Flow** — Self-serve password recovery via automated verification emails.
-- ✅ **Protected Route Architecture** — Client-side route guards preventing unauthorized navigation to dashboard routes.
-- ✅ **Session Persistence** — Long-lived, secure session management maintaining state across browser refreshes.
+- ✅ **Authentication & Security** — Email and password authentication, protected routes, and session persistence via Supabase Auth.
+- ✅ **Application Management** — Full lifecycle tracking (Applied, Interviewing, Offer, Rejected) with salary, notes, and detail views.
+- ✅ **Bulk Operations** — Batch updates, stage transitions, and bulk record deletion for candidate workflows.
 
-### 📋 Application Management
+### 🔍 Search & UI Experience
 
-- ✅ **Create & Edit Applications** — Modal-driven entry forms for tracking salary, pipeline stage, notes, and job links.
-- ✅ **Delete & Archive Records** — Safe application deletion with immediate workspace state synchronization.
-- ✅ **Detailed Application View** — Comprehensive breakdown of interview stages, notes, and activity timeline per job.
-- ✅ **Bulk Operations** — Select and update or remove multiple application records simultaneously.
+- ✅ **Real-Time Search & Filters** — Debounced instant search by company or position, paired with multi-column sorting.
+- ✅ **Responsive Table & Mobile Cards** — High-density desktop table layout auto-adapting to touch cards on mobile devices.
+- ✅ **Modern Dark Theme & UX States** — Glassmorphic UI, skeleton loading states, empty states, and toast notifications.
 
-### 🔍 Search & Organization
+### ⚡ Architecture & Performance
 
-- ✅ **Real-Time Search** — Debounced live search querying company names, job titles, and locations instantly.
-- ✅ **Advanced Filters** — Filter applications by pipeline stage, priority level, or remote work preference.
-- ✅ **Multi-Column Sorting** — Dynamic sorting by application date, salary range, or status.
-- ✅ **Responsive Table & Mobile Cards** — Data-dense table layout for desktop, auto-adapting to touch-friendly cards on mobile.
-
-### 📊 User Experience
-
-- ✅ **Modern Dark Theme** — Sleek dark UI designed for reduced eye strain during extended job hunting sessions.
-- ✅ **Glassmorphism UI** — Translucent panels, smooth hover effects, and crisp, modern typography.
-- ✅ **Comprehensive UI States** — Skeleton loaders, informative empty states, and structured error banners.
-- ✅ **Toast Notification System** — Real-time feedback for async operations, errors, and success triggers.
-
-### ⚡ Performance
-
-- ✅ **TanStack Query Caching** — Background data fetching, automatic revalidation, and intelligent garbage collection.
-- ✅ **Optimistic UI Updates** — Instant UI mutations before server response with automatic rollback on error.
-- ✅ **Debounced Search Inputs** — Reduced API requests and minimal network overhead during rapid typing.
-- ✅ **Memoized List Filtering** — High-performance client-side sorting and filtering without re-render lag.
-
-### 🛡️ Security
-
-- ✅ **Supabase Auth & RLS** — Database-level Row Level Security ensuring candidates access only their own records.
-- ✅ **Zod Schema Validation** — Runtime type checking and input sanitization for all forms and request payloads.
-- ✅ **End-to-End Type Safety** — Full TypeScript integration from PostgreSQL database schemas to React components.
+- ✅ **TanStack Query State** — Smart caching, optimistic UI updates, and zero-latency client state synchronization.
+- ✅ **Supabase RLS & Zod Validation** — Database row-level security for total data isolation combined with strict schema validation.
 
 ---
 
@@ -104,10 +80,6 @@
 ![Applications](docs/screenshots/applications.png)
 *Central application management interface featuring live search, custom filters, status tags, and bulk management capabilities.*
 
-### Create Application
-![Create Application](docs/screenshots/create-application.png)
-*Streamlined modal dialog for adding new job applications with salary inputs, company details, tags, and job posting URLs.*
-
 ### Application Detail
 ![Application Detail](docs/screenshots/application-detail.png)
 *In-depth view of a specific application including interview stages, custom notes, contact persons, and offer tracking.*
@@ -116,8 +88,8 @@
 ![Authentication](docs/screenshots/authentication.png)
 *Secure login and registration interface featuring form validation, error handling, and password recovery workflows.*
 
-### Mobile Experience
-![Mobile Experience](docs/screenshots/mobile-experience.png)
+### Mobile
+![Mobile](docs/screenshots/mobile.png)
 *Responsive touch-optimized view showcasing card layouts, mobile navigation drawer, and quick-action toolbars.*
 
 ---
