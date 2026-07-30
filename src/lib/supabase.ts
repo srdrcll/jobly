@@ -1,4 +1,4 @@
-import { createClient, AuthError } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://placeholder.supabase.co';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'placeholder-key';
@@ -18,12 +18,19 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
 });
 
 /**
- * Translates Supabase authentication error messages to user-friendly Turkish notices.
+ * Safely translates Supabase authentication error messages to user-friendly Turkish notices.
  */
-export function getTurkishAuthErrorMessage(error: AuthError | Error | null | string): string {
+export function getTurkishAuthErrorMessage(error: unknown): string {
   if (!error) return 'Bilinmeyen bir hata oluştu.';
   
-  const message = typeof error === 'string' ? error : error.message;
+  let message = '';
+  if (typeof error === 'string') {
+    message = error;
+  } else if (error instanceof Error) {
+    message = error.message;
+  } else if (typeof error === 'object' && error !== null && 'message' in error) {
+    message = String((error as { message: unknown }).message);
+  }
 
   if (message.includes('Invalid login credentials')) {
     return 'E-posta adresi veya şifre hatalı.';

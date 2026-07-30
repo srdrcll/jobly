@@ -56,8 +56,12 @@ export function App() {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-                <Route path="/reset-password" element={<ResetPasswordPage />} />
               </Route>
+            </Route>
+
+            {/* Password Reset Route (Accessible in any auth state for recovery flows) */}
+            <Route element={<AuthLayout />}>
+              <Route path="/reset-password" element={<ResetPasswordPage />} />
             </Route>
 
             {/* Public Marketing Landing Page */}

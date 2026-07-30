@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { User, Session, AuthResponse } from '@supabase/supabase-js';
+import { User, Session } from '@supabase/supabase-js';
 import { supabase, isSupabaseConfigured, getTurkishAuthErrorMessage } from '@/lib/supabase';
 import { useToast } from '@/hooks/useToast';
 
@@ -18,10 +18,11 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { toast } = useToast();
+
+  const user = session?.user ?? null;
 
   useEffect(() => {
     // Initial Session Restore
@@ -29,8 +30,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       try {
         const { data: { session: initialSession } } = await supabase.auth.getSession();
         setSession(initialSession);
-        setUser(initialSession?.user ?? null);
-      } catch (err) {
+      } catch (err: unknown) {
         console.error('Auth init error:', err);
       } finally {
         setLoading(false);
@@ -42,7 +42,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     // Subscribe to Auth State Changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, currentSession) => {
       setSession(currentSession);
-      setUser(currentSession?.user ?? null);
       setLoading(false);
     });
 
@@ -64,9 +63,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
 
       setSession(data.session);
-      setUser(data.user);
       return { success: true };
-    } catch (err: any) {
+    } catch (err: unknown) {
       return { success: false, error: getTurkishAuthErrorMessage(err) };
     }
   };
@@ -88,15 +86,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         return { success: false, error: trMessage };
       }
 
-      // Check if user session was created immediately or requires email confirmation
       const requiresVerification = !data.session;
       if (data.session) {
         setSession(data.session);
-        setUser(data.user);
       }
 
       return { success: true, requiresVerification };
-    } catch (err: any) {
+    } catch (err: unknown) {
       return { success: false, error: getTurkishAuthErrorMessage(err) };
     }
   };
@@ -105,9 +101,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       await supabase.auth.signOut();
       setSession(null);
-      setUser(null);
       toast.info('Oturum Kapatıldı', 'Güvenli bir şekilde çıkış yaptınız.');
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Logout error:', err);
     }
   };
@@ -124,7 +119,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
 
       return { success: true };
-    } catch (err: any) {
+    } catch (err: unknown) {
       return { success: false, error: getTurkishAuthErrorMessage(err) };
     }
   };
@@ -140,7 +135,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
 
       return { success: true };
-    } catch (err: any) {
+    } catch (err: unknown) {
       return { success: false, error: getTurkishAuthErrorMessage(err) };
     }
   };
