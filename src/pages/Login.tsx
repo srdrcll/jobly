@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { LogIn, Mail, Lock, ArrowRight } from 'lucide-react';
+import { LogIn, Mail, Lock, ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { useAuth } from '@/hooks/useAuth';
@@ -10,7 +10,7 @@ export const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, demoLogin } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
@@ -25,11 +25,15 @@ export const LoginPage: React.FC = () => {
     setIsLoading(false);
 
     if (res.success) {
-      toast.success('Giriş Başarılı', 'Kariyer Pusulası paneline yönlendiriliyorsunuz.');
       navigate(from, { replace: true });
     } else {
       toast.error('Giriş Başarısız', res.error || 'E-posta veya şifrenizi kontrol edin.');
     }
+  };
+
+  const handleDemoClick = () => {
+    demoLogin();
+    navigate('/dashboard', { replace: true });
   };
 
   return (
@@ -40,6 +44,26 @@ export const LoginPage: React.FC = () => {
         </div>
         <h2 className="text-2xl font-extrabold text-foreground">Hoş Geldiniz</h2>
         <p className="text-xs text-slate-400">Kariyer Pusulası hesabınıza giriş yapın</p>
+      </div>
+
+      {/* Quick Demo Login Banner */}
+      <div className="p-3.5 rounded-2xl bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 border border-indigo-500/20 flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <Sparkles className="w-4 h-4 text-indigo-400 shrink-0" aria-hidden="true" />
+          <div className="text-left">
+            <span className="block text-xs font-bold text-foreground">İnceleme Modu</span>
+            <span className="block text-[11px] text-slate-400">1-tıkla doğrudan paneli keşfedin</span>
+          </div>
+        </div>
+        <Button
+          type="button"
+          variant="primary"
+          size="sm"
+          onClick={handleDemoClick}
+          className="shrink-0 bg-indigo-600 hover:bg-indigo-500 text-xs font-bold px-3 py-1.5"
+        >
+          Hızlı Demo Girişi
+        </Button>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
