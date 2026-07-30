@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [v0.8.0] - 2026-07-30
+
+### 🚀 Added
+- **AI Career Assistant Module (`/ai-assistant`)**: Provider-agnostic AI chat assistant with model & persona configuration (Gemini 1.5 Pro, Gemini 1.5 Flash, Claude 3.5 Sonnet, GPT-4o), markdown export, and conversation archiving.
+- **7 Suggested Prompt Categories**: Quick one-click execution cards for Resume Review, Cover Letter Review, Interview Prep, Career Advice, Application Strategy, Salary Negotiation, and LinkedIn Optimization.
+- **AI Resume Review & ATS Engine**: Section-by-section analysis (Contact Info, Summary, Experience, Education, Skills, Projects, Certifications) with 0-100 overall ATS score.
+- **AI Cover Letter Evaluation**: 6-dimension evaluation covering Grammar, Clarity, Tone, Personalization, ATS Compatibility, and Structure.
+- **AI Interview Simulation Coach**: 6-category interview preparation sessions with candidate answer evaluations and STAR method feedback.
+- **Career Insights & Goal Tracker**: Automated conversion metrics (Application-to-Interview, Interview-to-Offer) and goal tracking with progress bars.
+- **Provider-Agnostic LLM Adapter Architecture**: Decoupled `ILlmProviderAdapter` interface and dependency injection registry ready for live AI APIs.
+
+---
+
 ## [v0.7.0] - 2026-07-30
 
 ### 🚀 Added

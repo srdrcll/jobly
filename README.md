@@ -9,7 +9,7 @@
 
   <p>
     <a href="#"><img src="https://img.shields.io/badge/Build-Passing-success?style=for-the-badge&logo=github-actions&logoColor=white" alt="Build" /></a>
-    <a href="#"><img src="https://img.shields.io/badge/Current_Release-v0.7.0-blue?style=for-the-badge&logo=git&logoColor=white" alt="Current Release" /></a>
+    <a href="#"><img src="https://img.shields.io/badge/Current_Release-v0.8.0-blue?style=for-the-badge&logo=git&logoColor=white" alt="Current Release" /></a>
     <a href="#"><img src="https://img.shields.io/badge/Next_Milestone-Document_Center-purple?style=for-the-badge&logo=target&logoColor=white" alt="Next Milestone" /></a>
     <a href="#"><img src="https://img.shields.io/badge/License-MIT-amber?style=for-the-badge" alt="License" /></a>
     <a href="#"><img src="https://img.shields.io/badge/PRs-Welcome-emerald?style=for-the-badge&logo=github&logoColor=white" alt="PRs Welcome" /></a>
@@ -27,8 +27,12 @@
 
 ### ✨ Key Features
 
-- 🎯 **End-to-End Application Pipeline** — Track job applications seamlessly across structured lifecycle stages (Applied, Screening, Interviewing, Offer, Rejected).
-- 📅 **Interview Management & Interactive Calendar** — Schedule technical interviews, İK randevuları, interactive month calendar, prep checklists, and self-evaluations.
+- 🤖 **AI Career Assistant & LLM Adapter Architecture** — Provider-agnostic AI assistant with model & persona selection (Gemini, Claude, GPT-4o) and Markdown export.
+- 📄 **AI Resume Review & ATS Score Engine** — 0-100 ATS scoring with section-by-section analysis and categorized improvement feedback.
+- ✉️ **AI Cover Letter Evaluation** — 6-dimension evaluation covering Grammar, Clarity, Tone, Personalization, ATS Compatibility, and Structure.
+- 🎯 **AI Interview Simulation Coach** — 6-category interview preparation sessions with candidate answer evaluations and STAR method feedback.
+- 📊 **Real-Time Conversion Insights & Goals** — Application-to-interview and interview-to-offer conversion insights with automated career goal tracking.
+- 📅 **Interview Management & Interactive Calendar** — Schedule technical interviews, interactive month calendar, prep checklists, and self-evaluations.
 - 🏢 **Company Management & Candidate CRM** — Store target companies, recruiter contacts, interaction logs, pinned notes, and company-specific follow-up tasks.
 - 📊 **Real-Time KPI Dashboard & Analytics** — Instant visual charts for status distribution, 6-month application trends, interview success rates, and weekly activity metrics.
 - ⚡ **Real-Time Search & Smart Filters** — Instantly locate and filter applications, companies, and interviews by industry, stage, result, or meeting type.

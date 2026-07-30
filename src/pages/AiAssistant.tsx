@@ -51,6 +51,7 @@ export const AiAssistantPage: React.FC = () => {
   const createMutation = useCreateAiConversationMutation();
   const renameMutation = useRenameAiConversationMutation();
   const toggleFavMutation = useToggleAiFavoriteMutation();
+  const toggleArchiveMutation = useToggleAiArchiveMutation();
   const deleteMutation = useDeleteAiConversationMutation();
   const sendMessageMutation = useSendAiMessageMutation();
 
@@ -236,6 +237,7 @@ export const AiAssistantPage: React.FC = () => {
                 setNewTitle(title);
               }}
               onToggleFavorite={(id) => toggleFavMutation.mutate(id)}
+              onToggleArchive={(id) => toggleArchiveMutation.mutate(id)}
               onDelete={(id) => {
                 deleteMutation.mutate(id);
                 if (activeId === id) setActiveId(null);

@@ -59,6 +59,19 @@ export function useToggleAiFavoriteMutation() {
   });
 }
 
+export function useToggleAiArchiveMutation() {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationFn: (id: string) => aiService.toggleArchive(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.ai.conversations() });
+      toast.success('Sohbet Arşiv Durumu Güncellendi');
+    },
+  });
+}
+
 export function useDeleteAiConversationMutation() {
   const queryClient = useQueryClient();
   const { toast } = useToast();

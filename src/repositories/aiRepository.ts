@@ -18,6 +18,7 @@ function getInitialConversations(): AiConversation[] {
       title: 'Özgeçmiş İncelemesi & Kariyer Tavsiyesi',
       category: 'resume',
       isFavorite: true,
+      isArchived: false,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       messages: [
@@ -77,7 +78,6 @@ export const aiRepository = {
         timestamp: now,
       });
 
-      // Simulated initial AI response
       messages.push({
         id: `msg-${Date.now()}-3`,
         conversationId: newId,
@@ -92,6 +92,7 @@ export const aiRepository = {
       title: title || 'Yeni Kariyer Sohbeti',
       category: category || 'general',
       isFavorite: false,
+      isArchived: false,
       createdAt: now,
       updatedAt: now,
       messages,
@@ -117,6 +118,15 @@ export const aiRepository = {
     const target = conversations.find((c) => c.id === id);
     if (target) {
       target.isFavorite = !target.isFavorite;
+      localStorage.setItem(CONVERSATIONS_KEY, JSON.stringify(conversations));
+    }
+  },
+
+  toggleArchive(id: string): void {
+    const conversations = this.getConversations();
+    const target = conversations.find((c) => c.id === id);
+    if (target) {
+      target.isArchived = !target.isArchived;
       localStorage.setItem(CONVERSATIONS_KEY, JSON.stringify(conversations));
     }
   },
@@ -147,6 +157,19 @@ export const aiRepository = {
     }
 
     return newMessage;
+  },
+
+  exportMarkdown(id: string): string {
+    const conv = this.getConversationById(id);
+    if (!conv) return '';
+
+    let md = `# ${conv.title}\n\n*Tarih: ${new Date(conv.createdAt).toLocaleDateString('tr-TR')}*\n\n---\n\n`;
+    conv.messages.forEach((m) => {
+      const sender = m.role === 'user' ? '👤 **Kullanıcı**' : '🤖 **Kariyer AI Asistanı**';
+      md += `${sender} (${new Date(m.timestamp).toLocaleTimeString('tr-TR')}):\n${m.content}\n\n---\n\n`;
+    });
+
+    return md;
   },
 
   getSettings(): AiSettings {

@@ -22,6 +22,7 @@ export interface AiConversation {
   title: string;
   category: AiCategory;
   isFavorite: boolean;
+  isArchived?: boolean;
   createdAt: string;
   updatedAt: string;
   messages: AiMessage[];
