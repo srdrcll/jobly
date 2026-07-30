@@ -12,6 +12,17 @@ export function useCompaniesListQuery() {
     queryKey: queryKeys.companies.lists(),
     queryFn: () => companiesService.fetchCompanies(),
     enabled: Boolean(user),
+    staleTime: 1000 * 60 * 2, // 2 minutes stale time
+    gcTime: 1000 * 60 * 10, // 10 minutes cache time
+  });
+}
+
+export function useCompanyDetailQuery(id?: string) {
+  const { user } = useAuth();
+  return useQuery({
+    queryKey: queryKeys.companies.detail(id || ''),
+    queryFn: () => companiesService.fetchCompanyById(id!),
+    enabled: Boolean(user && id),
   });
 }
 
@@ -49,6 +60,27 @@ export function useUpdateCompanyMutation() {
     },
     onError: (error: Error) => {
       toast.error('Güncelleme Başarısız', error.message);
+    },
+  });
+}
+
+export function useToggleCompanyFavoriteMutation() {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationFn: ({ id, currentStatus }: { id: string; currentStatus: boolean }) =>
+      companiesService.toggleFavorite(id, currentStatus),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.companies.lists() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.companies.detail(variables.id) });
+      toast.success(
+        variables.currentStatus ? 'Favorilerden Çıkarıldı' : 'Favorilere Eklendi',
+        'Şirket takibi güncellendi.'
+      );
+    },
+    onError: (error: Error) => {
+      toast.error('Favori Durumu Değiştirilemedi', error.message);
     },
   });
 }

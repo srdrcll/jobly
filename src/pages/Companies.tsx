@@ -1,175 +1,519 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   Building2, 
   Plus, 
+  Search, 
+  Filter, 
   Star, 
-  ExternalLink, 
-  MapPin, 
   Globe, 
-  Briefcase 
+  MapPin, 
+  MoreVertical, 
+  Trash2, 
+  Edit3, 
+  Eye, 
+  RefreshCw, 
+  AlertCircle,
+  ExternalLink,
+  Target,
+  Users,
+  Award
 } from 'lucide-react';
-import { PageHeader } from '@/components/common/PageHeader';
-import { SearchInput } from '@/components/ui/SearchInput';
+import { 
+  useCompaniesListQuery, 
+  useDeleteCompanyMutation, 
+  useToggleCompanyFavoriteMutation 
+} from '@/hooks/queries/useCompaniesQuery';
+import { DbCompany } from '@/types';
+import { CompanyStatusBadge } from '@/components/companies/CompanyStatusBadge';
+import { CreateCompanyModal } from '@/components/companies/CreateCompanyModal';
+import { EditCompanyModal } from '@/components/companies/EditCompanyModal';
+import { CompanyDetailModal } from '@/components/companies/CompanyDetailModal';
 import { Button } from '@/components/ui/Button';
-import { CompanyItem } from '@/types';
-
-const MOCK_COMPANIES: CompanyItem[] = [
-  {
-    id: 'c-1',
-    name: 'Trendyol',
-    industry: 'E-Ticaret & FinTech',
-    location: 'İstanbul, Türkiye',
-    rating: 4.8,
-    openPositionsCount: 14,
-    status: 'Applied',
-    website: 'https://trendyol.com',
-  },
-  {
-    id: 'c-2',
-    name: 'Getir',
-    industry: 'Hızlı Teslimat & Teknoloji',
-    location: 'İstanbul / Amsterdam',
-    rating: 4.6,
-    openPositionsCount: 8,
-    status: 'Contacted',
-    website: 'https://getir.com',
-  },
-  {
-    id: 'c-3',
-    name: 'Stripe',
-    industry: 'Finansal Altyapı',
-    location: 'San Francisco / Remote',
-    rating: 4.9,
-    openPositionsCount: 22,
-    status: 'Researching',
-    website: 'https://stripe.com',
-  },
-  {
-    id: 'c-4',
-    name: 'Vercel',
-    industry: 'Bulut Bilişim & Developer Tools',
-    location: 'San Francisco / Global Remote',
-    rating: 4.9,
-    openPositionsCount: 6,
-    status: 'Target',
-    website: 'https://vercel.com',
-  },
-  {
-    id: 'c-5',
-    name: 'Insider',
-    industry: 'Yapay Zeka & Pazarlama Teknoloji',
-    location: 'İstanbul / Singapore',
-    rating: 4.7,
-    openPositionsCount: 11,
-    status: 'Applied',
-    website: 'https://useinsider.com',
-  },
-  {
-    id: 'c-6',
-    name: 'Linear',
-    industry: 'Yazılım & Ürün Yönetimi',
-    location: 'San Francisco / Remote',
-    rating: 5.0,
-    openPositionsCount: 4,
-    status: 'Target',
-    website: 'https://linear.app',
-  },
-];
+import { Input } from '@/components/ui/Input';
+import { TableSkeleton } from '@/components/ui/Skeleton';
 
 export const CompaniesPage: React.FC = () => {
-  const [search, setSearch] = useState('');
+  // Queries & Mutations
+  const { data: companies = [], isLoading, isError, error, refetch } = useCompaniesListQuery();
+  const deleteMutation = useDeleteCompanyMutation();
+  const toggleFavoriteMutation = useToggleCompanyFavoriteMutation();
 
-  const filteredCompanies = MOCK_COMPANIES.filter(
-    (c) =>
-      c.name.toLowerCase().includes(search.toLowerCase()) ||
-      c.industry.toLowerCase().includes(search.toLowerCase())
-  );
+  // Modal States
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [selectedDetail, setSelectedDetail] = useState<DbCompany | null>(null);
+  const [selectedEdit, setSelectedEdit] = useState<DbCompany | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+
+  // Filter States
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const [selectedIndustry, setSelectedIndustry] = useState<string>('all');
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [sortBy, setSortBy] = useState<'name' | 'rating' | 'date' | 'status'>('date');
+
+  // Unique Industries list for filter dropdown
+  const uniqueIndustries = useMemo(() => {
+    const set = new Set<string>();
+    companies.forEach((c) => {
+      if (c.industry) set.add(c.industry);
+    });
+    return Array.from(set).sort();
+  }, [companies]);
+
+  // Filtered and Sorted Companies
+  const filteredCompanies = useMemo(() => {
+    return companies
+      .filter((company) => {
+        // Search query filter
+        const query = searchQuery.toLowerCase().trim();
+        const matchesSearch =
+          !query ||
+          company.name.toLowerCase().includes(query) ||
+          (company.industry && company.industry.toLowerCase().includes(query)) ||
+          (company.location && company.location.toLowerCase().includes(query)) ||
+          (company.contact_person && company.contact_person.toLowerCase().includes(query));
+
+        // Status filter
+        const matchesStatus = selectedStatus === 'all' || company.status === selectedStatus;
+
+        // Industry filter
+        const matchesIndustry = selectedIndustry === 'all' || company.industry === selectedIndustry;
+
+        // Favorite filter
+        const matchesFavorite = !showFavoritesOnly || Boolean(company.is_favorite);
+
+        return matchesSearch && matchesStatus && matchesIndustry && matchesFavorite;
+      })
+      .sort((a, b) => {
+        if (sortBy === 'name') {
+          return a.name.localeCompare(b.name, 'tr');
+        }
+        if (sortBy === 'rating') {
+          return (b.rating || 0) - (a.rating || 0);
+        }
+        if (sortBy === 'status') {
+          return (a.status || '').localeCompare(b.status || '', 'tr');
+        }
+        // default: sort by date descending
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      });
+  }, [companies, searchQuery, selectedStatus, selectedIndustry, showFavoritesOnly, sortBy]);
+
+  // Metric counts
+  const targetCount = useMemo(() => companies.filter((c) => c.status === 'Target').length, [companies]);
+  const interviewCount = useMemo(() => companies.filter((c) => c.status === 'Interviewed').length, [companies]);
+  const favoriteCount = useMemo(() => companies.filter((c) => c.is_favorite).length, [companies]);
+
+  const handleDeleteConfirm = () => {
+    if (deleteId) {
+      deleteMutation.mutate(deleteId, {
+        onSuccess: () => {
+          setDeleteId(null);
+          if (selectedDetail?.id === deleteId) setSelectedDetail(null);
+        },
+      });
+    }
+  };
 
   return (
-    <div className="space-y-6 animate-fadeIn">
-      <PageHeader
-        title="Şirketler"
-        description="Hedeflediğiniz teknoloji şirketleri, kültür puanları ve açık pozisyon takibi."
-        icon={Building2}
-        badge={`${MOCK_COMPANIES.length} Hedef Şirket`}
-        actionSlot={
-          <Button variant="primary" size="sm" leftIcon={<Plus className="w-4 h-4" aria-hidden="true" />}>
-            Hedef Şirket Ekle
-          </Button>
-        }
-      />
-
-      <div className="flex items-center justify-between gap-4 bg-white dark:bg-slate-900/60 p-4 rounded-2xl border border-slate-200 dark:border-slate-800/80 shadow-soft">
-        <div className="flex-1 max-w-sm">
-          <SearchInput
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            onClear={() => setSearch('')}
-            placeholder="Şirket veya sektör ara..."
-          />
+    <div className="space-y-6 animate-fadeIn pb-12">
+      {/* 1. Header & Title Banner */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-black text-foreground tracking-tight flex items-center gap-2.5">
+            <Building2 className="w-7 h-7 text-indigo-500" />
+            Şirket Yönetimi & CRM
+          </h1>
+          <p className="text-xs text-slate-400 mt-1">
+            Hedef teknoloji şirketlerini, iletişim kişilerini ve mülakat geçmişlerini düzenleyin.
+          </p>
         </div>
-        <span className="text-xs text-slate-400 font-medium">
-          {filteredCompanies.length} şirket gösteriliyor
-        </span>
+
+        <Button
+          variant="primary"
+          size="md"
+          leftIcon={<Plus className="w-4 h-4" />}
+          onClick={() => setIsCreateOpen(true)}
+          className="shrink-0 focus-visible:ring-2 focus-visible:ring-indigo-500"
+        >
+          Yeni Şirket Ekle
+        </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {filteredCompanies.map((company) => (
-          <div
-            key={company.id}
-            className="p-6 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft hover:border-indigo-500/40 hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
+      {/* 2. Top Summary KPI Cards Bar */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="p-4 rounded-xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+            <Building2 className="w-5 h-5" />
+          </div>
+          <div>
+            <span className="text-xs text-slate-400 font-medium">Toplam Kayıtlı</span>
+            <p className="text-lg font-extrabold text-foreground">{companies.length}</p>
+          </div>
+        </div>
+
+        <div className="p-4 rounded-xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+            <Target className="w-5 h-5" />
+          </div>
+          <div>
+            <span className="text-xs text-slate-400 font-medium">Hedef Şirketler</span>
+            <p className="text-lg font-extrabold text-foreground">{targetCount}</p>
+          </div>
+        </div>
+
+        <div className="p-4 rounded-xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+            <Users className="w-5 h-5" />
+          </div>
+          <div>
+            <span className="text-xs text-slate-400 font-medium">Mülakat Sürecinde</span>
+            <p className="text-lg font-extrabold text-foreground">{interviewCount}</p>
+          </div>
+        </div>
+
+        <div className="p-4 rounded-xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <Star className="w-5 h-5 fill-emerald-400" />
+          </div>
+          <div>
+            <span className="text-xs text-slate-400 font-medium">Favoriler</span>
+            <p className="text-lg font-extrabold text-foreground">{favoriteCount}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. Toolbar: Search, Filters & Sorting */}
+      <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft dark:shadow-soft-dark space-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+          {/* Search Input */}
+          <div className="lg:col-span-2">
+            <Input
+              placeholder="Şirket adı, sektör veya lokasyon ara..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              leftIcon={<Search className="w-4 h-4 text-slate-400" />}
+            />
+          </div>
+
+          {/* Status Filter */}
+          <select
+            value={selectedStatus}
+            onChange={(e) => setSelectedStatus(e.target.value)}
+            className="h-10 px-3 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs text-foreground focus:ring-2 focus:ring-indigo-500 outline-none font-semibold"
           >
-            <div>
-              <div className="flex items-start justify-between gap-3 mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 text-white font-black text-xl flex items-center justify-center shadow-md shrink-0 group-hover:scale-105 transition-transform">
-                    {company.name.charAt(0)}
-                  </div>
-                  <div>
-                    <h4 className="text-base font-bold text-foreground group-hover:text-indigo-400 transition-colors">
-                      {company.name}
-                    </h4>
-                    <span className="text-xs text-slate-400 font-medium block">
-                      {company.industry}
-                    </span>
-                  </div>
-                </div>
+            <option value="all">Tüm Durumlar</option>
+            <option value="Target">🎯 Hedef Şirket</option>
+            <option value="Researching">🔍 Araştırılıyor</option>
+            <option value="Applied">📩 Başvuruldu</option>
+            <option value="Contacted">📞 İletişime Geçildi</option>
+            <option value="Interviewed">👥 Mülakat Sürecinde</option>
+            <option value="Offer">🏆 Teklif Alındı</option>
+            <option value="Archived">📦 Arşivlendi</option>
+          </select>
 
-                <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold">
-                  <Star className="w-3.5 h-3.5 fill-amber-400" aria-hidden="true" />
-                  <span>{company.rating}</span>
-                </div>
-              </div>
+          {/* Industry Filter */}
+          <select
+            value={selectedIndustry}
+            onChange={(e) => setSelectedIndustry(e.target.value)}
+            className="h-10 px-3 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs text-foreground focus:ring-2 focus:ring-indigo-500 outline-none font-semibold"
+          >
+            <option value="all">Tüm Sektörler</option>
+            {uniqueIndustries.map((ind) => (
+              <option key={ind} value={ind}>
+                {ind}
+              </option>
+            ))}
+          </select>
 
-              <div className="space-y-2 text-xs text-slate-400 pt-3 border-t border-slate-100 dark:border-slate-800/60">
-                <div className="flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-slate-500" aria-hidden="true" />
-                  <span>{company.location}</span>
-                </div>
-                <div className="flex items-center gap-1.5 text-indigo-400 font-medium">
-                  <Briefcase className="w-3.5 h-3.5" aria-hidden="true" />
-                  <span>{company.openPositionsCount} Açık Pozisyon</span>
-                </div>
-              </div>
-            </div>
+          {/* Sorting */}
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as any)}
+            className="h-10 px-3 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs text-foreground focus:ring-2 focus:ring-indigo-500 outline-none font-semibold"
+          >
+            <option value="date">Sıralama: Eklenme Tarihi</option>
+            <option value="name">Sıralama: Şirket Adı (A-Z)</option>
+            <option value="rating">Sıralama: Değerlendirme Puanı</option>
+            <option value="status">Sıralama: Takip Durumu</option>
+          </select>
+        </div>
 
-            <div className="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800/60 flex items-center justify-between">
-              <a
-                href={company.website}
-                target="_blank"
-                rel="noreferrer"
-                className="text-xs text-slate-400 hover:text-indigo-400 flex items-center gap-1 font-medium transition-colors"
-              >
-                <Globe className="w-3.5 h-3.5" aria-hidden="true" /> Website <ExternalLink className="w-3 h-3" aria-hidden="true" />
-              </a>
+        {/* Favorites Filter Toggle Bar */}
+        <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800/80 text-xs">
+          <button
+            type="button"
+            onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border font-bold transition-all ${
+              showFavoritesOnly
+                ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-sm'
+                : 'bg-slate-100 dark:bg-slate-800 text-slate-400 border-slate-200 dark:border-slate-700 hover:text-foreground'
+            }`}
+          >
+            <Star className={`w-3.5 h-3.5 ${showFavoritesOnly ? 'fill-amber-400 text-amber-400' : ''}`} />
+            Sadece Favoriler ({favoriteCount})
+          </button>
 
-              <span className="px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-                {company.status}
-              </span>
+          <span className="text-slate-400 font-medium">
+            Toplam <strong className="text-foreground">{filteredCompanies.length}</strong> şirket listeleniyor
+          </span>
+        </div>
+      </div>
+
+      {/* 4. Main Data Views (Table for Desktop, Cards for Mobile) */}
+      {isLoading ? (
+        <TableSkeleton />
+      ) : isError ? (
+        <div 
+          role="alert"
+          className="p-6 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-300 flex items-center justify-between gap-4"
+        >
+          <div className="flex items-center gap-3">
+            <AlertCircle className="w-6 h-6 text-rose-400 shrink-0" />
+            <div className="text-xs">
+              <p className="font-bold text-rose-200">Şirket Listesi Yüklenemedi</p>
+              <p className="text-rose-300/80">{error?.message || 'Veritabanına erişilirken sorun oluştu.'}</p>
             </div>
           </div>
-        ))}
-      </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => refetch()}
+            leftIcon={<RefreshCw className="w-3.5 h-3.5" />}
+            className="border-rose-500/30 text-rose-300 hover:bg-rose-500/20 shrink-0"
+          >
+            Tekrar Dene
+          </Button>
+        </div>
+      ) : filteredCompanies.length === 0 ? (
+        /* Empty State */
+        <div className="p-12 rounded-2xl border border-dashed border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900/40 text-center space-y-4">
+          <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 mx-auto flex items-center justify-center">
+            <Building2 className="w-7 h-7" />
+          </div>
+          <div className="space-y-1 max-w-sm mx-auto">
+            <h3 className="text-base font-bold text-foreground">Şirket Kaydı Bulunamadı</h3>
+            <p className="text-xs text-slate-400">
+              Arama kriterlerinize uyan bir şirket bulunamadı veya henüz hiç şirket eklemediniz.
+            </p>
+          </div>
+          <Button
+            variant="primary"
+            size="sm"
+            leftIcon={<Plus className="w-4 h-4" />}
+            onClick={() => setIsCreateOpen(true)}
+          >
+            İlk Şirketi Ekle
+          </Button>
+        </div>
+      ) : (
+        <>
+          {/* Desktop Responsive Table */}
+          <div className="hidden md:block bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 rounded-2xl overflow-hidden shadow-soft dark:shadow-soft-dark">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/80 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  <th className="py-3.5 px-4">Şirket</th>
+                  <th className="py-3.5 px-4">Sektör</th>
+                  <th className="py-3.5 px-4">Lokasyon</th>
+                  <th className="py-3.5 px-4">Takip Durumu</th>
+                  <th className="py-3.5 px-4 text-center">Puan</th>
+                  <th className="py-3.5 px-4 text-right">İşlemler</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 text-xs">
+                {filteredCompanies.map((company) => (
+                  <tr
+                    key={company.id}
+                    className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors group cursor-pointer"
+                    onClick={() => setSelectedDetail(company)}
+                  >
+                    {/* Company Name & Logo Initial */}
+                    <td className="py-3.5 px-4">
+                      <div className="flex items-center gap-3">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleFavoriteMutation.mutate({ id: company.id, currentStatus: Boolean(company.is_favorite) });
+                          }}
+                          className="text-slate-400 hover:scale-125 transition-transform"
+                          title="Favorilere Ekle / Çıkar"
+                        >
+                          <Star
+                            className={`w-4 h-4 ${
+                              company.is_favorite ? 'fill-amber-400 text-amber-400' : 'text-slate-600 hover:text-amber-400'
+                            }`}
+                          />
+                        </button>
+                        <div className="w-9 h-9 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 font-extrabold flex items-center justify-center text-sm shrink-0">
+                          {company.name.charAt(0)}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="font-bold text-foreground group-hover:text-indigo-400 transition-colors truncate">
+                            {company.name}
+                          </p>
+                          {company.website && (
+                            <span className="text-[11px] text-slate-400 hover:underline truncate block">
+                              {company.website.replace(/^https?:\/\//, '')}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </td>
+
+                    {/* Industry */}
+                    <td className="py-3.5 px-4 text-slate-300 font-medium">
+                      {company.industry || <span className="text-slate-500">-</span>}
+                    </td>
+
+                    {/* Location */}
+                    <td className="py-3.5 px-4 text-slate-400">
+                      <div className="flex items-center gap-1">
+                        <MapPin className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                        <span className="truncate max-w-[140px]">{company.location || 'Uzaktan'}</span>
+                      </div>
+                    </td>
+
+                    {/* Status Badge */}
+                    <td className="py-3.5 px-4">
+                      <CompanyStatusBadge status={company.status} />
+                    </td>
+
+                    {/* Rating */}
+                    <td className="py-3.5 px-4 text-center">
+                      <div className="inline-flex items-center gap-0.5 text-amber-400 font-bold">
+                        <Star className="w-3.5 h-3.5 fill-amber-400" />
+                        <span>{company.rating || 3}</span>
+                      </div>
+                    </td>
+
+                    {/* Actions */}
+                    <td className="py-3.5 px-4 text-right" onClick={(e) => e.stopPropagation()}>
+                      <div className="flex items-center justify-end gap-1">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedDetail(company)}
+                          className="p-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-400 hover:text-indigo-400 transition-colors"
+                          title="Detay Gör"
+                        >
+                          <Eye className="w-4 h-4" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedEdit(company)}
+                          className="p-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-400 hover:text-indigo-400 transition-colors"
+                          title="Düzenle"
+                        >
+                          <Edit3 className="w-4 h-4" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setDeleteId(company.id)}
+                          className="p-1.5 rounded-lg hover:bg-rose-500/10 text-slate-400 hover:text-rose-400 transition-colors"
+                          title="Sil"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Mobile Card Grid View */}
+          <div className="md:hidden grid grid-cols-1 gap-4">
+            {filteredCompanies.map((company) => (
+              <div
+                key={company.id}
+                onClick={() => setSelectedDetail(company)}
+                className="p-4 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 space-y-3 cursor-pointer hover:border-indigo-500/40 transition-all shadow-sm"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="w-9 h-9 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 font-black text-sm flex items-center justify-center shrink-0">
+                      {company.name.charAt(0)}
+                    </div>
+                    <div className="min-w-0">
+                      <h4 className="font-bold text-sm text-foreground truncate">{company.name}</h4>
+                      <p className="text-xs text-slate-400 truncate">{company.industry || 'Genel Teknoloji'}</p>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFavoriteMutation.mutate({ id: company.id, currentStatus: Boolean(company.is_favorite) });
+                    }}
+                    className="p-1"
+                  >
+                    <Star
+                      className={`w-5 h-5 ${
+                        company.is_favorite ? 'fill-amber-400 text-amber-400' : 'text-slate-600'
+                      }`}
+                    />
+                  </button>
+                </div>
+
+                <div className="flex items-center justify-between text-xs pt-2 border-t border-slate-100 dark:border-slate-800">
+                  <CompanyStatusBadge status={company.status} />
+                  <div className="flex items-center gap-1 text-amber-400 font-bold">
+                    <Star className="w-3.5 h-3.5 fill-amber-400" />
+                    <span>{company.rating || 3} / 5</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* Modals */}
+      <CreateCompanyModal isOpen={isCreateOpen} onClose={() => setIsCreateOpen(false)} />
+
+      <EditCompanyModal
+        company={selectedEdit}
+        isOpen={Boolean(selectedEdit)}
+        onClose={() => setSelectedEdit(null)}
+      />
+
+      <CompanyDetailModal
+        company={selectedDetail}
+        isOpen={Boolean(selectedDetail)}
+        onClose={() => setSelectedDetail(null)}
+        onEdit={(company) => setSelectedEdit(company)}
+        onDelete={(id) => setDeleteId(id)}
+      />
+
+      {/* Delete Confirmation Modal */}
+      {deleteId && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-sm w-full space-y-4 shadow-2xl">
+            <h3 className="text-base font-bold text-rose-300">Şirket Kaydını Sil</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Bu şirketi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.
+            </p>
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <Button variant="outline" size="sm" onClick={() => setDeleteId(null)}>
+                Vazgeç
+              </Button>
+              <Button
+                variant="danger"
+                size="sm"
+                isLoading={deleteMutation.isPending}
+                onClick={handleDeleteConfirm}
+              >
+                Evet, Sil
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+
+export default CompaniesPage;

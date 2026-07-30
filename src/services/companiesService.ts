@@ -19,12 +19,20 @@ export const companiesService = {
     return await companiesRepository.create({
       user_id: userId,
       name: validated.name,
-      industry: validated.industry ?? null,
-      location: validated.location ?? null,
-      rating: validated.rating ?? null,
-      open_positions_count: validated.open_positions_count ?? 0,
-      status: validated.status ?? 'Target',
+      industry: validated.industry || null,
+      location: validated.location || null,
+      rating: validated.rating || null,
+      open_positions_count: 0,
+      status: validated.status || 'Target',
       website: validated.website || null,
+      company_size: validated.company_size || null,
+      contact_person: validated.contact_person || null,
+      contact_email: validated.contact_email || null,
+      contact_phone: validated.contact_phone || null,
+      linkedin_url: validated.linkedin_url || null,
+      career_page_url: validated.career_page_url || null,
+      notes: validated.notes || null,
+      is_favorite: validated.is_favorite ?? false,
     });
   },
 
@@ -36,5 +44,10 @@ export const companiesService = {
   async deleteCompany(id: string): Promise<void> {
     if (!id) throw new AppError('Silinecek şirket seçilmedi.');
     await companiesRepository.delete(id);
+  },
+
+  async toggleFavorite(id: string, currentStatus: boolean): Promise<DbCompany> {
+    if (!id) throw new AppError('Şirket kimliği bulunamadı.');
+    return await companiesRepository.update(id, { is_favorite: !currentStatus });
   },
 };
