@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Briefcase, 
   Plus, 
@@ -21,10 +21,12 @@ import { StatusBadge } from '@/components/ui/StatusBadge';
 import { EmptyState } from '@/components/common/EmptyState';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/Table';
+import { CreateApplicationModal } from '@/components/applications/CreateApplicationModal';
 import { useApplicationsListQuery } from '@/hooks/queries/useApplicationsQuery';
 import { ApplicationStatus } from '@/types';
 
 export const ApplicationsPage: React.FC = () => {
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const { data: applications, isLoading, isError, error, refetch } = useApplicationsListQuery();
 
   const formatDate = (dateString?: string | null) => {
@@ -52,7 +54,7 @@ export const ApplicationsPage: React.FC = () => {
           <Button
             variant="primary"
             size="md"
-            disabled
+            onClick={() => setIsCreateModalOpen(true)}
             leftIcon={<Plus className="w-4 h-4" aria-hidden="true" />}
           >
             Yeni Başvuru
@@ -129,7 +131,7 @@ export const ApplicationsPage: React.FC = () => {
           title="Henüz Başvuru Bulunmuyor"
           description="Veritabanında kayıtlı iş başvurunuz yok. Yeni başvuru ekleyerek takibe başlayabilirsiniz."
           actionText="Yeni Başvuru Ekle"
-          onAction={() => {}}
+          onAction={() => setIsCreateModalOpen(true)}
         />
       ) : (
         <Table>
@@ -243,6 +245,12 @@ export const ApplicationsPage: React.FC = () => {
           </TableBody>
         </Table>
       )}
+
+      {/* Create Application Modal */}
+      <CreateApplicationModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+      />
     </div>
   );
 };
