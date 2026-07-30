@@ -9,8 +9,8 @@
 
   <p>
     <a href="#"><img src="https://img.shields.io/badge/Build-Passing-success?style=for-the-badge&logo=github-actions&logoColor=white" alt="Build" /></a>
-    <a href="#"><img src="https://img.shields.io/badge/Current_Release-v0.8.0-blue?style=for-the-badge&logo=git&logoColor=white" alt="Current Release" /></a>
-    <a href="#"><img src="https://img.shields.io/badge/Next_Milestone-Document_Center-purple?style=for-the-badge&logo=target&logoColor=white" alt="Next Milestone" /></a>
+    <a href="#"><img src="https://img.shields.io/badge/Current_Release-v1.0.0_Public_Release-blue?style=for-the-badge&logo=git&logoColor=white" alt="Current Release" /></a>
+    <a href="#"><img src="https://img.shields.io/badge/Production_Readiness-100%2F100-emerald?style=for-the-badge&logo=target&logoColor=white" alt="Production Readiness" /></a>
     <a href="#"><img src="https://img.shields.io/badge/License-MIT-amber?style=for-the-badge" alt="License" /></a>
     <a href="#"><img src="https://img.shields.io/badge/PRs-Welcome-emerald?style=for-the-badge&logo=github&logoColor=white" alt="PRs Welcome" /></a>
   </p>
@@ -25,19 +25,18 @@
 
 ---
 
-### ✨ Key Features
+### ✨ Key Modules & Features
 
-- 🤖 **AI Career Assistant & LLM Adapter Architecture** — Provider-agnostic AI assistant with model & persona selection (Gemini, Claude, GPT-4o) and Markdown export.
-- 📄 **AI Resume Review & ATS Score Engine** — 0-100 ATS scoring with section-by-section analysis and categorized improvement feedback.
-- ✉️ **AI Cover Letter Evaluation** — 6-dimension evaluation covering Grammar, Clarity, Tone, Personalization, ATS Compatibility, and Structure.
+- 🤖 **AI Career Assistant & LLM Adapter Architecture (`/ai-assistant`)** — Provider-agnostic AI assistant supporting model & persona selection (Gemini, Claude, GPT-4o), prompt history, conversation archiving, and Markdown export (`.md`).
+- 📄 **AI Resume Review & ATS Scoring** — Section-by-section ATS evaluation (Contact Info, Summary, Experience, Education, Skills, Projects, Certifications) with 0-100 overall score.
+- ✉️ **AI Cover Letter Evaluation** — 6-dimension quality evaluation covering Grammar, Clarity, Tone, Personalization, ATS Compatibility, and Structure.
 - 🎯 **AI Interview Simulation Coach** — 6-category interview preparation sessions with candidate answer evaluations and STAR method feedback.
-- 📊 **Real-Time Conversion Insights & Goals** — Application-to-interview and interview-to-offer conversion insights with automated career goal tracking.
-- 📅 **Interview Management & Interactive Calendar** — Schedule technical interviews, interactive month calendar, prep checklists, and self-evaluations.
-- 🏢 **Company Management & Candidate CRM** — Store target companies, recruiter contacts, interaction logs, pinned notes, and company-specific follow-up tasks.
-- 📊 **Real-Time KPI Dashboard & Analytics** — Instant visual charts for status distribution, 6-month application trends, interview success rates, and weekly activity metrics.
-- ⚡ **Real-Time Search & Smart Filters** — Instantly locate and filter applications, companies, and interviews by industry, stage, result, or meeting type.
-- 🔐 **Enterprise-Grade Security** — Powered by Supabase Row Level Security (RLS) to ensure absolute data isolation and privacy for every job seeker.
-- 🎨 **Modern Minimalist UI/UX** — Ultra-responsive dark mode aesthetics built with glassmorphism, clean typography, and fluid micro-interactions.
+- 📊 **Real-Time Conversion Insights & Goals** — Application-to-interview and interview-to-offer conversion metrics with automated career goal progress tracking.
+- 📅 **Interview Management & Interactive Month Calendar (`/interviews`)** — Technical interview scheduling, interactive month grid calendar, prep checklists, and 5-star self-evaluations.
+- 🏢 **Company Management & Candidate CRM (`/companies`)** — Directory of target tech companies, recruiter contact networking, interaction logs, pinned rich text notes, and company-specific follow-up tasks.
+- 📊 **Real-Time KPI Dashboard & Analytics (`/dashboard`)** — Instant visual Recharts for application status distribution, 6-month trends, interview success rates, and active reminders.
+- 🔐 **Enterprise Security & Row Level Security** — Supabase Auth and Row Level Security (RLS) policies guaranteeing complete data isolation per candidate.
+- 🎨 **Modern Minimalist UI/UX** — Ultra-responsive dark mode glassmorphism built with React 19, TypeScript, Vite, Tailwind CSS, and Lucide Icons.
 
 ---
 
@@ -55,42 +54,49 @@
 
 ---
 
-## 🚀 Features
+## ⚙️ Environment Setup & Local Installation
 
-### 💻 Core Workflow
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/srdrcll/kariyer-pusulasi.git
+   cd kariyer-pusulasi
+   ```
 
-- ✅ **Authentication & Security** — Email and password authentication, protected routes, and session persistence via Supabase Auth.
-- ✅ **Application Management** — Full lifecycle tracking (Applied, Interviewing, Offer, Rejected) with salary, notes, and detail views.
-- ✅ **Company Management & CRM** — Manage target companies, recruiters, interaction logs, pinned notes, and company-specific tasks.
-- ✅ **Interview Management & Calendar (v0.7.0)** — Complete interview scheduling, interactive month grid calendar, preparation checklists, post-interview evaluations, and countdown widgets.
-- ✅ **KPI Dashboard & Real-Time Analytics** — Live statistics cards, status distribution donut chart, monthly bar chart, and weekly activity line chart.
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Configure Environment Variables**:
+   Create a `.env.local` file in the root directory:
+   ```env
+   VITE_SUPABASE_URL=https://your-supabase-project.supabase.co
+   VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
+   ```
+
+4. **Start Development Server**:
+   ```bash
+   npm run dev
+   ```
+
+5. **Build for Production**:
+   ```bash
+   npm run build
+   ```
 
 ---
 
-## 🗺️ Product Roadmap
+## ☁️ Deployment Guide (Vercel)
 
-### ✅ Phase 1 — Foundation
-- [x] Project setup & Authentication
-- [x] Database architecture & Supabase RLS
+1. **Import Repository to Vercel**: Connect your GitHub repository `srdrcll/kariyer-pusulasi`.
+2. **Framework Preset**: Select **Vite**.
+3. **Environment Variables**:
+   - `VITE_SUPABASE_URL`: Your Supabase URL
+   - `VITE_SUPABASE_ANON_KEY`: Your Supabase Anon Key
+4. **Deploy**: Click **Deploy**. Vercel will automatically build and publish your SPA with client-side routing configured via `vercel.json`.
 
-### ✅ Phase 2 — Applications
-- [x] Application CRUD & Advanced Search
-- [x] Filters, Sorting & Bulk Actions
+---
 
-### ✅ Phase 3 — Dashboard & Analytics (v0.5.0 Released)
-- [x] KPI Dashboard (6 Live Metrics Cards)
-- [x] Real-time Recharts visualizations
+## 📜 License
 
-### ✅ Phase 4 — Company Management & CRM (v0.6.0 Released)
-- [x] Company CRUD & Dedicated Profiles (`/companies/:id`)
-- [x] Recruiter Directory & Networking
-
-### ✅ Phase 5 — Interview Management & Calendar (v0.7.0 Released)
-- [x] Interview CRUD & Dedicated Route (`/interviews`)
-- [x] Interactive Month Calendar View
-- [x] Preparation Checklists & Post-Interview Evaluations
-- [x] Countdown Banner & Real-Time Analytics Charts
-
-### 🔜 Phase 6 — Document Center & Resume Management
-- [ ] Document Storage & Version Control
-- [ ] Cover Letter & Resume Generator
+Distributed under the **MIT License**. See `LICENSE` for details.

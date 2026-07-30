@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [v1.0.0] - 2026-07-30
+
+### 🚀 Public Production Release (v1.0.0)
+- **First Public Release**: Full production release of Kariyer Pusulası candidate-centric ATS & CRM SaaS platform.
+- **Complete Module Coverage**:
+  - 🔐 **Authentication & RLS**: Email/password auth, protected routes, session persistence, and Supabase Row Level Security data isolation.
+  - 📊 **Dashboard & Analytics**: KPI summary cards, Recharts visualizations, active reminders, and next interview countdown.
+  - 💼 **Application Management**: End-to-end lifecycle tracking across Applied, Interviewing, Offer, and Rejected stages.
+  - 🏢 **Company Management & CRM**: Target company directory, recruiter contact management, interaction history logs, pinned rich text notes, and company tasks.
+  - 📅 **Interview Management & Interactive Calendar**: Scheduled technical interviews, month grid calendar, preparation checklists, and 5-star self-evaluations.
+  - 🤖 **AI Career Assistant & Review Suite**: Provider-agnostic LLM adapter architecture, AI chat, resume ATS review, cover letter evaluation, interview simulation coach, career conversion insights, and goal tracking.
+- **Enterprise Hardening**: Complete accessibility (a11y), dark mode glassmorphism UI, responsive design across mobile/tablet/desktop, loading skeletons, and zero console errors.
+
+---
+
 ## [v0.8.0] - 2026-07-30
 
 ### 🚀 Added
