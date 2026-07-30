@@ -1,8 +1,9 @@
 import React from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { WelcomeSection } from '@/components/dashboard/WelcomeSection';
-import { QuickActionsSection } from '@/components/dashboard/QuickActionsSection';
+import { QuickActions } from '@/components/dashboard/QuickActions';
 import { KpiCardsGrid } from '@/components/dashboard/KpiCardsGrid';
+import { InsightsList } from '@/components/dashboard/InsightsList';
 import { AnalyticsSection } from '@/components/dashboard/AnalyticsSection';
 import { RecentActivitySection } from '@/components/dashboard/RecentActivitySection';
 
@@ -14,8 +15,8 @@ export const DashboardPage: React.FC = () => {
       {/* 1. Welcome Section with Dynamic Greeting & Motivational Text */}
       <WelcomeSection onOpenNewModal={context?.onOpenNewModal} />
 
-      {/* 2. Quick Actions Section (4 UI Action Buttons) */}
-      <QuickActionsSection onOpenNewModal={context?.onOpenNewModal} />
+      {/* 2. Quick Actions Section (4 Interactive Action Cards) */}
+      <QuickActions onOpenNewModal={context?.onOpenNewModal} />
 
       {/* 3. Reusable KPI Metric Cards Grid (6 Live Cards) */}
       <div className="space-y-3">
@@ -28,10 +29,15 @@ export const DashboardPage: React.FC = () => {
         <KpiCardsGrid onOpenNewModal={context?.onOpenNewModal} />
       </div>
 
-      {/* 4. Analytics Visualizations Section (3 Real-time Charts) */}
-      <AnalyticsSection />
+      {/* 4. Dynamic Career Insights & Recommendations Widget (Sprint 5.5) */}
+      <InsightsList />
 
-      {/* 5. Recent Activity Feed & Upcoming Interviews Section (Sprint 5.4 Live Widgets) */}
+      {/* 5. Analytics Visualizations Section (3 Real-time Charts) */}
+      <div id="analytics-section">
+        <AnalyticsSection />
+      </div>
+
+      {/* 6. Recent Activity Feed & Upcoming Interviews Section (Sprint 5.4 Live Widgets) */}
       <RecentActivitySection />
     </div>
   );
