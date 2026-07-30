@@ -28,4 +28,11 @@ export const queryKeys = {
     lists: () => [...queryKeys.documents.all, 'list'] as const,
     byApplication: (appId: string) => [...queryKeys.documents.all, 'application', appId] as const,
   },
+  interviews: {
+    all: ['interviews'] as const,
+    lists: () => [...queryKeys.interviews.all, 'list'] as const,
+    list: (filters?: Record<string, unknown>) => [...queryKeys.interviews.lists(), filters] as const,
+    details: () => [...queryKeys.interviews.all, 'detail'] as const,
+    detail: (id: string) => [...queryKeys.interviews.details(), id] as const,
+  },
 };

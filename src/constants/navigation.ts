@@ -2,6 +2,7 @@ import {
   LayoutDashboard, 
   Briefcase, 
   Building2, 
+  Calendar,
   LayoutTemplate, 
   User, 
   Settings, 
@@ -32,6 +33,12 @@ export const MAIN_NAV_ITEMS: NavItem[] = [
     icon: Building2,
     badge: 8,
     description: 'Hedef şirketler ve incelemeler'
+  },
+  {
+    title: 'Mülakatlar',
+    href: '/interviews',
+    icon: Calendar,
+    description: 'Teknik mülakatlar, randevular ve vaka takvimi'
   },
   {
     title: 'Şablonlar',

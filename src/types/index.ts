@@ -61,6 +61,10 @@ export type DbDocument = Database['public']['Tables']['documents']['Row'];
 export type DbDocumentInsert = Database['public']['Tables']['documents']['Insert'];
 export type DbDocumentUpdate = Database['public']['Tables']['documents']['Update'];
 
+export type DbInterview = Database['public']['Tables']['interviews']['Row'];
+export type DbInterviewInsert = Database['public']['Tables']['interviews']['Insert'];
+export type DbInterviewUpdate = Database['public']['Tables']['interviews']['Update'];
+
 
 export interface CompanyItem {
   id: string;
