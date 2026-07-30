@@ -128,13 +128,67 @@ flowchart TD
 
 ---
 
-## 🗺️ Roadmap
+## 📂 Project Structure
 
-- ✅ **Authentication**
-- ✅ **Applications**
-- 🔄 **Dashboard**
-- ⬜ **Companies**
-- ⬜ **Interview Calendar**
-- ⬜ **Document Manager**
-- ⬜ **AI Resume Analyzer**
-- ⬜ **AI Career Insights**
+```text
+src/
+├── components/          # Reusable UI components
+├── features/
+│   ├── applications/    # Application management module
+│   ├── auth/            # Authentication module
+│   └── dashboard/       # Dashboard (planned)
+├── hooks/               # Shared custom hooks
+├── lib/                 # Utilities and configurations
+├── repositories/        # Data access layer
+├── services/            # Business logic
+├── types/               # TypeScript definitions
+└── utils/               # Shared helper functions
+```
+
+---
+
+## 💡 Why Kariyer Pusulası?
+
+Most Applicant Tracking Systems (ATS) are built for recruiters and hiring teams. **Kariyer Pusulası** takes a different approach—it is designed entirely for job seekers.
+
+Managing dozens of applications across multiple platforms can quickly become overwhelming. Spreadsheets become outdated, emails get buried, and important interview dates are easily missed.
+
+Kariyer Pusulası provides a modern, centralized workspace where candidates can organize applications, monitor interview progress, analyze job search performance, and make more informed career decisions.
+
+The long-term vision is to evolve beyond application tracking into an intelligent career companion powered by analytics and AI-driven insights.
+
+---
+
+## 🗺️ Product Roadmap
+
+### ✅ Phase 1 — Foundation
+- [x] Project setup
+- [x] Authentication
+- [x] Database architecture
+- [x] User profiles
+
+### ✅ Phase 2 — Applications
+- [x] Application CRUD
+- [x] Advanced Search
+- [x] Filters & Sorting
+- [x] Bulk Actions
+- [x] Production Hardening
+
+### 🚧 Phase 3 — Dashboard & Analytics
+- [ ] KPI Dashboard
+- [ ] Application Funnel
+- [ ] Activity Timeline
+- [ ] Weekly & Monthly Statistics
+- [ ] Charts & Data Visualization
+
+### 🔜 Phase 4 — Productivity
+- [ ] Company Management
+- [ ] Interview Tracker
+- [ ] Notes & Documents
+- [ ] Goal Tracking
+
+### 🤖 Phase 5 — AI Features
+- [ ] Resume Analyzer
+- [ ] Cover Letter Assistant
+- [ ] Interview Preparation
+- [ ] Personalized Career Insights
