@@ -21,11 +21,11 @@ export const DashboardPage: React.FC = () => {
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-            İstatistik İcmali
+            Canlı İstatistik İcmali
           </h2>
-          <span className="text-xs text-slate-400 font-medium">Sprint 5.1 Altyapısı</span>
+          <span className="text-xs text-slate-400 font-medium">Supabase Canlı Veri • Sprint 5.2</span>
         </div>
-        <KpiCardsGrid />
+        <KpiCardsGrid onOpenNewModal={context?.onOpenNewModal} />
       </div>
 
       {/* 4. Analytics & Activity Feed Container Placeholders */}
