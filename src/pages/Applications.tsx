@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Briefcase, 
@@ -102,8 +102,16 @@ export const ApplicationsPage: React.FC = () => {
     }
   };
 
-  // Selection Handlers
+  // Selection Handlers & Auto-Pruning for Filter Changes
   const visibleIds = filteredAndSortedApplications.map((a) => a.id);
+
+  // Auto-prune selected IDs if they are filtered out
+  useEffect(() => {
+    if (selectedIds.length > 0) {
+      setSelectedIds((prev) => prev.filter((id) => visibleIds.includes(id)));
+    }
+  }, [debouncedSearchQuery, filters]);
+
   const isAllSelected = visibleIds.length > 0 && visibleIds.every((id) => selectedIds.includes(id));
   const isSomeSelected = selectedIds.length > 0;
 
@@ -779,6 +787,7 @@ export const ApplicationsPage: React.FC = () => {
                           type="checkbox"
                           checked={isSelected}
                           onChange={() => {}}
+                          aria-label={`${app.company_name} başvurusunu seç`}
                           className="w-4 h-4 rounded border-slate-300 dark:border-slate-700 text-indigo-600 focus:ring-indigo-500 cursor-pointer mt-1"
                         />
                       </div>
