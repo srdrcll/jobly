@@ -5,6 +5,7 @@ import { Database } from './database';
 export type ApplicationStatus = 
   | 'saved' 
   | 'applied' 
+  | 'contacted'
   | 'interview' 
   | 'case_study' 
   | 'offer' 

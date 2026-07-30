@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { 
   Bookmark, 
   Send, 
+  MessageSquare,
   Users, 
   FileCode2, 
   PartyPopper, 
@@ -22,6 +23,7 @@ interface StatusBadgeProps {
 const STATUS_ICONS: Record<ApplicationStatus, React.ComponentType<{ className?: string; 'aria-hidden'?: boolean }>> = {
   saved: Bookmark,
   applied: Send,
+  contacted: MessageSquare,
   interview: Users,
   case_study: FileCode2,
   offer: PartyPopper,
@@ -35,8 +37,8 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
   showDot = false,
   className,
 }) => {
-  const config = STATUS_CONFIG[status];
-  const IconComponent = STATUS_ICONS[status];
+  const config = STATUS_CONFIG[status] || STATUS_CONFIG.applied;
+  const IconComponent = STATUS_ICONS[status] || STATUS_ICONS.applied;
 
   const sizeClasses = {
     sm: 'text-xs px-2.5 py-0.5 gap-1.5 font-medium rounded-md',
