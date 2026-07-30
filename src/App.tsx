@@ -10,6 +10,7 @@ import { CardSkeleton } from '@/components/ui/Skeleton';
 // Code-Split Route Pages
 const DashboardPage = lazy(() => import('@/pages/Dashboard').then(m => ({ default: m.DashboardPage })));
 const ApplicationsPage = lazy(() => import('@/pages/Applications').then(m => ({ default: m.ApplicationsPage })));
+const ApplicationDetailPage = lazy(() => import('@/pages/ApplicationDetail').then(m => ({ default: m.ApplicationDetailPage })));
 const CompaniesPage = lazy(() => import('@/pages/Companies').then(m => ({ default: m.CompaniesPage })));
 const TemplatesPage = lazy(() => import('@/pages/Templates').then(m => ({ default: m.TemplatesPage })));
 const ProfilePage = lazy(() => import('@/pages/Profile').then(m => ({ default: m.ProfilePage })));
@@ -43,6 +44,7 @@ export function App() {
                 <Route path="/" element={<Navigate to="/dashboard" replace />} />
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/applications" element={<ApplicationsPage />} />
+                <Route path="/applications/:id" element={<ApplicationDetailPage />} />
                 <Route path="/companies" element={<CompaniesPage />} />
                 <Route path="/templates" element={<TemplatesPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
@@ -50,7 +52,7 @@ export function App() {
               </Route>
             </Route>
 
-            {/* Public Only Auth Routes (Redirects to /dashboard if logged in) */}
+            {/* Public Only Auth Routes */}
             <Route element={<PublicRoute />}>
               <Route element={<AuthLayout />}>
                 <Route path="/login" element={<LoginPage />} />
@@ -59,7 +61,7 @@ export function App() {
               </Route>
             </Route>
 
-            {/* Password Reset Route (Accessible in any auth state for recovery flows) */}
+            {/* Password Reset Route */}
             <Route element={<AuthLayout />}>
               <Route path="/reset-password" element={<ResetPasswordPage />} />
             </Route>

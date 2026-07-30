@@ -15,6 +15,15 @@ export function useApplicationsListQuery() {
   });
 }
 
+export function useApplicationDetailQuery(id?: string) {
+  const { user } = useAuth();
+  return useQuery({
+    queryKey: queryKeys.applications.detail(id || ''),
+    queryFn: () => applicationsService.fetchApplicationById(id!),
+    enabled: Boolean(user && id),
+  });
+}
+
 export function useCreateApplicationMutation() {
   const queryClient = useQueryClient();
   const { user } = useAuth();
