@@ -8,6 +8,7 @@
   </p>
 
   <p>
+    <a href="#"><img src="https://img.shields.io/badge/Build-Passing-success?style=for-the-badge&logo=github-actions&logoColor=white" alt="Build" /></a>
     <a href="#"><img src="https://img.shields.io/badge/Status-Active_Development-brightgreen?style=for-the-badge&logo=rocket&logoColor=white" alt="Status" /></a>
     <a href="#"><img src="https://img.shields.io/badge/Version-v0.4.0-blue?style=for-the-badge&logo=git&logoColor=white" alt="Version" /></a>
     <a href="#"><img src="https://img.shields.io/badge/License-MIT-amber?style=for-the-badge" alt="License" /></a>
