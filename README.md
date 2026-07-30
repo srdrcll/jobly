@@ -45,3 +45,48 @@
   <img src="https://img.shields.io/badge/TanStack_Query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white" alt="TanStack Query" />
   <img src="https://img.shields.io/badge/Zod-3E67B1?style=for-the-badge&logo=zod&logoColor=white" alt="Zod" />
 </p>
+
+---
+
+## 🚀 Features
+
+### 🔐 Authentication
+
+- ✅ **Secure Login & Registration** — Email and password authentication powered by Supabase Auth with encrypted tokens.
+- ✅ **Password Reset Flow** — Self-serve password recovery via automated verification emails.
+- ✅ **Protected Route Architecture** — Client-side route guards preventing unauthorized navigation to dashboard routes.
+- ✅ **Session Persistence** — Long-lived, secure session management maintaining state across browser refreshes.
+
+### 📋 Application Management
+
+- ✅ **Create & Edit Applications** — Modal-driven entry forms for tracking salary, pipeline stage, notes, and job links.
+- ✅ **Delete & Archive Records** — Safe application deletion with immediate workspace state synchronization.
+- ✅ **Detailed Application View** — Comprehensive breakdown of interview stages, notes, and activity timeline per job.
+- ✅ **Bulk Operations** — Select and update or remove multiple application records simultaneously.
+
+### 🔍 Search & Organization
+
+- ✅ **Real-Time Search** — Debounced live search querying company names, job titles, and locations instantly.
+- ✅ **Advanced Filters** — Filter applications by pipeline stage, priority level, or remote work preference.
+- ✅ **Multi-Column Sorting** — Dynamic sorting by application date, salary range, or status.
+- ✅ **Responsive Table & Mobile Cards** — Data-dense table layout for desktop, auto-adapting to touch-friendly cards on mobile.
+
+### 📊 User Experience
+
+- ✅ **Modern Dark Theme** — Sleek dark UI designed for reduced eye strain during extended job hunting sessions.
+- ✅ **Glassmorphism UI** — Translucent panels, smooth hover effects, and crisp, modern typography.
+- ✅ **Comprehensive UI States** — Skeleton loaders, informative empty states, and structured error banners.
+- ✅ **Toast Notification System** — Real-time feedback for async operations, errors, and success triggers.
+
+### ⚡ Performance
+
+- ✅ **TanStack Query Caching** — Background data fetching, automatic revalidation, and intelligent garbage collection.
+- ✅ **Optimistic UI Updates** — Instant UI mutations before server response with automatic rollback on error.
+- ✅ **Debounced Search Inputs** — Reduced API requests and minimal network overhead during rapid typing.
+- ✅ **Memoized List Filtering** — High-performance client-side sorting and filtering without re-render lag.
+
+### 🛡️ Security
+
+- ✅ **Supabase Auth & RLS** — Database-level Row Level Security ensuring candidates access only their own records.
+- ✅ **Zod Schema Validation** — Runtime type checking and input sanitization for all forms and request payloads.
+- ✅ **End-to-End Type Safety** — Full TypeScript integration from PostgreSQL database schemas to React components.
