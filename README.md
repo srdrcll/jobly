@@ -147,6 +147,39 @@ src/
 
 ---
 
+## ⚙️ Getting Started
+
+### Prerequisites
+- **Node.js**: v18.0.0 or higher
+- **npm** or **pnpm**
+- **Supabase Account**: For authentication & database backend
+
+### Environment Setup
+Create a `.env` file in the root directory:
+
+```env
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+### Local Development
+
+```bash
+# Clone the repository
+git clone https://github.com/srdrcll/kariyer-pusulasi.git
+
+# Navigate to project directory
+cd kariyer-pusulasi
+
+# Install dependencies
+npm install
+
+# Run local development server
+npm run dev
+```
+
+---
+
 ## 💡 Why Kariyer Pusulası?
 
 Most Applicant Tracking Systems (ATS) are built for recruiters and hiring teams. **Kariyer Pusulası** takes a different approach—it is designed entirely for job seekers.
