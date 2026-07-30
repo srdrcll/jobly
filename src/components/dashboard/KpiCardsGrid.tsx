@@ -16,44 +16,7 @@ import { useApplicationsListQuery } from '@/hooks/queries/useApplicationsQuery';
 import { DbApplication } from '@/types';
 import { Button } from '@/components/ui/Button';
 
-export interface KpiMetrics {
-  total: number;
-  active: number;
-  interviews: number;
-  offers: number;
-  rejections: number;
-  successRate: number;
-}
-
-export function calculateKpiMetrics(applications: DbApplication[] = []): KpiMetrics {
-  if (!applications || applications.length === 0) {
-    return {
-      total: 0,
-      active: 0,
-      interviews: 0,
-      offers: 0,
-      rejections: 0,
-      successRate: 0,
-    };
-  }
-
-  const total = applications.length;
-  const active = applications.filter((a) => a.status !== 'rejected' && a.status !== 'saved').length;
-  const interviews = applications.filter((a) => a.status === 'interview' || a.status === 'case_study' || a.status === 'contacted').length;
-  const offers = applications.filter((a) => a.status === 'offer').length;
-  const rejections = applications.filter((a) => a.status === 'rejected').length;
-  const positiveOutcomes = offers + interviews;
-  const successRate = total > 0 ? Number(((positiveOutcomes / total) * 100).toFixed(1)) : 0;
-
-  return {
-    total,
-    active,
-    interviews,
-    offers,
-    rejections,
-    successRate,
-  };
-}
+import { calculateKpiMetrics, KpiMetrics } from '@/utils/statisticsUtils';
 
 interface KpiCardsGridProps {
   onOpenNewModal?: () => void;

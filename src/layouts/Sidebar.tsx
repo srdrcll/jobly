@@ -14,6 +14,9 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
+import { useApplicationsListQuery } from '@/hooks/queries/useApplicationsQuery';
+import { useCompaniesListQuery } from '@/hooks/queries/useCompaniesQuery';
+import { useInterviewsListQuery } from '@/hooks/queries/useInterviewsQuery';
 
 interface SidebarProps {
   isCollapsed: boolean;
@@ -27,6 +30,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onMobileClose,
 }) => {
   const { user, logout } = useAuth();
+  
+  // Dynamic Real-time Counters from Cached Queries
+  const { data: applications = [] } = useApplicationsListQuery();
+  const { data: companies = [] } = useCompaniesListQuery();
+  const { data: interviews = [] } = useInterviewsListQuery();
+
+  const getDynamicBadge = (href: string) => {
+    if (href === '/applications') return applications.length > 0 ? applications.length : undefined;
+    if (href === '/companies') return companies.length > 0 ? companies.length : undefined;
+    if (href === '/interviews') return interviews.length > 0 ? interviews.length : undefined;
+    if (href === '/dashboard') return 'Yeni';
+    if (href === '/ai-assistant') return 'AI';
+    return undefined;
+  };
 
   const fullName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Kullanıcı';
   const avatarInitials = fullName
@@ -109,9 +126,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         {!isCollapsed && (
                           <span className="truncate flex-1">{item.title}</span>
                         )}
-                        {!isCollapsed && item.badge && (
+                        {!isCollapsed && getDynamicBadge(item.href) && (
                           <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-500/15 text-indigo-500 border border-indigo-500/20">
-                            {item.badge}
+                            {getDynamicBadge(item.href)}
                           </span>
                         )}
                         {isCollapsed && (

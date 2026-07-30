@@ -18,21 +18,18 @@ export const MAIN_NAV_ITEMS: NavItem[] = [
     title: 'Genel Bakış',
     href: '/dashboard',
     icon: LayoutDashboard,
-    badge: 'Yeni',
     description: 'Başvuru özeti, istatistikler ve yaklaşan mülakatlar'
   },
   {
     title: 'Başvurular',
     href: '/applications',
     icon: Briefcase,
-    badge: 14,
     description: 'Tüm iş başvurularınız ve durum takibi'
   },
   {
     title: 'Şirketler',
     href: '/companies',
     icon: Building2,
-    badge: 8,
     description: 'Hedef şirketler ve incelemeler'
   },
   {
@@ -45,7 +42,6 @@ export const MAIN_NAV_ITEMS: NavItem[] = [
     title: 'AI Kariyer Asistanı',
     href: '/ai-assistant',
     icon: Bot,
-    badge: 'AI',
     description: 'Özgeçmiş analizi, mülakat koçu ve kariyer rehberi'
   },
   {
