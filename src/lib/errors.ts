@@ -64,9 +64,14 @@ export function handleDatabaseError(error: unknown): AppError {
       });
     }
 
-    // Network / Offline Error
-    if (message.includes('Failed to fetch') || message.includes('NetworkError')) {
-      return new AppError('Ağ bağlantısı kurulamadı. Lütfen internet bağlantınızı kontrol edin.', {
+    // Network / Offline Error / Timeout
+    if (
+      message.toLowerCase().includes('failed to fetch') || 
+      message.toLowerCase().includes('networkerror') ||
+      message.toLowerCase().includes('aborted') ||
+      message.toLowerCase().includes('timeout')
+    ) {
+      return new AppError('Sunucu bağlantısı zaman aşımına uğradı veya ağ bağlantısı kurulamadı.', {
         isNetworkError: true,
       });
     }
