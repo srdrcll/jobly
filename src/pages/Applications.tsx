@@ -13,7 +13,8 @@ import {
   AlertCircle,
   RefreshCw,
   Target,
-  Edit3
+  Edit3,
+  Trash2
 } from 'lucide-react';
 import { PageHeader } from '@/components/common/PageHeader';
 import { Button } from '@/components/ui/Button';
@@ -23,17 +24,23 @@ import { PriorityBadge } from '@/components/common/PriorityBadge';
 import { EmptyState } from '@/components/common/EmptyState';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/Table';
+import { ConfirmationDialog } from '@/components/ui/ConfirmationDialog';
 import { CreateApplicationModal } from '@/components/applications/CreateApplicationModal';
 import { EditApplicationModal } from '@/components/applications/EditApplicationModal';
-import { useApplicationsListQuery } from '@/hooks/queries/useApplicationsQuery';
+import { 
+  useApplicationsListQuery, 
+  useDeleteApplicationMutation 
+} from '@/hooks/queries/useApplicationsQuery';
 import { ApplicationStatus, DbApplication } from '@/types';
 
 export const ApplicationsPage: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [editingApplication, setEditingApplication] = useState<DbApplication | null>(null);
+  const [deletingApplication, setDeletingApplication] = useState<DbApplication | null>(null);
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
 
   const { data: applications, isLoading, isError, error, refetch } = useApplicationsListQuery();
+  const deleteMutation = useDeleteApplicationMutation();
 
   const formatDate = (dateString?: string | null) => {
     if (!dateString) return '—';
@@ -57,6 +64,23 @@ export const ApplicationsPage: React.FC = () => {
     e.stopPropagation();
     setActiveMenuId(null);
     setEditingApplication(app);
+  };
+
+  const handleOpenDelete = (app: DbApplication, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setActiveMenuId(null);
+    setDeletingApplication(app);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deletingApplication?.id) return;
+
+    try {
+      await deleteMutation.mutateAsync(deletingApplication.id);
+      setDeletingApplication(null);
+    } catch {
+      // Error handled by mutation callback
+    }
   };
 
   return (
@@ -268,6 +292,12 @@ export const ApplicationsPage: React.FC = () => {
                             >
                               <Edit3 className="w-3.5 h-3.5 text-indigo-400" aria-hidden="true" /> Düzenle
                             </button>
+                            <button
+                              onClick={(e) => handleOpenDelete(app, e)}
+                              className="w-full px-3 py-2 text-left text-xs font-semibold text-rose-500 hover:bg-rose-500/10 flex items-center gap-2 transition-colors"
+                            >
+                              <Trash2 className="w-3.5 h-3.5 text-rose-500" aria-hidden="true" /> Sil
+                            </button>
                           </div>
                         )}
                       </TableCell>
@@ -326,6 +356,12 @@ export const ApplicationsPage: React.FC = () => {
                           >
                             <Edit3 className="w-3.5 h-3.5 text-indigo-400" aria-hidden="true" /> Düzenle
                           </button>
+                          <button
+                            onClick={(e) => handleOpenDelete(app, e)}
+                            className="w-full px-3 py-2 text-left text-xs font-semibold text-rose-500 hover:bg-rose-500/10 flex items-center gap-2"
+                          >
+                            <Trash2 className="w-3.5 h-3.5 text-rose-500" aria-hidden="true" /> Sil
+                          </button>
                         </div>
                       )}
                     </div>
@@ -368,6 +404,23 @@ export const ApplicationsPage: React.FC = () => {
         isOpen={Boolean(editingApplication)}
         onClose={() => setEditingApplication(null)}
         application={editingApplication}
+      />
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmationDialog
+        isOpen={Boolean(deletingApplication)}
+        onClose={() => setDeletingApplication(null)}
+        onConfirm={handleConfirmDelete}
+        title="Başvuruyu Sil"
+        message={
+          deletingApplication
+            ? `"${deletingApplication.company_name} - ${deletingApplication.position}" iş başvurusunu kalıcı olarak silmek istediğinize emin misiniz? Bu işlem geri alınamaz.`
+            : ''
+        }
+        confirmText="Başvuruyu Sil"
+        cancelText="İptal"
+        variant="danger"
+        isLoading={deleteMutation.isPending}
       />
     </div>
   );
