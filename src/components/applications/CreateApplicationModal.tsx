@@ -161,10 +161,10 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
     >
       <form id="create-application-form" onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
         {/* Required Fields Section */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Input
             label="Şirket Adı *"
-            placeholder="örn. Trendyol, Getir, Microsoft"
+            placeholder="örn. Teknoloji A.Ş., Global Corp"
             leftIcon={<Building2 className="w-4 h-4" aria-hidden="true" />}
             error={errors.company_name?.message}
             {...register('company_name')}
@@ -177,34 +177,6 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
             error={errors.position?.message}
             {...register('position')}
           />
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {/* Target Role Select */}
-          <div className="space-y-1.5 w-full">
-            <label htmlFor="create-target-role" className="block text-xs font-semibold text-slate-600 dark:text-slate-300">
-              Hedef Rol *
-            </label>
-            <div className="relative flex items-center w-full">
-              <div className="absolute left-3.5 text-slate-500 pointer-events-none shrink-0" aria-hidden="true">
-                <Target className="w-4 h-4" />
-              </div>
-              <select
-                id="create-target-role"
-                className="w-full h-10 pl-10 pr-3.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
-                {...register('target_role')}
-              >
-                {TARGET_ROLE_OPTIONS.map((role) => (
-                  <option key={role} value={role}>
-                    {role}
-                  </option>
-                ))}
-              </select>
-            </div>
-            {errors.target_role?.message && (
-              <p className="text-[11px] text-rose-400 font-medium" role="alert" aria-live="assertive">{errors.target_role.message}</p>
-            )}
-          </div>
 
           {/* Status Select */}
           <div className="space-y-1.5 w-full">
@@ -234,7 +206,30 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
         <div className="pt-2 border-t border-slate-200 dark:border-slate-800/60 space-y-4">
           <h4 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Ek Detaylar (Opsiyonel)</h4>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+            {/* Target Role Select (Optional) */}
+            <div className="space-y-1.5 w-full">
+              <label htmlFor="create-target-role" className="block text-xs font-semibold text-slate-600 dark:text-slate-300">
+                Rol Kategorisi
+              </label>
+              <div className="relative flex items-center w-full">
+                <div className="absolute left-3.5 text-slate-500 pointer-events-none shrink-0" aria-hidden="true">
+                  <Target className="w-4 h-4" />
+                </div>
+                <select
+                  id="create-target-role"
+                  className="w-full h-10 pl-10 pr-3.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+                  {...register('target_role')}
+                >
+                  {TARGET_ROLE_OPTIONS.map((role) => (
+                    <option key={role} value={role}>
+                      {role}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
             <Input
               label="Başvuru Tarihi"
               type="date"

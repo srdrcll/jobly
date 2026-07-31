@@ -69,7 +69,7 @@ export const CreateCompanyModal: React.FC<CreateCompanyModalProps> = ({ isOpen, 
           <div className="sm:col-span-2">
             <Input
               label="Şirket Adı *"
-              placeholder="Örn: Trendyol Tech, Getir, Google"
+              placeholder="Örn: Teknoloji A.Ş., Global Corp"
               leftIcon={<Building2 className="w-4 h-4 text-slate-400" />}
               error={errors.name?.message}
               {...register('name')}

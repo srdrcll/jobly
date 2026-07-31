@@ -25,7 +25,7 @@ export const AiInterviewCoachSection: React.FC = () => {
   const evaluateMutation = useEvaluateAnswerMutation();
 
   // Form State
-  const [companyName, setCompanyName] = useState('Trendyol Tech');
+  const [companyName, setCompanyName] = useState('Teknoloji A.Ş.');
   const [position, setPosition] = useState('Senior Frontend Developer');
   const [interviewType, setInterviewType] = useState('Online');
   const [seniority, setSeniority] = useState<SeniorityLevel>('Senior');
@@ -82,7 +82,7 @@ export const AiInterviewCoachSection: React.FC = () => {
         <form onSubmit={handleGenerate} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-1">
           <Input
             label="Hedef Şirket"
-            placeholder="Örn: Trendyol"
+            placeholder="Örn: Teknoloji A.Ş."
             value={companyName}
             onChange={(e) => setCompanyName(e.target.value)}
           />

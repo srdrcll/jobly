@@ -15,9 +15,9 @@ export const CoverLetterReviewSection: React.FC = () => {
   const { data: reviews = [] } = useCoverLetterReviewsQuery();
   const reviewMutation = useReviewCoverLetterMutation();
 
-  const [title, setTitle] = useState('Senior Frontend Developer — Trendyol Ön Mektubu');
+  const [title, setTitle] = useState('Senior Frontend Developer — Ön Mektup');
   const [contentText, setContentText] = useState(
-    'Sayın İşe Alım Yöneticisi,\n\nTrendyol ekibinde yayınlanan Senior Frontend Developer pozisyonunu büyük bir heyecanla inceledim. 7 yılı aşkın süredir React 19, TypeScript ve mikro-frontend mimarileri geliştiren bir yazılım mühendisi olarak, kullanıcı odaklı yüksek performanslı web uygulamaları inşa etme konusundaki birikimimle ekibinize değer katabileceğime inanıyorum.\n\nKariyerim boyunca yüksek trafikli SaaS platformlarında sayfa yükleme sürelerini %35 düşürdüm ve tasarım sistemlerini (Design System) standardize ettim. Şirketinizin teknoloji vizyonuna katkı sağlamak isterim.\n\nZaman ayırdığınız için teşekkür eder, mülakat fırsatını değerlendirmekten memnuniyet duyarım.\n\nSaygılarımla,\nSerdar Çil'
+    'Sayın İşe Alım Yöneticisi,\n\nŞirketiniz ekibinde yayınlanan Senior Frontend Developer pozisyonunu büyük bir heyecanla inceledim. 7 yılı aşkın süredir React 19, TypeScript ve mikro-frontend mimarileri geliştiren bir yazılım mühendisi olarak, kullanıcı odaklı yüksek performanslı web uygulamaları inşa etme konusundaki birikimimle ekibinize değer katabileceğime inanıyorum.\n\nKariyerim boyunca yüksek trafikli SaaS platformlarında sayfa yükleme sürelerini %35 düşürdüm ve tasarım sistemlerini (Design System) standardize ettim. Şirketinizin teknoloji vizyonuna katkı sağlamak isterim.\n\nZaman ayırdığınız için teşekkür eder, mülakat fırsatını değerlendirmekten memnuniyet duyarım.\n\nSaygılarımla,\nSerdar Çil'
   );
 
   const [activeReview, setActiveReview] = useState<CoverLetterReviewRecord | null>(() => reviews[0] || null);

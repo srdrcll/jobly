@@ -36,9 +36,7 @@ export const applicationSchema = z.object({
     .string({ required_error: 'Pozisyon ünvanı zorunludur.' })
     .min(1, 'Pozisyon ünvanı boş bırakılamaz.')
     .max(120, 'Pozisyon ünvanı en fazla 120 karakter olabilir.'),
-  target_role: z
-    .string({ required_error: 'Hedef rol seçimi zorunludur.' })
-    .min(1, 'Hedef rol seçimi zorunludur.'),
+  target_role: z.string().optional().default('Software Engineer'),
   status: applicationStatusEnum.default('applied'),
   company_id: z.string().uuid().nullable().optional(),
   location: z.string().max(100, 'Konum en fazla 100 karakter olabilir.').nullable().optional(),

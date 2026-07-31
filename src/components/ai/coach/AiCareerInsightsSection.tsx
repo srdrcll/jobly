@@ -38,7 +38,7 @@ export const AiCareerInsightsSection: React.FC = () => {
       const c = a.company_name || 'Teknoloji Şirketi';
       compMap[c] = (compMap[c] || 0) + 1;
     });
-    const topCompany = Object.entries(compMap).sort((a, b) => b[1] - a[1])[0]?.[0] || 'Trendyol Tech';
+    const topCompany = Object.entries(compMap).sort((a, b) => b[1] - a[1])[0]?.[0] || 'Teknoloji A.Ş.';
 
     return {
       appToInterviewConversion,

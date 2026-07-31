@@ -108,7 +108,7 @@ export class MockAiReviewProvider implements IAiReviewProvider {
   async reviewCoverLetter(title: string, contentText: string): Promise<CoverLetterReviewRecord> {
     await new Promise((resolve) => setTimeout(resolve, 800));
 
-    const isCustomized = /şirket|ekip|vizyon|trendyol|getir|hepsiburada/i.test(contentText);
+    const isCustomized = /şirket|ekip|vizyon|pozisyon|ürün/i.test(contentText);
     const textLen = contentText.length;
 
     const grammarScore = 94;

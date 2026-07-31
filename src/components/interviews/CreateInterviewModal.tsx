@@ -98,7 +98,7 @@ export const CreateInterviewModal: React.FC<CreateInterviewModalProps> = ({ isOp
           {/* Company Name */}
           <Input
             label="Şirket Adı *"
-            placeholder="Örn: Trendyol Tech"
+            placeholder="Örn: Teknoloji A.Ş."
             leftIcon={<Building2 className="w-4 h-4 text-slate-400" />}
             error={errors.company_name?.message}
             {...register('company_name')}
