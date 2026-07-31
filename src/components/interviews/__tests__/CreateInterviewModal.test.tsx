@@ -43,16 +43,15 @@ describe('CreateInterviewModal Component', () => {
   it('submits form successfully with valid data', async () => {
     render(<CreateInterviewModal isOpen={true} onClose={mockOnClose} />);
 
-    await userEvent.type(screen.getByLabelText(/şirket adı \*/i), 'Google');
-    await userEvent.type(screen.getByLabelText(/pozisyon adı \*/i), 'Senior Software Engineer');
+    await userEvent.type(screen.getByLabelText(/şirket adı \*/i), 'Apex Sistemleri');
+    await userEvent.type(screen.getByLabelText(/pozisyon \*/i), 'Software Engineer');
 
-    const saveButton = screen.getByRole('button', { name: /mülakatı kaydet/i });
-    await userEvent.click(saveButton);
+    await userEvent.click(screen.getByRole('button', { name: /mülakatı kaydet/i }));
 
     await waitFor(() => {
       expect(mockMutate).toHaveBeenCalledWith(
         expect.objectContaining({
-          company_name: 'Google',
+          company_name: 'Apex Sistemleri',
           position: 'Senior Software Engineer',
         }),
         expect.any(Object)

@@ -35,7 +35,7 @@ describe('Integration Test: Applications Flow & KPI Sync', () => {
     expect(screen.getByText('2')).toBeInTheDocument();
 
     // Verify list items present
-    expect(screen.getByText('Trendyol')).toBeInTheDocument();
-    expect(screen.getByText('Google')).toBeInTheDocument();
+    expect(screen.getByText('Nova Teknoloji')).toBeInTheDocument();
+    expect(screen.getByText('Apex Sistemleri')).toBeInTheDocument();
   });
 });

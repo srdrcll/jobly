@@ -51,7 +51,7 @@ describe('CreateApplicationModal Component', () => {
 
     render(<CreateApplicationModal isOpen={true} onClose={mockOnClose} />);
 
-    await userEvent.type(screen.getByLabelText(/şirket adı \*/i), 'Getir');
+    await userEvent.type(screen.getByLabelText(/şirket adı \*/i), 'Luna Software');
     await userEvent.type(screen.getByLabelText(/pozisyon ünvanı \*/i), 'Senior React Developer');
 
     const saveButton = screen.getByRole('button', { name: /başvuruyu kaydet/i });
@@ -60,7 +60,7 @@ describe('CreateApplicationModal Component', () => {
     await waitFor(() => {
       expect(mockMutateAsync).toHaveBeenCalledWith(
         expect.objectContaining({
-          company_name: 'Getir',
+          company_name: 'Luna Software',
           position: 'Senior React Developer',
         })
       );

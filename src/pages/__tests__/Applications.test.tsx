@@ -89,13 +89,13 @@ describe('ApplicationsPage Component', () => {
 
     render(<ApplicationsPage />);
 
-    expect(screen.getByText('Trendyol')).toBeInTheDocument();
-    expect(screen.getByText('Google')).toBeInTheDocument();
+    expect(screen.getByText('Nova Teknoloji')).toBeInTheDocument();
+    expect(screen.getByText('Apex Sistemleri')).toBeInTheDocument();
 
     const searchInput = screen.getByPlaceholderText(/şirket, pozisyon veya not ara/i);
-    await userEvent.type(searchInput, 'Trendyol');
+    await userEvent.type(searchInput, 'Nova Teknoloji');
 
     // Wait for debounced search filter
-    expect(searchInput).toHaveValue('Trendyol');
+    expect(searchInput).toHaveValue('Nova Teknoloji');
   });
 });

@@ -7,7 +7,7 @@ export interface InterviewItemData {
   position: string;
   location: string;
   workType: 'Remote' | 'Hybrid' | 'On-site' | 'Bilinmiyor';
-  interviewType: string; // e.g. "Online (Google Meet / Zoom)", "Ofis Mülakatı"
+  interviewType: string; // e.g. "Online Mülakat", "Ofis Mülakatı"
   dateFormatted: string; // e.g. "Bugün, 14:30" or "28 Temmuz 2026"
   timeFormatted: string; // e.g. "14:30"
   isWithin24Hours: boolean;
@@ -42,7 +42,7 @@ export function extractUpcomingInterviews(applications: DbApplication[] = []): I
     } else if (app.work_type === 'Hybrid') {
       interviewType = 'Hibrit Mülakat';
     } else if (app.work_type === 'Remote') {
-      interviewType = 'Online (Google Meet / Zoom)';
+      interviewType = 'Online Görüşme (Görüntülü Toplantı)';
     }
 
     let dateFormatted = 'Yakında';

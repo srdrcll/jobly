@@ -43,17 +43,17 @@ describe('EditCompanyModal Component', () => {
 
     const nameInput = screen.getByLabelText(/şirket adı \*/i);
     await userEvent.clear(nameInput);
-    await userEvent.type(nameInput, 'Trendyol Group');
+    await userEvent.type(nameInput, 'Nova Teknoloji Grubu');
 
-    const saveButton = screen.getByRole('button', { name: /değişiklikleri kaydet/i });
+    const saveButton = screen.getByRole('button', { name: /güncelle/i });
     await userEvent.click(saveButton);
 
     await waitFor(() => {
-      expect(mockMutate).toHaveBeenCalledWith(
-        {
-          id: sampleCompany.id,
-          payload: expect.objectContaining({
-            name: 'Trendyol Group',
+      expect(mockMutateAsync).toHaveBeenCalledWith(
+        expect.objectContaining({
+          id: 'comp-1',
+          companyData: expect.objectContaining({
+            name: 'Nova Teknoloji Grubu',
           }),
         },
         expect.any(Object)

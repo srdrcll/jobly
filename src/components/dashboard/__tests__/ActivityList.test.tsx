@@ -18,16 +18,14 @@ describe('ActivityList Component', () => {
         id: 'act-1',
         type: 'application_created',
         title: 'Yeni Başvuru Yapıldı',
-        description: 'Trendyol - Frontend Developer pozisyonuna başvuru yapıldı.',
-        timestamp: '2026-07-29T10:00:00Z',
-        targetId: 'app-1',
-        targetType: 'application',
+        description: 'Nova Teknoloji - Frontend Developer pozisyonuna başvuru yapıldı.',
+        timestamp: '2 saat önce',
       },
     ];
 
     render(<ActivityList activities={mockActivities} />);
 
     expect(screen.getByText('Yeni Başvuru Yapıldı')).toBeInTheDocument();
-    expect(screen.getByText('Trendyol - Frontend Developer pozisyonuna başvuru yapıldı.')).toBeInTheDocument();
+    expect(screen.getByText('Nova Teknoloji - Frontend Developer pozisyonuna başvuru yapıldı.')).toBeInTheDocument();
   });
 });

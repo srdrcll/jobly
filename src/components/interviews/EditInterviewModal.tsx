@@ -123,9 +123,9 @@ export const EditInterviewModal: React.FC<EditInterviewModalProps> = ({ intervie
             <label className="text-xs font-semibold text-foreground">Görüşme Türü</label>
             <select
               {...register('type')}
-              className="w-full h-10 px-3 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs text-foreground font-bold focus:ring-2 focus:ring-indigo-500 outline-none"
+              className="w-full h-10 px-3 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs text-foreground font-bold focus:ring-2 focus:ring-blue-500 outline-none"
             >
-              <option value="Online">📹 Online (Google Meet / Zoom / Teams)</option>
+              <option value="Online">📹 Online Görüşme (Görüntülü Toplantı)</option>
               <option value="On-site">🏢 Ofiste (Yüz Yüze)</option>
               <option value="Phone">📞 Telefon Görüşmesi</option>
               <option value="Hybrid">🔀 Hibrit</option>

@@ -8,7 +8,7 @@ export interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> 
 }
 
 export const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
-  ({ value, onChange, onClear, showKbdShortcut = true, className, placeholder = "Ara... (örn. Google, React Developer)", ...props }, ref) => {
+  ({ value, onChange, onClear, showKbdShortcut = true, className, placeholder = "Ara... (örn. Teknoloji A.Ş., React Developer)", ...props }, ref) => {
     const internalRef = useRef<HTMLInputElement>(null);
     const inputRef = (ref as React.RefObject<HTMLInputElement>) || internalRef;
 
@@ -31,7 +31,7 @@ export const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className="w-full h-10 pl-10 pr-16 bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-xl text-sm placeholder:text-slate-400 text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500/50 transition-all duration-200"
+          className="w-full h-10 pl-10 pr-16 bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-xl text-sm placeholder:text-slate-400 text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/50 transition-all duration-200"
           {...props}
         />
 

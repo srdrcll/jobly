@@ -16,22 +16,23 @@ describe('UpcomingInterviews Component', () => {
     const mockInterviews: InterviewItemData[] = [
       {
         id: 'int-1',
-        companyName: 'Google',
-        position: 'Software Engineer',
-        stage: 'Teknik Görüşme',
+        companyName: 'Apex Sistemleri',
+        position: 'Senior SWE',
+        stage: 'Teknik Mülakat',
         type: 'Online',
-        date: '2026-08-05',
+        date: 'Bugün, 14:30',
         time: '14:00',
         durationMinutes: 45,
         daysLeft: 5,
         isToday: false,
+        isWithin24Hours: true,
       },
     ];
 
     render(<UpcomingInterviews interviews={mockInterviews} />);
 
-    expect(screen.getByText('Google')).toBeInTheDocument();
-    expect(screen.getByText('Software Engineer')).toBeInTheDocument();
-    expect(screen.getByText('Teknik Görüşme')).toBeInTheDocument();
+    expect(screen.getByText('Apex Sistemleri')).toBeInTheDocument();
+    expect(screen.getByText('Senior SWE')).toBeInTheDocument();
+    expect(screen.getByText('Teknik Mülakat')).toBeInTheDocument();
   });
 });

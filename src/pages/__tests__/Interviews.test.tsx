@@ -92,9 +92,9 @@ describe('InterviewsPage Component', () => {
 
     expect(screen.getByText('Software Engineer')).toBeInTheDocument();
 
-    const searchInput = screen.getByPlaceholderText(/şirket, pozisyon veya mülakatçı ara/i);
-    await userEvent.type(searchInput, 'Google');
+    const searchInput = screen.getByPlaceholderText(/ara/i);
+    await userEvent.type(searchInput, 'Apex Sistemleri');
 
-    expect(searchInput).toHaveValue('Google');
+    expect(searchInput).toHaveValue('Apex Sistemleri');
   });
 });

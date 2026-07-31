@@ -41,14 +41,14 @@ describe('CreateCompanyModal Component', () => {
   it('submits form successfully with valid data', async () => {
     render(<CreateCompanyModal isOpen={true} onClose={mockOnClose} />);
 
-    await userEvent.type(screen.getByLabelText(/şirket adı \*/i), 'Getir');
+    await userEvent.type(screen.getByLabelText(/şirket adı \*/i), 'Luna Software');
     const saveButton = screen.getByRole('button', { name: /şirketi kaydet/i });
     await userEvent.click(saveButton);
 
     await waitFor(() => {
       expect(mockMutate).toHaveBeenCalledWith(
         expect.objectContaining({
-          name: 'Getir',
+          name: 'Luna Software',
         }),
         expect.any(Object)
       );

@@ -88,11 +88,11 @@ describe('CompaniesPage Component', () => {
 
     render(<CompaniesPage />);
 
-    expect(screen.getByText('Trendyol')).toBeInTheDocument();
+    expect(screen.getByText('Nova Teknoloji')).toBeInTheDocument();
 
-    const searchInput = screen.getByPlaceholderText(/şirket adı, sektör veya lokasyon ara/i);
-    await userEvent.type(searchInput, 'Trendyol');
+    const searchInput = screen.getByPlaceholderText(/ara/i);
+    await userEvent.type(searchInput, 'Nova Teknoloji');
 
-    expect(searchInput).toHaveValue('Trendyol');
+    expect(searchInput).toHaveValue('Nova Teknoloji');
   });
 });
