@@ -2,8 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { 
   MAIN_NAV_ITEMS, 
-  SECONDARY_NAV_ITEMS, 
-  AUTH_NAV_ITEMS 
+  SECONDARY_NAV_ITEMS
 } from '@/constants/navigation';
 import { 
   Compass, 
@@ -207,36 +206,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         )}
                       </>
                     )}
-                  </NavLink>
-                );
-              })}
-            </nav>
-          </div>
-
-          {/* Navigation Group 3: Preview Routes */}
-          <div>
-            {!isCollapsed && (
-              <h4 className="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
-                Hızlı Önizleme
-              </h4>
-            )}
-            <nav className="space-y-1">
-              {AUTH_NAV_ITEMS.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <NavLink
-                    key={item.href}
-                    to={item.href}
-                    onClick={onMobileClose}
-                    className={({ isActive }) =>
-                      cn(
-                        'flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-all duration-200 text-slate-500 dark:text-slate-400 hover:text-foreground hover:bg-slate-100 dark:hover:bg-slate-900/60',
-                        isActive && 'bg-slate-100 dark:bg-slate-900 text-foreground font-semibold'
-                      )
-                    }
-                  >
-                    <Icon className="w-4 h-4 text-slate-400 shrink-0" aria-hidden="true" />
-                    {!isCollapsed && <span className="truncate">{item.title}</span>}
                   </NavLink>
                 );
               })}
