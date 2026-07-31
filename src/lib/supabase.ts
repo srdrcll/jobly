@@ -9,26 +9,11 @@ if (!supabaseUrl || !supabaseAnonKey) {
   );
 }
 
-const fetchWithTimeout = (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 seconds timeout
-
-  return fetch(input, {
-    ...init,
-    signal: controller.signal,
-  }).finally(() => {
-    clearTimeout(timeoutId);
-  });
-};
-
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
     detectSessionInUrl: true,
-  },
-  global: {
-    fetch: fetchWithTimeout,
   },
 });
 
