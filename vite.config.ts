@@ -34,6 +34,6 @@ export default defineConfig({
       },
     },
     // Raise warning threshold slightly — we track it manually
-    chunkSizeWarningLimit: 600,
+    chunkSizeWarningLimit: 1000,
   },
 });
