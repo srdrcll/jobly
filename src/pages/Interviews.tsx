@@ -504,7 +504,7 @@ export const InterviewsPage: React.FC = () => {
                         <Clock className="w-3.5 h-3.5 text-purple-400" />
                         <span>{new Date(interview.date).toLocaleDateString('tr-TR')} — {interview.time || '14:00'}</span>
                       </div>
-                      <span className="font-bold text-slate-300">{interview.stage || 'Mülakat'}</span>
+                      <span className="font-bold text-slate-700 dark:text-slate-300">{interview.stage || 'Mülakat'}</span>
                     </div>
                   </div>
                 ))}

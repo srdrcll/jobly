@@ -103,7 +103,7 @@ export const CompanyProfileOverview: React.FC<CompanyProfileOverviewProps> = ({
               href={company.website}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-300 hover:text-indigo-400 text-xs font-semibold transition-colors"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-indigo-400 text-xs font-semibold transition-colors"
             >
               <Globe className="w-4 h-4" /> Web Sitesi
             </a>

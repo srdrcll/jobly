@@ -79,6 +79,7 @@ export const WelcomeSection: React.FC<{ onOpenNewModal?: () => void }> = ({ onOp
             size="md"
             rightIcon={<ArrowRight className="w-4 h-4" />}
             onClick={() => navigate('/applications')}
+            className="border-indigo-400/30 text-indigo-100 hover:bg-indigo-500/20 hover:text-white hover:border-indigo-400/50"
           >
             Tüm Liste
           </Button>

@@ -858,7 +858,7 @@ export const ApplicationsPage: React.FC = () => {
                   <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-slate-100 dark:border-slate-800/60">
                     <StatusBadge status={app.status as ApplicationStatus} size="sm" />
                     <PriorityBadge priority={priorityDisplay} />
-                    <span className="px-2 py-0.5 text-[10px] font-semibold rounded-md bg-slate-100 dark:bg-slate-800 text-slate-300">
+                    <span className="px-2 py-0.5 text-[10px] font-semibold rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
                       {targetRoleDisplay}
                     </span>
                   </div>
