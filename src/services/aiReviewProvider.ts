@@ -66,7 +66,7 @@ export class MockAiReviewProvider implements IAiReviewProvider {
           score: skillsScore,
           status: 'excellent',
           feedback: 'Teknik ve sosyal beceriler kategorize edilmiş ve ATS taramasına uygun.',
-          strengths: ['Frontend kütüphaneleri tam', 'Tailwind, TanStack Query, Supabase öne çıkarılmış'],
+          strengths: ['Frontend kütüphaneleri tam', 'Tailwind, TanStack Query ve veritabanı mimarisi öne çıkarılmış'],
           improvements: ['Eski teknolojileri (jQuery vb.) kaldırıp güncel araçları koruyun'],
         },
         {

@@ -324,7 +324,7 @@ export const ApplicationDetailPage: React.FC = () => {
               <Shield className="w-4 h-4" aria-hidden="true" /> Güvenli Veri Koruması
             </div>
             <p className="text-[11px] text-slate-400 leading-relaxed">
-              Bu başvuru kaydı Supabase PostgreSQL Row Level Security (RLS) ile yalnızca sizin kullanıcı kimliğinize özel olarak korunmaktadır.
+              Bu başvuru kaydı gelişmiş veri güvenliği protokolleri ile yalnızca sizin hesabınıza özel olarak korunmaktadır.
             </p>
           </div>
         </div>

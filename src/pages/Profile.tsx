@@ -73,7 +73,7 @@ export const ProfilePage: React.FC = () => {
     <div className="space-y-6 animate-fadeIn max-w-4xl mx-auto">
       <PageHeader
         title="Profilim"
-        description="Doğrulanmış Supabase oturum bilgileriniz ve hesap güvenliği."
+        description="Doğrulanmış hesap bilgileriniz ve oturum güvenliği."
         icon={User}
         badge="Aktif Oturum"
       />
@@ -99,7 +99,7 @@ export const ProfilePage: React.FC = () => {
             </div>
 
             <p className="text-xs text-slate-400 leading-relaxed pt-1">
-              Supabase Auth ile korunan oturum. İş başvurularınız ve kariyer hedefleriniz bu hesap altında saklanır.
+              Güvenli kimlik doğrulama ile korunan oturum. İş başvurularınız ve kariyer hedefleriniz bu hesap altında saklanır.
             </p>
 
             <div className="pt-4 flex flex-wrap items-center justify-center sm:justify-start gap-4 text-xs text-slate-400 border-t border-slate-100 dark:border-slate-800/60">

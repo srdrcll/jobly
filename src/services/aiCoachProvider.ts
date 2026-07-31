@@ -40,7 +40,7 @@ export class MockAiCoachProvider implements IAiCoachProvider {
           id: `q-3-${sessionId}`,
           category: 'Company-Specific',
           questionText: `${companyName} ölçeğinde ve yüksek kullanıcılı SaaS mimarisinde karşılaşılabilecek performans darboğazlarını nasıl engellersiniz?`,
-          sampleAnswer: 'CDN önbellekleme, lazy-loading, code splitting ve Supabase RLS indeks optimizasyonu uygularım.',
+          sampleAnswer: 'CDN önbellekleme, lazy-loading, code splitting ve veritabanı indeks optimizasyonu uygularım.',
         },
         {
           id: `q-4-${sessionId}`,
