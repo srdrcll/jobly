@@ -208,9 +208,9 @@ export const ApplicationDetailPage: React.FC = () => {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-slate-100 dark:border-slate-800/60">
           <div className="space-y-1">
             <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-              <Target className="w-3.5 h-3.5 text-indigo-400" aria-hidden="true" /> Hedef Rol
+              <Briefcase className="w-3.5 h-3.5 text-indigo-400" aria-hidden="true" /> Pozisyon
             </span>
-            <p className="text-xs font-bold text-foreground truncate">{targetRoleDisplay}</p>
+            <p className="text-xs font-bold text-foreground truncate">{application.position}</p>
           </div>
 
           <div className="space-y-1">

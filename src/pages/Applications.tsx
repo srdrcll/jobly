@@ -636,7 +636,6 @@ export const ApplicationsPage: React.FC = () => {
                   </TableHead>
                   <TableHead>Şirket</TableHead>
                   <TableHead>Pozisyon & Konum</TableHead>
-                  <TableHead>Hedef Rol</TableHead>
                   <TableHead>Durum</TableHead>
                   <TableHead>Öncelik</TableHead>
                   <TableHead>Başvuru Tarihi</TableHead>
@@ -707,12 +706,7 @@ export const ApplicationsPage: React.FC = () => {
                         </div>
                       </TableCell>
 
-                      {/* Target Role Column */}
-                      <TableCell>
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-                          <Target className="w-3 h-3 shrink-0" aria-hidden="true" /> {targetRoleDisplay}
-                        </span>
-                      </TableCell>
+
 
                       {/* Status Column */}
                       <TableCell>
@@ -858,9 +852,6 @@ export const ApplicationsPage: React.FC = () => {
                   <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-slate-100 dark:border-slate-800/60">
                     <StatusBadge status={app.status as ApplicationStatus} size="sm" />
                     <PriorityBadge priority={priorityDisplay} />
-                    <span className="px-2 py-0.5 text-[10px] font-semibold rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
-                      {targetRoleDisplay}
-                    </span>
                   </div>
 
                   <div className="flex items-center justify-between text-xs text-slate-400 pt-1">
