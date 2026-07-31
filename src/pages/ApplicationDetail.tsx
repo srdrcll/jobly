@@ -323,8 +323,6 @@ export const ApplicationDetailPage: React.FC = () => {
             <div className="flex items-center gap-2 text-blue-500 font-bold text-xs">
               <Shield className="w-4 h-4" aria-hidden="true" /> Güvenli Veri Koruması
             </div>
-              <Shield className="w-4 h-4" aria-hidden="true" /> Güvenli Veri Koruması
-            </div>
             <p className="text-[11px] text-slate-400 leading-relaxed">
               Bu başvuru kaydı gelişmiş veri güvenliği protokolleri ile yalnızca sizin hesabınıza özel olarak korunmaktadır.
             </p>
