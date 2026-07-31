@@ -34,12 +34,12 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const baseStyles = 'inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-50 disabled:pointer-events-none rounded-xl active:scale-[0.98] select-none';
 
     const variantStyles: Record<ButtonVariant, string> = {
-      primary: 'bg-slate-900 hover:bg-slate-800 text-white dark:bg-slate-100 dark:hover:bg-white dark:text-slate-900 shadow-md shadow-slate-900/10 font-semibold',
+      primary: 'bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-500/25 hover:shadow-lg hover:shadow-blue-500/35 dark:bg-blue-600 dark:hover:bg-blue-500 font-semibold',
       secondary: 'bg-secondary text-secondary-foreground hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800',
       outline: 'bg-transparent border border-slate-300 dark:border-slate-700/80 text-foreground hover:bg-slate-100 dark:hover:bg-slate-800/60',
       ghost: 'bg-transparent text-muted-foreground hover:text-foreground hover:bg-slate-100 dark:hover:bg-slate-800/50',
       destructive: 'bg-rose-600 hover:bg-rose-500 text-white shadow-md shadow-rose-600/20 dark:bg-rose-600 dark:hover:bg-rose-500',
-      link: 'bg-transparent text-slate-900 dark:text-slate-100 underline-offset-4 hover:underline p-0 h-auto',
+      link: 'bg-transparent text-blue-600 dark:text-blue-400 underline-offset-4 hover:underline p-0 h-auto',
     };
 
     const sizeStyles: Record<ButtonSize, string> = {

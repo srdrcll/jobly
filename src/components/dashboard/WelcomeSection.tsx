@@ -33,16 +33,16 @@ export const WelcomeSection: React.FC<{ onOpenNewModal?: () => void }> = ({ onOp
   const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Kariyer Yolcusu';
 
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-slate-900 text-white dark:bg-slate-900 border border-slate-800 p-6 sm:p-8 shadow-xl">
+    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-blue-950/80 border border-blue-500/20 p-6 sm:p-8 shadow-xl text-white">
       {/* Background Ambient Glow Effects */}
-      <div className="absolute -top-24 -right-24 w-72 h-72 bg-slate-700/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-slate-800/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -top-24 -right-24 w-72 h-72 bg-blue-500/15 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-3 max-w-2xl">
           {/* Top Badges */}
           <div className="flex flex-wrap items-center gap-2 text-xs">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-200 font-semibold">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-300 font-semibold">
               <span>{greeting.emoji}</span>
               <span>{greeting.text}</span>
             </span>
@@ -54,7 +54,7 @@ export const WelcomeSection: React.FC<{ onOpenNewModal?: () => void }> = ({ onOp
 
           {/* Heading */}
           <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-            Hoş Geldin, <span className="bg-clip-text text-transparent bg-gradient-to-r from-slate-100 via-slate-300 to-slate-400">{userName}</span> 👋
+            Hoş Geldin, <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-cyan-300 to-teal-300">{userName}</span> 👋
           </h1>
 
           {/* Motivational Subtitle */}
@@ -68,9 +68,9 @@ export const WelcomeSection: React.FC<{ onOpenNewModal?: () => void }> = ({ onOp
           <Button
             variant="primary"
             size="md"
-            leftIcon={<Sparkles className="w-4 h-4 text-amber-400" />}
+            leftIcon={<Sparkles className="w-4 h-4 text-amber-300" />}
             onClick={() => onOpenNewModal ? onOpenNewModal() : navigate('/applications')}
-            className="bg-white hover:bg-slate-100 text-slate-900 font-bold border-0 shadow-lg"
+            className="bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-500/25"
           >
             Yeni Başvuru Ekle
           </Button>
@@ -79,7 +79,7 @@ export const WelcomeSection: React.FC<{ onOpenNewModal?: () => void }> = ({ onOp
             size="md"
             rightIcon={<ArrowRight className="w-4 h-4" />}
             onClick={() => navigate('/applications')}
-            className="border-slate-700 text-slate-200 hover:bg-slate-800 hover:text-white"
+            className="border-blue-400/30 text-blue-100 hover:bg-blue-500/20 hover:text-white hover:border-blue-400/50"
           >
             Tüm Liste
           </Button>
