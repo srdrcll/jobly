@@ -29,7 +29,7 @@ export default defineConfig({
           // Charts
           'vendor-charts': ['recharts'],
           // UI utilities
-          'vendor-ui': ['clsx', 'tailwind-merge', 'lucide-react', 'sonner'],
+          'vendor-ui': ['clsx', 'tailwind-merge', 'lucide-react'],
         },
       },
     },
