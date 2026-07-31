@@ -14,9 +14,9 @@ export const InsightsList: React.FC = () => {
   if (isLoading) {
     return (
       <section aria-label="İpuçları yükleniyor..." className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 h-64 animate-pulse space-y-3">
-        <div className="h-5 w-40 bg-slate-800 rounded-lg" />
-        <div className="h-16 bg-slate-800/50 rounded-xl" />
-        <div className="h-16 bg-slate-800/50 rounded-xl" />
+        <div className="h-5 w-40 bg-slate-200 dark:bg-slate-800 rounded-lg" />
+        <div className="h-16 bg-slate-100 dark:bg-slate-800/50 rounded-xl" />
+        <div className="h-16 bg-slate-100 dark:bg-slate-800/50 rounded-xl" />
       </section>
     );
   }
@@ -58,10 +58,10 @@ export const InsightsList: React.FC = () => {
           </div>
           <div>
             <h3 className="text-base font-bold text-foreground">Pusula Tavsiyeleri & İpuçları</h3>
-            <p className="text-xs text-slate-400">Başvuru verilerinize göre otomatik oluşturulan öneriler</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Başvuru verilerinize göre otomatik oluşturulan öneriler</p>
           </div>
         </div>
-        <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400">
+        <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-500/10 border border-amber-300/50 dark:border-amber-500/20 text-amber-600 dark:text-amber-400">
           Otomatik Analiz
         </span>
       </div>

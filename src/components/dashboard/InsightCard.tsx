@@ -40,32 +40,32 @@ export const InsightCard: React.FC<InsightCardProps> = ({ insight }) => {
     switch (insight.type) {
       case 'success':
         return {
-          cardBg: 'bg-emerald-500/5 dark:bg-emerald-950/20 border-emerald-500/30',
-          iconBg: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-          badgeBg: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
-          titleColor: 'text-emerald-300',
+          cardBg: 'bg-emerald-50 dark:bg-emerald-950/20 border-emerald-300/60 dark:border-emerald-500/30',
+          iconBg: 'bg-emerald-100 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-300/50 dark:border-emerald-500/20',
+          badgeBg: 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border-emerald-300/50 dark:border-emerald-500/30',
+          titleColor: 'text-emerald-700 dark:text-emerald-300',
         };
       case 'warning':
         return {
-          cardBg: 'bg-amber-500/5 dark:bg-amber-950/20 border-amber-500/30',
-          iconBg: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
-          badgeBg: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
-          titleColor: 'text-amber-300',
+          cardBg: 'bg-amber-50 dark:bg-amber-950/20 border-amber-300/60 dark:border-amber-500/30',
+          iconBg: 'bg-amber-100 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-300/50 dark:border-amber-500/20',
+          badgeBg: 'bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300 border-amber-300/50 dark:border-amber-500/30',
+          titleColor: 'text-amber-700 dark:text-amber-300',
         };
       case 'info':
         return {
-          cardBg: 'bg-indigo-500/5 dark:bg-indigo-950/20 border-indigo-500/30',
-          iconBg: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20',
-          badgeBg: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
-          titleColor: 'text-indigo-300',
+          cardBg: 'bg-indigo-50 dark:bg-indigo-950/20 border-indigo-300/60 dark:border-indigo-500/30',
+          iconBg: 'bg-indigo-100 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-300/50 dark:border-indigo-500/20',
+          badgeBg: 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border-indigo-300/50 dark:border-indigo-500/30',
+          titleColor: 'text-indigo-700 dark:text-indigo-300',
         };
       case 'tip':
       default:
         return {
-          cardBg: 'bg-purple-500/5 dark:bg-purple-950/20 border-purple-500/30',
-          iconBg: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
-          badgeBg: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
-          titleColor: 'text-purple-300',
+          cardBg: 'bg-purple-50 dark:bg-purple-950/20 border-purple-300/60 dark:border-purple-500/30',
+          iconBg: 'bg-purple-100 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-300/50 dark:border-purple-500/20',
+          badgeBg: 'bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 border-purple-300/50 dark:border-purple-500/30',
+          titleColor: 'text-purple-700 dark:text-purple-300',
         };
     }
   };
@@ -94,7 +94,7 @@ export const InsightCard: React.FC<InsightCardProps> = ({ insight }) => {
         </span>
       </div>
 
-      <p className="text-xs text-slate-300 leading-relaxed pl-8">
+      <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed pl-8">
         {insight.description}
       </p>
     </div>
