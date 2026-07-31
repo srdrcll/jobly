@@ -33,32 +33,32 @@ export const WelcomeSection: React.FC<{ onOpenNewModal?: () => void }> = ({ onOp
   const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Kariyer Yolcusu';
 
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-50 via-white to-violet-50 dark:from-indigo-950/80 dark:via-slate-900 dark:to-slate-950 border border-indigo-200/60 dark:border-indigo-500/20 p-6 sm:p-8 shadow-lg dark:shadow-xl">
+    <div className="relative overflow-hidden rounded-2xl bg-slate-900 text-white dark:bg-slate-900 border border-slate-800 p-6 sm:p-8 shadow-xl">
       {/* Background Ambient Glow Effects */}
-      <div className="absolute -top-24 -right-24 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-violet-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -top-24 -right-24 w-72 h-72 bg-slate-700/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-slate-800/20 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-3 max-w-2xl">
           {/* Top Badges */}
           <div className="flex flex-wrap items-center gap-2 text-xs">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-100 dark:bg-indigo-500/10 border border-indigo-300/60 dark:border-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-semibold">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-200 font-semibold">
               <span>{greeting.emoji}</span>
               <span>{greeting.text}</span>
             </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 text-slate-600 dark:text-slate-300 font-medium">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700/80 text-slate-300 font-medium">
               <CalendarIcon className="w-3.5 h-3.5 text-slate-400" />
               <span>{getFormattedDate()}</span>
             </span>
           </div>
 
           {/* Heading */}
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            Hoş Geldin, <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-violet-500 to-purple-600 dark:from-indigo-400 dark:via-violet-300 dark:to-purple-400">{userName}</span> 👋
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            Hoş Geldin, <span className="bg-clip-text text-transparent bg-gradient-to-r from-slate-100 via-slate-300 to-slate-400">{userName}</span> 👋
           </h1>
 
           {/* Motivational Subtitle */}
-          <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+          <p className="text-sm text-slate-300 leading-relaxed">
             Bugün kariyer hedeflerinize bir adım daha yaklaşmak için harika bir gün. Başvurularınızı düzenleyin, mülakat hazırlıklarınızı takip edin ve performansınızı analiz edin.
           </p>
         </div>
@@ -68,9 +68,9 @@ export const WelcomeSection: React.FC<{ onOpenNewModal?: () => void }> = ({ onOp
           <Button
             variant="primary"
             size="md"
-            leftIcon={<Sparkles className="w-4 h-4 text-amber-300" />}
+            leftIcon={<Sparkles className="w-4 h-4 text-amber-400" />}
             onClick={() => onOpenNewModal ? onOpenNewModal() : navigate('/applications')}
-            className="shadow-indigo-500/25 shadow-lg hover:shadow-indigo-500/40"
+            className="bg-white hover:bg-slate-100 text-slate-900 font-bold border-0 shadow-lg"
           >
             Yeni Başvuru Ekle
           </Button>
@@ -79,7 +79,7 @@ export const WelcomeSection: React.FC<{ onOpenNewModal?: () => void }> = ({ onOp
             size="md"
             rightIcon={<ArrowRight className="w-4 h-4" />}
             onClick={() => navigate('/applications')}
-            className="border-indigo-400/40 dark:border-indigo-400/30 text-indigo-700 dark:text-indigo-100 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 hover:text-indigo-800 dark:hover:text-white hover:border-indigo-500/50 dark:hover:border-indigo-400/50"
+            className="border-slate-700 text-slate-200 hover:bg-slate-800 hover:text-white"
           >
             Tüm Liste
           </Button>
