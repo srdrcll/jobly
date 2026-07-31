@@ -35,7 +35,7 @@ export const ActionCard: React.FC<ActionCardProps> = ({
       className={cn(
         'group p-5 rounded-2xl border transition-all duration-300 cursor-pointer flex flex-col justify-between space-y-4 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 hover:-translate-y-1 shadow-soft dark:shadow-soft-dark relative overflow-hidden',
         primary
-          ? 'bg-gradient-to-br from-indigo-950/90 via-slate-900 to-slate-950 border-indigo-500/40 shadow-indigo-500/10 shadow-lg'
+          ? 'bg-gradient-to-br from-indigo-100 via-white to-violet-50 dark:from-indigo-950/90 dark:via-slate-900 dark:to-slate-950 border-indigo-300/60 dark:border-indigo-500/40 shadow-indigo-100/50 dark:shadow-indigo-500/10 shadow-lg'
           : 'bg-white dark:bg-slate-900/60 border-slate-200 dark:border-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700'
       )}
     >
