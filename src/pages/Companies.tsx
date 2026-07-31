@@ -173,7 +173,7 @@ export const CompaniesPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-black text-foreground tracking-tight flex items-center gap-2.5">
-            <Building2 className="w-7 h-7 text-indigo-500" />
+            <Building2 className="w-7 h-7 text-blue-500" />
             Şirket Yönetimi & CRM
           </h1>
           <p className="text-xs text-slate-400 mt-1">
@@ -185,7 +185,7 @@ export const CompaniesPage: React.FC = () => {
           <Button
             variant="outline"
             size="md"
-            leftIcon={<BarChart3 className="w-4 h-4 text-purple-400" />}
+            leftIcon={<BarChart3 className="w-4 h-4 text-cyan-400" />}
             onClick={() => setShowAnalytics(!showAnalytics)}
           >
             {showAnalytics ? 'Grafikleri Gizle' : 'CRM Analizleri'}
@@ -196,7 +196,7 @@ export const CompaniesPage: React.FC = () => {
             size="md"
             leftIcon={<Plus className="w-4 h-4" />}
             onClick={() => setIsCreateOpen(true)}
-            className="shrink-0 focus-visible:ring-2 focus-visible:ring-indigo-500"
+            className="shrink-0 focus-visible:ring-2 focus-visible:ring-blue-500"
           >
             Yeni Şirket Ekle
           </Button>
@@ -206,7 +206,7 @@ export const CompaniesPage: React.FC = () => {
       {/* 2. Top KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="p-4 rounded-xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+          <div className="p-2.5 rounded-xl bg-blue-500/10 text-blue-500 border border-blue-500/20">
             <Building2 className="w-5 h-5" />
           </div>
           <div>
@@ -216,7 +216,7 @@ export const CompaniesPage: React.FC = () => {
         </div>
 
         <div className="p-4 rounded-xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+          <div className="p-2.5 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
             <Target className="w-5 h-5" />
           </div>
           <div>
@@ -254,20 +254,20 @@ export const CompaniesPage: React.FC = () => {
 
       {/* 5. Bulk Actions Toolbar (Appears when items are checked) */}
       {selectedIds.length > 0 && (
-        <div className="p-4 rounded-2xl bg-indigo-950/80 border border-indigo-500/30 text-indigo-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-fadeIn">
+        <div className="p-4 rounded-2xl bg-slate-900 border border-blue-500/30 text-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-fadeIn">
           <div className="flex items-center gap-2 font-bold text-xs">
-            <CheckSquare className="w-4 h-4 text-indigo-400" />
+            <CheckSquare className="w-4 h-4 text-blue-500" />
             <span>{selectedIds.length} şirket seçildi</span>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <Button variant="outline" size="sm" onClick={handleBulkArchive} className="text-xs border-indigo-500/40">
+            <Button variant="outline" size="sm" onClick={handleBulkArchive} className="text-xs border-blue-500/40">
               <Archive className="w-3.5 h-3.5 mr-1" /> Arşivle
             </Button>
-            <Button variant="outline" size="sm" onClick={handleBulkRestore} className="text-xs border-indigo-500/40">
+            <Button variant="outline" size="sm" onClick={handleBulkRestore} className="text-xs border-blue-500/40">
               Geri Yükle
             </Button>
-            <Button variant="outline" size="sm" onClick={() => handleBulkFavorite(true)} className="text-xs border-indigo-500/40">
+            <Button variant="outline" size="sm" onClick={() => handleBulkFavorite(true)} className="text-xs border-blue-500/40">
               <Star className="w-3.5 h-3.5 mr-1 fill-amber-400 text-amber-400" /> Favori Yap
             </Button>
             <Button variant="danger" size="sm" onClick={handleBulkDelete} className="text-xs">

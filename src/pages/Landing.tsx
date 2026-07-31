@@ -10,15 +10,15 @@ import { StatusBadge } from '@/components/ui/StatusBadge';
 
 export const LandingPage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-blue-500 selection:text-white">
       {/* Landing Navigation */}
       <header className="h-20 max-w-7xl w-full mx-auto px-6 flex items-center justify-between z-10">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 text-white shadow-lg shadow-indigo-600/30">
+          <div className="p-2.5 rounded-2xl bg-gradient-to-tr from-blue-600 to-cyan-500 text-white shadow-lg shadow-blue-500/25">
             <Compass className="w-6 h-6" aria-hidden="true" />
           </div>
           <span className="font-extrabold text-xl tracking-tight text-foreground">
-            Kariyer <span className="text-indigo-500">Pusulası</span>
+            Kariyer <span className="text-blue-500">Pusulası</span>
           </span>
         </div>
 
@@ -38,14 +38,14 @@ export const LandingPage: React.FC = () => {
 
       {/* Hero Section */}
       <section className="relative py-20 px-6 max-w-5xl mx-auto text-center space-y-8 my-auto">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold animate-pulse">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold animate-pulse">
           <Sparkles className="w-4 h-4" aria-hidden="true" />
           <span>Kariyer Süreçlerinizi Modernleştirin</span>
         </div>
 
         <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-foreground leading-[1.15]">
           İş Başvurularınızı <br />
-          <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-300 bg-clip-text text-transparent">
             Linear Disipliniyle
           </span> Yönetin.
         </h1>

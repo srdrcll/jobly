@@ -48,8 +48,8 @@ export const WeeklyActivityChart: React.FC<WeeklyActivityChartProps> = ({ data }
           {/* Area Fill Gradient */}
           <defs>
             <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#a855f7" stopOpacity="0.4" />
-              <stop offset="100%" stopColor="#a855f7" stopOpacity="0.0" />
+              <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.4" />
+              <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.0" />
             </linearGradient>
           </defs>
 
@@ -62,7 +62,7 @@ export const WeeklyActivityChart: React.FC<WeeklyActivityChartProps> = ({ data }
           {/* Line Path */}
           <polyline
             fill="none"
-            stroke="#a855f7"
+            stroke="#3b82f6"
             strokeWidth="3"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -76,7 +76,7 @@ export const WeeklyActivityChart: React.FC<WeeklyActivityChartProps> = ({ data }
                 cx={p.x}
                 cy={p.y}
                 r="4"
-                className="fill-purple-500 stroke-white dark:stroke-slate-900 stroke-2 group-hover:r-6 transition-all"
+                className="fill-blue-500 stroke-white dark:stroke-slate-900 stroke-2 group-hover:r-6 transition-all"
               />
               <title>{`${p.dayLabel}: ${p.count} aktivite`}</title>
             </g>

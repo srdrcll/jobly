@@ -20,9 +20,9 @@ export const AiSuggestedPrompts: React.FC<AiSuggestedPromptsProps> = ({ onSelect
   const getIcon = (iconName: string) => {
     switch (iconName) {
       case 'FileText':
-        return <FileText className="w-5 h-5 text-indigo-400" />;
+        return <FileText className="w-5 h-5 text-blue-500" />;
       case 'Mail':
-        return <Mail className="w-5 h-5 text-purple-400" />;
+        return <Mail className="w-5 h-5 text-cyan-400" />;
       case 'Target':
         return <Target className="w-5 h-5 text-amber-400" />;
       case 'Compass':
@@ -33,7 +33,7 @@ export const AiSuggestedPrompts: React.FC<AiSuggestedPromptsProps> = ({ onSelect
         return <DollarSign className="w-5 h-5 text-teal-400" />;
       case 'Linkedin':
       default:
-        return <Linkedin className="w-5 h-5 text-indigo-400" />;
+        return <Linkedin className="w-5 h-5 text-blue-500" />;
     }
   };
 
@@ -51,18 +51,18 @@ export const AiSuggestedPrompts: React.FC<AiSuggestedPromptsProps> = ({ onSelect
           <div
             key={item.id}
             onClick={() => onSelectPrompt(item)}
-            className="p-4 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 hover:border-purple-500/40 transition-all cursor-pointer space-y-2 group shadow-sm hover:shadow-md"
+            className="p-4 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 hover:border-blue-500/40 transition-all cursor-pointer space-y-2 group shadow-sm hover:shadow-md"
           >
             <div className="flex items-center justify-between">
               <div className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800/80">
                 {getIcon(item.iconName)}
               </div>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-500 border border-blue-500/20">
                 {item.tag}
               </span>
             </div>
 
-            <h4 className="text-xs font-bold text-foreground group-hover:text-purple-400 transition-colors">
+            <h4 className="text-xs font-bold text-foreground group-hover:text-blue-500 transition-colors">
               {item.title}
             </h4>
 
@@ -70,7 +70,7 @@ export const AiSuggestedPrompts: React.FC<AiSuggestedPromptsProps> = ({ onSelect
               {item.prompt}
             </p>
 
-            <div className="pt-1 flex items-center text-[10px] font-bold text-purple-400 group-hover:translate-x-1 transition-transform">
+            <div className="pt-1 flex items-center text-[10px] font-bold text-blue-500 group-hover:translate-x-1 transition-transform">
               <span>Sohbet Başlat</span>
               <ArrowRight className="w-3 h-3 ml-1" />
             </div>

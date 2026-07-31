@@ -26,7 +26,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
         className
       )}
     >
-      <div className="p-4 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-500 dark:text-indigo-400 mb-4 shadow-inner" aria-hidden="true">
+      <div className="p-4 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 mb-4 shadow-inner" aria-hidden="true">
         <Icon className="w-8 h-8" />
       </div>
 

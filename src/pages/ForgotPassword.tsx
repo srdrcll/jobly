@@ -31,7 +31,7 @@ export const ForgotPasswordPage: React.FC = () => {
   return (
     <div className="p-8 rounded-3xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800/80 shadow-2xl space-y-6">
       <div className="text-center space-y-1.5">
-        <div className="inline-flex p-3 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 mb-2" aria-hidden="true">
+        <div className="inline-flex p-3 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-500 mb-2" aria-hidden="true">
           <KeyRound className="w-6 h-6" />
         </div>
         <h2 className="text-2xl font-extrabold text-foreground">Şifrenizi mi Unuttunuz?</h2>
@@ -82,7 +82,7 @@ export const ForgotPasswordPage: React.FC = () => {
 
       <div className="pt-4 border-t border-slate-100 dark:border-slate-800/60 text-center text-xs text-slate-400">
         Hatırladınız mı?{' '}
-        <Link to="/login" className="text-indigo-400 font-semibold hover:underline">
+        <Link to="/login" className="text-blue-500 font-semibold hover:underline">
           Giriş Yapın
         </Link>
       </div>

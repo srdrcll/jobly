@@ -161,7 +161,7 @@ export const ApplicationDetailPage: React.FC = () => {
             variant="outline"
             size="sm"
             onClick={handleOpenEdit}
-            leftIcon={<Edit3 className="w-4 h-4 text-indigo-400" aria-hidden="true" />}
+            leftIcon={<Edit3 className="w-4 h-4 text-blue-500" aria-hidden="true" />}
           >
             Düzenle
           </Button>
@@ -181,14 +181,14 @@ export const ApplicationDetailPage: React.FC = () => {
       <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft relative overflow-hidden space-y-6">
         <div className="flex flex-col sm:flex-row items-start justify-between gap-6">
           <div className="flex items-start gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 font-black text-xl shrink-0 shadow-sm">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 flex items-center justify-center text-blue-500 font-black text-xl shrink-0 shadow-sm">
               {companyInitials || <Building2 className="w-8 h-8" aria-hidden="true" />}
             </div>
 
             <div className="space-y-1">
               <h1 className="text-2xl font-black text-foreground">{application.company_name}</h1>
               <div className="flex flex-wrap items-center gap-2 text-sm text-slate-300 font-semibold">
-                <span className="text-indigo-400">{application.position}</span>
+                <span className="text-blue-500">{application.position}</span>
                 {application.location && (
                   <span className="text-slate-400 flex items-center gap-1 text-xs font-normal">
                     <MapPin className="w-3.5 h-3.5 text-slate-500" aria-hidden="true" /> {application.location}
@@ -208,21 +208,21 @@ export const ApplicationDetailPage: React.FC = () => {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-slate-100 dark:border-slate-800/60">
           <div className="space-y-1">
             <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-              <Briefcase className="w-3.5 h-3.5 text-indigo-400" aria-hidden="true" /> Pozisyon
+              <Briefcase className="w-3.5 h-3.5 text-blue-500" aria-hidden="true" /> Pozisyon
             </span>
             <p className="text-xs font-bold text-foreground truncate">{application.position}</p>
           </div>
 
           <div className="space-y-1">
             <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-              <Calendar className="w-3.5 h-3.5 text-indigo-400" aria-hidden="true" /> Başvuru Tarihi
+              <Calendar className="w-3.5 h-3.5 text-blue-500" aria-hidden="true" /> Başvuru Tarihi
             </span>
             <p className="text-xs font-bold text-foreground">{formatDate(application.applied_date)}</p>
           </div>
 
           <div className="space-y-1">
             <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-              <Building2 className="w-3.5 h-3.5 text-indigo-400" aria-hidden="true" /> Çalışma Modeli
+              <Building2 className="w-3.5 h-3.5 text-blue-500" aria-hidden="true" /> Çalışma Modeli
             </span>
             <p className="text-xs font-bold text-foreground">{application.work_type ?? 'Belirtilmedi'}</p>
           </div>
@@ -243,7 +243,7 @@ export const ApplicationDetailPage: React.FC = () => {
           {/* Section: Contact & Link */}
           <div className="p-6 rounded-3xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft space-y-4">
             <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-              <User className="w-4 h-4 text-indigo-400" aria-hidden="true" /> İletişim & İlan Detayları
+              <User className="w-4 h-4 text-blue-500" aria-hidden="true" /> İletişim & İlan Detayları
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
@@ -255,7 +255,7 @@ export const ApplicationDetailPage: React.FC = () => {
               <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/60 dark:border-slate-800/60 space-y-1">
                 <span className="text-slate-400 font-semibold block">İletişim E-Postası</span>
                 {contactEmail ? (
-                  <a href={`mailto:${contactEmail}`} className="font-bold text-indigo-400 hover:underline flex items-center gap-1">
+                  <a href={`mailto:${contactEmail}`} className="font-bold text-blue-500 hover:underline flex items-center gap-1">
                     <Mail className="w-3.5 h-3.5" aria-hidden="true" /> {contactEmail}
                   </a>
                 ) : (
@@ -270,7 +270,7 @@ export const ApplicationDetailPage: React.FC = () => {
                   href={jobUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 hover:bg-indigo-500/20 transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl bg-blue-500/10 text-blue-500 border border-blue-500/20 hover:bg-blue-500/20 transition-colors"
                 >
                   <Globe className="w-4 h-4" aria-hidden="true" /> İlan Linkini Aç (Harici Sayfa)
                   <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
@@ -282,7 +282,7 @@ export const ApplicationDetailPage: React.FC = () => {
           {/* Section: Notes */}
           <div className="p-6 rounded-3xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft space-y-3">
             <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-              <FileText className="w-4 h-4 text-indigo-400" aria-hidden="true" /> Özel Notlar & Mülakat Detayları
+              <FileText className="w-4 h-4 text-blue-500" aria-hidden="true" /> Özel Notlar & Mülakat Detayları
             </h3>
             {notes ? (
               <p className="text-xs text-slate-300 leading-relaxed whitespace-pre-wrap bg-slate-50 dark:bg-slate-950/60 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-800/60">
@@ -298,13 +298,13 @@ export const ApplicationDetailPage: React.FC = () => {
         <div className="space-y-6">
           <div className="p-6 rounded-3xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft space-y-4">
             <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-              <Clock className="w-4 h-4 text-indigo-400" aria-hidden="true" /> Sistem Kayıt Bilgileri
+              <Clock className="w-4 h-4 text-blue-500" aria-hidden="true" /> Sistem Kayıt Bilgileri
             </h3>
 
             <div className="space-y-3 text-xs">
               <div className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800/60">
                 <span className="text-slate-400">Kayıt Kimliği (ID):</span>
-                <span className="font-mono text-[11px] text-indigo-400 truncate max-w-[140px]">{application.id}</span>
+                <span className="font-mono text-[11px] text-blue-500 truncate max-w-[140px]">{application.id}</span>
               </div>
 
               <div className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800/60">
@@ -319,8 +319,10 @@ export const ApplicationDetailPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-6 rounded-3xl bg-indigo-500/10 border border-indigo-500/20 space-y-2">
-            <div className="flex items-center gap-2 text-indigo-400 font-bold text-xs">
+          <div className="p-6 rounded-3xl bg-blue-500/10 border border-blue-500/20 space-y-2">
+            <div className="flex items-center gap-2 text-blue-500 font-bold text-xs">
+              <Shield className="w-4 h-4" aria-hidden="true" /> Güvenli Veri Koruması
+            </div>
               <Shield className="w-4 h-4" aria-hidden="true" /> Güvenli Veri Koruması
             </div>
             <p className="text-[11px] text-slate-400 leading-relaxed">

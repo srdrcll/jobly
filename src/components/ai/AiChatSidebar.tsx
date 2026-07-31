@@ -66,7 +66,7 @@ export const AiChatSidebar: React.FC<AiChatSidebarProps> = ({
           size="md"
           leftIcon={<Plus className="w-4 h-4" />}
           onClick={onNew}
-          className="w-full justify-center bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 shadow-md"
+          className="w-full justify-center bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 shadow-md"
         >
           Yeni Sohbet Başlat
         </Button>
@@ -83,14 +83,14 @@ export const AiChatSidebar: React.FC<AiChatSidebarProps> = ({
           <button
             type="button"
             onClick={() => setViewArchived(false)}
-            className={`px-2 py-1 rounded-md transition-colors ${!viewArchived ? 'bg-purple-500/10 text-purple-400' : 'text-slate-400 hover:text-foreground'}`}
+            className={`px-2 py-1 rounded-md transition-colors ${!viewArchived ? 'bg-blue-500/10 text-blue-500' : 'text-slate-400 hover:text-foreground'}`}
           >
             Aktif Sohbetler
           </button>
           <button
             type="button"
             onClick={() => setViewArchived(true)}
-            className={`px-2 py-1 rounded-md transition-colors ${viewArchived ? 'bg-purple-500/10 text-purple-400' : 'text-slate-400 hover:text-foreground'}`}
+            className={`px-2 py-1 rounded-md transition-colors ${viewArchived ? 'bg-blue-500/10 text-blue-500' : 'text-slate-400 hover:text-foreground'}`}
           >
             Arşivlenmiş
           </button>
@@ -113,12 +113,12 @@ export const AiChatSidebar: React.FC<AiChatSidebarProps> = ({
                 onClick={() => onSelect(conv.id)}
                 className={`p-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-2 group ${
                   isActive
-                    ? 'bg-purple-500/10 dark:bg-purple-950/30 border-purple-500/40 text-purple-400 font-bold'
+                    ? 'bg-blue-500/10 dark:bg-blue-950/30 border-blue-500/40 text-blue-500 font-bold'
                     : 'bg-slate-50/50 dark:bg-slate-900/40 border-transparent hover:border-slate-200 dark:hover:border-slate-800 text-slate-700 dark:text-slate-300'
                 }`}
               >
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <MessageSquare className={`w-4 h-4 shrink-0 ${isActive ? 'text-purple-400' : 'text-slate-400'}`} />
+                  <MessageSquare className={`w-4 h-4 shrink-0 ${isActive ? 'text-blue-500' : 'text-slate-400'}`} />
                   <span className="text-xs truncate">{conv.title}</span>
                 </div>
 
@@ -140,7 +140,7 @@ export const AiChatSidebar: React.FC<AiChatSidebarProps> = ({
                   <button
                     type="button"
                     onClick={(e) => handleExportMarkdown(e, conv)}
-                    className="p-1 text-slate-500 hover:text-purple-400 transition-colors"
+                    className="p-1 text-slate-500 hover:text-blue-500 transition-colors"
                     title="Markdown Olarak İndir (.md)"
                   >
                     <Download className="w-3.5 h-3.5" />
@@ -164,7 +164,7 @@ export const AiChatSidebar: React.FC<AiChatSidebarProps> = ({
                       e.stopPropagation();
                       onRename(conv.id, conv.title);
                     }}
-                    className="p-1 text-slate-500 hover:text-indigo-400 transition-colors"
+                    className="p-1 text-slate-500 hover:text-blue-500 transition-colors"
                     title="Yeniden Adlandır"
                   >
                     <Edit3 className="w-3.5 h-3.5" />

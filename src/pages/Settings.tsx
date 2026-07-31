@@ -118,7 +118,7 @@ export const SettingsPage: React.FC = () => {
             onClick={() => setActiveSection('general')}
             className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-colors ${
               activeSection === 'general'
-                ? 'bg-indigo-500/10 text-indigo-400 font-bold border border-indigo-500/20'
+                ? 'bg-blue-500/10 text-blue-500 font-bold border border-blue-500/20'
                 : 'text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
@@ -128,7 +128,7 @@ export const SettingsPage: React.FC = () => {
             onClick={() => setActiveSection('notifications')}
             className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-colors ${
               activeSection === 'notifications'
-                ? 'bg-indigo-500/10 text-indigo-400 font-bold border border-indigo-500/20'
+                ? 'bg-blue-500/10 text-blue-500 font-bold border border-blue-500/20'
                 : 'text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
@@ -138,7 +138,7 @@ export const SettingsPage: React.FC = () => {
             onClick={() => setActiveSection('security')}
             className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-colors ${
               activeSection === 'security'
-                ? 'bg-indigo-500/10 text-indigo-400 font-bold border border-indigo-500/20'
+                ? 'bg-blue-500/10 text-blue-500 font-bold border border-blue-500/20'
                 : 'text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
@@ -198,7 +198,7 @@ export const SettingsPage: React.FC = () => {
                   checked={interviewReminders}
                   onChange={(e) => setInterviewReminders(e.target.checked)}
                   aria-label="Mülakat Hatırlatmaları"
-                  className="w-4 h-4 rounded text-indigo-600 bg-slate-900 border-slate-800 focus:ring-indigo-500 cursor-pointer"
+                  className="w-4 h-4 rounded text-blue-600 bg-slate-900 border-slate-800 focus:ring-blue-500 cursor-pointer"
                 />
               </div>
 
@@ -213,7 +213,7 @@ export const SettingsPage: React.FC = () => {
                   checked={emailAlerts}
                   onChange={(e) => setEmailAlerts(e.target.checked)}
                   aria-label="Haftalık Kariyer Raporu"
-                  className="w-4 h-4 rounded text-indigo-600 bg-slate-900 border-slate-800 focus:ring-indigo-500 cursor-pointer"
+                  className="w-4 h-4 rounded text-blue-600 bg-slate-900 border-slate-800 focus:ring-blue-500 cursor-pointer"
                 />
               </div>
             </div>

@@ -16,11 +16,11 @@ export default {
         primary: {
           DEFAULT: 'hsl(var(--primary) / <alpha-value>)',
           foreground: 'hsl(var(--primary-foreground) / <alpha-value>)',
-          50: '#eef2ff',
-          100: '#e0e7ff',
-          500: '#6366f1',
-          600: '#4f46e5',
-          700: '#4338ca',
+          50: '#eff6ff',
+          100: '#dbeafe',
+          500: '#3b82f6',
+          600: '#2563eb',
+          700: '#1d4ed8',
         },
         secondary: {
           DEFAULT: 'hsl(var(--secondary) / <alpha-value>)',
@@ -55,9 +55,9 @@ export default {
             border: 'rgba(59, 130, 246, 0.25)',
           },
           interview: {
-            bg: 'rgba(168, 85, 247, 0.1)',
-            text: '#c084fc',
-            border: 'rgba(168, 85, 247, 0.25)',
+            bg: 'rgba(14, 165, 233, 0.1)',
+            text: '#38bdf8',
+            border: 'rgba(14, 165, 233, 0.25)',
           },
           case_study: {
             bg: 'rgba(6, 182, 212, 0.1)',
@@ -84,7 +84,7 @@ export default {
         md: '0.375rem',
       },
       boxShadow: {
-        glow: '0 0 20px -5px rgba(99, 102, 241, 0.3)',
+        glow: '0 0 20px -5px rgba(59, 130, 246, 0.3)',
         'glow-emerald': '0 0 20px -5px rgba(16, 185, 129, 0.3)',
         soft: '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
         'soft-dark': '0 4px 25px -2px rgba(0, 0, 0, 0.3)',

@@ -34,13 +34,13 @@ export const StatisticCard: React.FC<StatisticCardProps> = ({
       )}
     >
       {/* Background Accent Glow */}
-      <div className="absolute -right-6 -bottom-6 w-24 h-24 bg-indigo-500/5 rounded-full blur-2xl group-hover:bg-indigo-500/10 transition-colors pointer-events-none" aria-hidden="true" />
+      <div className="absolute -right-6 -bottom-6 w-24 h-24 bg-blue-500/5 rounded-full blur-2xl group-hover:bg-blue-500/10 transition-colors pointer-events-none" aria-hidden="true" />
 
       <div className="flex items-center justify-between mb-3">
         <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
           {title}
         </span>
-        <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 group-hover:bg-indigo-500/10 group-hover:text-indigo-500 transition-colors" aria-hidden="true">
+        <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 group-hover:bg-blue-500/10 group-hover:text-blue-500 transition-colors" aria-hidden="true">
           <Icon className="w-5 h-5" />
         </div>
       </div>

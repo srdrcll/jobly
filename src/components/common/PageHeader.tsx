@@ -28,7 +28,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
     >
       <div className="flex items-start gap-4">
         {Icon && (
-          <div className="p-3 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border border-indigo-500/20 text-indigo-500 dark:text-indigo-400 rounded-2xl shadow-sm shrink-0" aria-hidden="true">
+          <div className="p-3 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 rounded-2xl shadow-sm shrink-0" aria-hidden="true">
             <Icon className="w-6 h-6" />
           </div>
         )}
@@ -36,7 +36,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
           <div className="flex items-center gap-2.5">
             <h1 className="text-2xl font-bold tracking-tight text-foreground">{title}</h1>
             {badge && (
-              <span className="px-2.5 py-0.5 text-xs font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 rounded-full">
+              <span className="px-2.5 py-0.5 text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-500/10 border border-blue-500/20 rounded-full">
                 {badge}
               </span>
             )}

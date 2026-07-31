@@ -32,14 +32,14 @@ export const MonthlyApplicationsChart: React.FC<MonthlyApplicationsChartProps> =
           return (
             <div key={idx} className="flex-1 flex flex-col items-center gap-2 group relative">
               {/* Value Badge above Bar */}
-              <span className="text-[11px] font-bold text-slate-300 group-hover:text-indigo-400 transition-colors">
+              <span className="text-[11px] font-bold text-slate-300 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors">
                 {item.count}
               </span>
 
               {/* Bar Column */}
               <div className="w-full max-w-[36px] bg-slate-100 dark:bg-slate-800/60 rounded-t-lg h-36 flex items-end p-1 overflow-hidden relative">
                 <div
-                  className="w-full bg-gradient-to-t from-indigo-600 to-violet-500 rounded-t-md transition-all duration-500 group-hover:from-indigo-500 group-hover:to-violet-400 group-hover:shadow-lg group-hover:shadow-indigo-500/25"
+                  className="w-full bg-gradient-to-t from-blue-600 to-cyan-500 rounded-t-md transition-all duration-500 group-hover:from-blue-500 group-hover:to-cyan-400 group-hover:shadow-lg group-hover:shadow-blue-500/25"
                   style={{ height: `${heightPercent}%` }}
                 />
               </div>

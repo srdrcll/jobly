@@ -13,7 +13,7 @@ export const PriorityBadge: React.FC<PriorityBadgeProps> = ({ priority = 'Orta',
   const p = priority?.toString() || 'Orta';
 
   let label = 'Orta';
-  let badgeStyle = 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20';
+  let badgeStyle = 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20';
   let Icon = Shield;
 
   if (p === 'Düşük' || p.toLowerCase() === 'low') {

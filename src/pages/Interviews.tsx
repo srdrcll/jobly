@@ -115,7 +115,7 @@ export const InterviewsPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-black text-foreground tracking-tight flex items-center gap-2.5">
-            <CalendarIcon className="w-7 h-7 text-purple-500" />
+            <CalendarIcon className="w-7 h-7 text-blue-500" />
             Mülakat Yönetimi & Takvim
           </h1>
           <p className="text-xs text-slate-400 mt-1">
@@ -131,7 +131,7 @@ export const InterviewsPage: React.FC = () => {
               onClick={() => setViewMode('list')}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
                 viewMode === 'list'
-                  ? 'bg-purple-600 text-white shadow-sm'
+                  ? 'bg-blue-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-foreground'
               }`}
             >
@@ -142,7 +142,7 @@ export const InterviewsPage: React.FC = () => {
               onClick={() => setViewMode('calendar')}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
                 viewMode === 'calendar'
-                  ? 'bg-purple-600 text-white shadow-sm'
+                  ? 'bg-blue-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-foreground'
               }`}
             >
@@ -153,7 +153,7 @@ export const InterviewsPage: React.FC = () => {
               onClick={() => setViewMode('analytics')}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
                 viewMode === 'analytics'
-                  ? 'bg-purple-600 text-white shadow-sm'
+                  ? 'bg-blue-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-foreground'
               }`}
             >
@@ -166,7 +166,7 @@ export const InterviewsPage: React.FC = () => {
             size="md"
             leftIcon={<Plus className="w-4 h-4" />}
             onClick={() => setIsCreateOpen(true)}
-            className="shrink-0 focus-visible:ring-2 focus-visible:ring-purple-500"
+            className="shrink-0 focus-visible:ring-2 focus-visible:ring-blue-500"
           >
             Yeni Mülakat Planla
           </Button>
@@ -175,19 +175,19 @@ export const InterviewsPage: React.FC = () => {
 
       {/* 2. Next Interview Countdown Banner (If upcoming interview exists) */}
       {countdownInfo.interview && (
-        <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-950/80 via-indigo-950/80 to-slate-900 border border-purple-500/30 text-purple-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-lg animate-fadeIn">
+        <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-blue-950/80 border border-blue-500/30 text-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-lg animate-fadeIn">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/30 shrink-0">
+            <div className="p-2.5 rounded-xl bg-blue-500/20 text-blue-300 border border-blue-500/30 shrink-0">
               <Clock className="w-6 h-6 animate-pulse" />
             </div>
             <div>
-              <span className="text-[10px] uppercase tracking-wider font-extrabold text-purple-300">
+              <span className="text-[10px] uppercase tracking-wider font-extrabold text-blue-300">
                 Sıradaki Mülakat Geri Sayımı
               </span>
               <h3 className="text-sm font-bold text-white">
                 {countdownInfo.interview.company_name} — {countdownInfo.interview.position} ({countdownInfo.interview.stage || 'Mülakat'})
               </h3>
-              <p className="text-xs text-purple-200/80">
+              <p className="text-xs text-blue-200/80">
                 {new Date(countdownInfo.interview.date).toLocaleDateString('tr-TR')} saat {countdownInfo.interview.time || '14:00'}
               </p>
             </div>
@@ -211,7 +211,7 @@ export const InterviewsPage: React.FC = () => {
       {/* 3. KPI Summary Cards Bar */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="p-4 rounded-xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+          <div className="p-2.5 rounded-xl bg-blue-500/10 text-blue-500 border border-blue-500/20">
             <CalendarIcon className="w-5 h-5" />
           </div>
           <div>

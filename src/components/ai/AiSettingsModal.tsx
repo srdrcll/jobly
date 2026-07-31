@@ -46,12 +46,12 @@ export const AiSettingsModal: React.FC<AiSettingsModalProps> = ({ isOpen, onClos
         {/* Model Selector */}
         <div className="space-y-1.5">
           <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
-            <Cpu className="w-4 h-4 text-purple-400" /> Model Seçimi
+            <Cpu className="w-4 h-4 text-blue-500" /> Model Seçimi
           </label>
           <select
             value={settings.model}
             onChange={(e) => setSettings({ ...settings, model: e.target.value as any })}
-            className="w-full h-10 px-3 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-bold text-foreground focus:ring-2 focus:ring-purple-500 outline-none"
+            className="w-full h-10 px-3 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-bold text-foreground focus:ring-2 focus:ring-blue-500 outline-none"
           >
             <option value="gemini-1.5-pro">✨ Gemini 1.5 Pro (Derin Akıl Yürütme)</option>
             <option value="gemini-1.5-flash">⚡ Gemini 1.5 Flash (Ultra Hızlı)</option>
@@ -63,12 +63,12 @@ export const AiSettingsModal: React.FC<AiSettingsModalProps> = ({ isOpen, onClos
         {/* Persona Selector */}
         <div className="space-y-1.5">
           <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
-            <UserCheck className="w-4 h-4 text-indigo-400" /> Yapay Zekâ Personası / Rolü
+            <UserCheck className="w-4 h-4 text-blue-500" /> Yapay Zekâ Personası / Rolü
           </label>
           <select
             value={settings.persona}
             onChange={(e) => setSettings({ ...settings, persona: e.target.value as any })}
-            className="w-full h-10 px-3 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-bold text-foreground focus:ring-2 focus:ring-purple-500 outline-none"
+            className="w-full h-10 px-3 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-bold text-foreground focus:ring-2 focus:ring-blue-500 outline-none"
           >
             <option value="Career Coach">🧭 Kıdemli Kariyer Koçu & Rehber</option>
             <option value="HR Manager">👔 İK Direktörü & İşe Alım Yöneticisi</option>
@@ -83,7 +83,7 @@ export const AiSettingsModal: React.FC<AiSettingsModalProps> = ({ isOpen, onClos
             <span className="text-foreground flex items-center gap-1.5">
               <Sliders className="w-4 h-4 text-amber-400" /> Yaratıcılık Seviyesi (Temperature)
             </span>
-            <span className="text-purple-400 font-extrabold">{settings.creativity}</span>
+            <span className="text-blue-500 font-extrabold">{settings.creativity}</span>
           </div>
           <input
             type="range"
@@ -92,7 +92,7 @@ export const AiSettingsModal: React.FC<AiSettingsModalProps> = ({ isOpen, onClos
             step="0.1"
             value={settings.creativity}
             onChange={(e) => setSettings({ ...settings, creativity: parseFloat(e.target.value) })}
-            className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-purple-500"
+            className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500"
           />
           <div className="flex justify-between text-[10px] text-slate-400">
             <span>Daha Odaklı & Dürüst</span>
@@ -115,7 +115,7 @@ export const AiSettingsModal: React.FC<AiSettingsModalProps> = ({ isOpen, onClos
                 onClick={() => setSettings({ ...settings, responseLength: item.id as any })}
                 className={`py-2 rounded-xl border text-xs font-bold transition-all ${
                   settings.responseLength === item.id
-                    ? 'bg-purple-500/20 text-purple-300 border-purple-500/40 shadow-sm'
+                    ? 'bg-blue-500/20 text-blue-300 border-blue-500/40 shadow-sm'
                     : 'bg-slate-50 dark:bg-slate-900 text-slate-400 border-slate-200 dark:border-slate-800 hover:text-foreground'
                 }`}
               >

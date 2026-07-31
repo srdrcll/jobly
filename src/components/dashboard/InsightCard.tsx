@@ -54,18 +54,18 @@ export const InsightCard: React.FC<InsightCardProps> = ({ insight }) => {
         };
       case 'info':
         return {
-          cardBg: 'bg-indigo-50 dark:bg-indigo-950/20 border-indigo-300/60 dark:border-indigo-500/30',
-          iconBg: 'bg-indigo-100 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-300/50 dark:border-indigo-500/20',
-          badgeBg: 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border-indigo-300/50 dark:border-indigo-500/30',
-          titleColor: 'text-indigo-700 dark:text-indigo-300',
+          cardBg: 'bg-blue-50 dark:bg-blue-950/20 border-blue-300/60 dark:border-blue-500/30',
+          iconBg: 'bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-300/50 dark:border-blue-500/20',
+          badgeBg: 'bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300 border-blue-300/50 dark:border-blue-500/30',
+          titleColor: 'text-blue-700 dark:text-blue-300',
         };
       case 'tip':
       default:
         return {
-          cardBg: 'bg-purple-50 dark:bg-purple-950/20 border-purple-300/60 dark:border-purple-500/30',
-          iconBg: 'bg-purple-100 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-300/50 dark:border-purple-500/20',
-          badgeBg: 'bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 border-purple-300/50 dark:border-purple-500/30',
-          titleColor: 'text-purple-700 dark:text-purple-300',
+          cardBg: 'bg-cyan-50 dark:bg-cyan-950/20 border-cyan-300/60 dark:border-cyan-500/30',
+          iconBg: 'bg-cyan-100 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border-cyan-300/50 dark:border-cyan-500/20',
+          badgeBg: 'bg-cyan-100 dark:bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 border-cyan-300/50 dark:border-cyan-500/30',
+          titleColor: 'text-cyan-700 dark:text-cyan-300',
         };
     }
   };
