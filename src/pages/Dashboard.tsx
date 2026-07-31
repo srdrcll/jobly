@@ -24,7 +24,7 @@ export const DashboardPage: React.FC = () => {
           <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
             Canlı İstatistik İcmali
           </h2>
-          <span className="text-xs text-slate-400 font-medium">Supabase Canlı Veri • Sprint 5.2</span>
+          <span className="text-xs text-slate-400 font-medium">Canlı Veriler</span>
         </div>
         <KpiCardsGrid onOpenNewModal={context?.onOpenNewModal} />
       </div>

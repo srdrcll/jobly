@@ -54,13 +54,8 @@ export const LoginPage: React.FC = () => {
         />
 
         <div className="space-y-1.5">
-          <div className="flex items-center justify-between">
-            <label className="block text-xs font-semibold text-slate-300">Şifre</label>
-            <Link to="/forgot-password" className="text-[11px] text-indigo-400 hover:underline">
-              Şifremi Unuttum?
-            </Link>
-          </div>
           <Input
+            label="Şifre"
             type="password"
             required
             disabled={isLoading}
@@ -69,6 +64,11 @@ export const LoginPage: React.FC = () => {
             placeholder="••••••••"
             leftIcon={<Lock className="w-4 h-4" aria-hidden="true" />}
           />
+          <div className="text-right">
+            <Link to="/forgot-password" className="text-[11px] text-indigo-400 hover:underline">
+              Şifremi Unuttum?
+            </Link>
+          </div>
         </div>
 
         <Button

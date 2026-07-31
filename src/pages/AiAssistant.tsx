@@ -323,6 +323,12 @@ export const AiAssistantPage: React.FC = () => {
                     type="text"
                     value={inputMessage}
                     onChange={(e) => setInputMessage(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSendMessage(e);
+                      }
+                    }}
                     placeholder="AI Kariyer Asistanına bir soru sorun..."
                     className="w-full h-11 pl-4 pr-10 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs text-foreground placeholder:text-slate-500 focus:ring-2 focus:ring-purple-500 outline-none"
                   />
@@ -335,10 +341,11 @@ export const AiAssistantPage: React.FC = () => {
                   type="submit"
                   variant="primary"
                   size="md"
+                  aria-label="Mesaj gönder"
                   disabled={!inputMessage.trim() || sendMessageMutation.isPending}
                   className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 shrink-0 shadow-md"
                 >
-                  <Send className="w-4 h-4" />
+                  <Send className="w-4 h-4" aria-hidden="true" />
                 </Button>
               </form>
             </div>

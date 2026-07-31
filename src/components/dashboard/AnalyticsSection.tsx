@@ -69,7 +69,7 @@ export const AnalyticsSection: React.FC = () => {
         <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
           Analiz ve Performans Grafikleri
         </h2>
-        <span className="text-xs text-slate-400 font-medium">Supabase Canlı Analiz • Sprint 5.6</span>
+        <span className="text-xs text-slate-400 font-medium">Canlı Analiz</span>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

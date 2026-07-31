@@ -79,9 +79,10 @@ export function useCreateApplicationMutation() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.applications.lists() });
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] });
     },
-    onSuccess: () => {
-      toast.success('Başvuru Oluşturuldu', 'Yeni iş başvurusu başarıyla veritabanına eklendi.');
+    onSuccess: (data) => {
+      toast.success('Başvuru Oluşturuldu', `"${data.company_name} - ${data.position}" başvurusu veritabanına eklendi.`);
     },
   });
 }

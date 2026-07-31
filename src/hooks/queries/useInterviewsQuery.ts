@@ -36,9 +36,10 @@ export function useCreateInterviewMutation() {
       if (!user?.id) throw new Error('Oturum açmış kullanıcı bulunamadı.');
       return interviewsService.createInterview(user.id, values);
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.interviews.lists() });
-      toast.success('Mülakat Planlandı', 'Takviminize yeni randevu eklendi.');
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+      toast.success('Mülakat Planlandı', `"${data.company_name} - ${data.position}" randevusu takvime eklendi.`);
     },
     onError: (error: Error) => {
       toast.error('İşlem Başarısız', error.message || 'Mülakat eklenirken sorun oluştu.');

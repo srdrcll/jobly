@@ -24,7 +24,7 @@ export const CompanyProfileAttachments: React.FC<CompanyProfileAttachmentsProps>
           variant="outline"
           size="sm"
           leftIcon={<Upload className="w-3.5 h-3.5" />}
-          onClick={() => alert('Doküman yükleme altyapısı aktiftir. Sprint 8.0 Document Center ile tam senkronize çalışır.')}
+          onClick={() => alert('Doküman yükleme altyapısı aktiftir. Doküman Merkezi ile tam senkronize çalışır.')}
         >
           Dosya Yükle
         </Button>

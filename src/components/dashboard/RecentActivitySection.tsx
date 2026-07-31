@@ -71,7 +71,7 @@ export const RecentActivitySection: React.FC = () => {
         <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
           Aktivite Akışı ve Yaklaşan Mülakatlar
         </h2>
-        <span className="text-xs text-slate-400 font-medium">Sprint 5.6 • Üretim Kalitesi</span>
+        <span className="text-xs text-slate-400 font-medium">Canlı Akış</span>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">

@@ -50,7 +50,7 @@ export const CompanyAnalyticsSection: React.FC<CompanyAnalyticsSectionProps> = (
         <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
           Şirket CRM Analitik Grafikleri
         </h2>
-        <span className="text-xs text-slate-400 font-medium">Sprint 6.4 • Canlı Analiz</span>
+        <span className="text-xs text-slate-400 font-medium">Canlı Analiz</span>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

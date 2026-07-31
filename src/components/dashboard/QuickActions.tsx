@@ -30,7 +30,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({ onOpenNewModal }) =>
             <p className="text-xs text-slate-400">Sık kullanılan kısayollar ve modül yönlendirmeleri</p>
           </div>
         </div>
-        <span className="text-xs text-slate-400 font-medium">Sprint 5.5</span>
+        <span className="text-xs text-slate-400 font-medium">Hızlı Erişim</span>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
