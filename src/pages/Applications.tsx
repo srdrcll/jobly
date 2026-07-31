@@ -866,12 +866,6 @@ export const ApplicationsPage: React.FC = () => {
                 </div>
               );
             })}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
           </div>
         </>
       )}
