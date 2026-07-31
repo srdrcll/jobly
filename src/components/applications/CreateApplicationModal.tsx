@@ -123,7 +123,7 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
           </div>
         }
       >
-        <p className="text-sm text-slate-300 leading-relaxed">
+        <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
           Doldurduğunuz form alanları kaydedilmemiş. Çıkarsanız girdiğiniz bilgiler kaybolacaktır.
         </p>
       </Modal>
@@ -182,7 +182,7 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Target Role Select */}
           <div className="space-y-1.5 w-full">
-            <label htmlFor="create-target-role" className="block text-xs font-semibold text-slate-300">
+            <label htmlFor="create-target-role" className="block text-xs font-semibold text-slate-600 dark:text-slate-300">
               Hedef Rol *
             </label>
             <div className="relative flex items-center w-full">
@@ -191,7 +191,7 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
               </div>
               <select
                 id="create-target-role"
-                className="w-full h-10 pl-10 pr-3.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+                className="w-full h-10 pl-10 pr-3.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
                 {...register('target_role')}
               >
                 {TARGET_ROLE_OPTIONS.map((role) => (
@@ -208,7 +208,7 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
 
           {/* Status Select */}
           <div className="space-y-1.5 w-full">
-            <label htmlFor="create-status" className="block text-xs font-semibold text-slate-300">
+            <label htmlFor="create-status" className="block text-xs font-semibold text-slate-600 dark:text-slate-300">
               Başvuru Durumu *
             </label>
             <div className="relative flex items-center w-full">
@@ -217,7 +217,7 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
               </div>
               <select
                 id="create-status"
-                className="w-full h-10 pl-10 pr-3.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+                className="w-full h-10 pl-10 pr-3.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
                 {...register('status')}
               >
                 {Object.entries(STATUS_CONFIG).map(([key, config]) => (
@@ -231,8 +231,8 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
         </div>
 
         {/* Optional Fields Section */}
-        <div className="pt-2 border-t border-slate-100 dark:border-slate-800/60 space-y-4">
-          <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Ek Detaylar (Opsiyonel)</h4>
+        <div className="pt-2 border-t border-slate-200 dark:border-slate-800/60 space-y-4">
+          <h4 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Ek Detaylar (Opsiyonel)</h4>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Input
@@ -252,12 +252,12 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
             />
 
             <div className="space-y-1.5 w-full">
-              <label htmlFor="create-work-type" className="block text-xs font-semibold text-slate-300">
+              <label htmlFor="create-work-type" className="block text-xs font-semibold text-slate-600 dark:text-slate-300">
                 Çalışma Modeli
               </label>
               <select
                 id="create-work-type"
-                className="w-full h-10 px-3.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+                className="w-full h-10 px-3.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
                 {...register('work_type')}
               >
                 <option value="Remote">Remote (Uzaktan)</option>
@@ -297,14 +297,14 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
 
           {/* Notes Area */}
           <div className="space-y-1.5 w-full">
-            <label htmlFor="create-notes" className="block text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-              <FileText className="w-3.5 h-3.5 text-indigo-400" aria-hidden="true" /> Özel Notlar & Detaylar
+            <label htmlFor="create-notes" className="block text-xs font-semibold text-slate-600 dark:text-slate-300 flex items-center gap-1.5">
+              <FileText className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" aria-hidden="true" /> Özel Notlar & Detaylar
             </label>
             <textarea
               id="create-notes"
               rows={3}
               placeholder="Mülakat süreci, teknoloji mülakatı detayları veya başvuru notlarınızı ekleyin..."
-              className="w-full p-3 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-foreground placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 resize-none"
+              className="w-full p-3 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 resize-none"
               {...register('notes')}
             />
             {errors.notes?.message && (

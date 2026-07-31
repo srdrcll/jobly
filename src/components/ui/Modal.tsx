@@ -84,7 +84,7 @@ export const Modal: React.FC<ModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-950/70 backdrop-blur-sm transition-opacity animate-fadeIn"
+        className="fixed inset-0 bg-slate-950/60 dark:bg-slate-950/75 backdrop-blur-sm transition-opacity animate-fadeIn"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -93,7 +93,7 @@ export const Modal: React.FC<ModalProps> = ({
       <div
         ref={modalRef}
         className={cn(
-          'relative w-full bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden z-10 animate-slideUp text-slate-100 my-8 focus:outline-none',
+          'relative w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl overflow-hidden z-10 animate-slideUp text-slate-900 dark:text-slate-100 my-8 focus:outline-none',
           widthClasses[maxWidth]
         )}
         role="dialog"
@@ -103,24 +103,24 @@ export const Modal: React.FC<ModalProps> = ({
         tabIndex={-1}
       >
         {/* Header */}
-        <div className="flex items-start justify-between p-6 border-b border-slate-800/80 bg-slate-900/50">
+        <div className="flex items-start justify-between p-6 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/80 dark:bg-slate-900/50">
           <div className="flex items-center gap-3">
             {icon && (
-              <div className="p-2.5 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 rounded-xl" aria-hidden="true">
+              <div className="p-2.5 bg-indigo-500/10 border border-indigo-500/20 text-indigo-500 dark:text-indigo-400 rounded-xl" aria-hidden="true">
                 {icon}
               </div>
             )}
             <div>
-              <h3 id="modal-title" className="text-lg font-bold tracking-tight text-white">{title}</h3>
+              <h3 id="modal-title" className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">{title}</h3>
               {description && (
-                <p id="modal-description" className="text-xs text-slate-400 mt-0.5 leading-relaxed">{description}</p>
+                <p id="modal-description" className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">{description}</p>
               )}
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
             aria-label="Modalı Kapat"
           >
             <X className="w-5 h-5" aria-hidden="true" />
@@ -136,7 +136,7 @@ export const Modal: React.FC<ModalProps> = ({
 
         {/* Footer */}
         {footer && (
-          <div className="flex items-center justify-end gap-3 p-4 px-6 border-t border-slate-800/80 bg-slate-950/40">
+          <div className="flex items-center justify-end gap-3 p-4 px-6 border-t border-slate-100 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-950/40">
             {footer}
           </div>
         )}
