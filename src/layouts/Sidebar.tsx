@@ -8,8 +8,7 @@ import {
   Compass, 
   ChevronLeft, 
   ChevronRight, 
-  LogOut, 
-  ShieldCheck 
+  LogOut 
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
@@ -224,8 +223,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </div>
               <div className="flex flex-col min-w-0">
                 <span className="text-xs font-bold text-foreground truncate">{fullName}</span>
-                <span className="text-[10px] text-slate-400 truncate flex items-center gap-1">
-                  <ShieldCheck className="w-3 h-3 text-emerald-500 inline" aria-hidden="true" /> Pro Plan
+                <span className="text-[10px] text-slate-400 dark:text-slate-500 truncate">
+                  {user?.email || 'Aktif Oturum'}
                 </span>
               </div>
             </div>
