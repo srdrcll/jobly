@@ -80,7 +80,7 @@ export const LandingPage: React.FC = () => {
 
       {/* Landing Footer */}
       <footer className="border-t border-slate-200 dark:border-slate-800/80 py-8 px-6 text-center text-xs text-slate-500">
-        <p>© 2026 Kariyer Pusulası. Modern Full Stack & UI/UX Tasarım Temeli.</p>
+        <p>© 2026 Kariyer Pusulası. Kariyer yolculuğunuzda en güçlü rehberiniz. Tüm hakları saklıdır.</p>
       </footer>
     </div>
   );

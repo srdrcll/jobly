@@ -39,7 +39,7 @@ export const AuthLayout: React.FC = () => {
 
       {/* Bottom Footer */}
       <footer className="text-center text-xs text-slate-500 dark:text-slate-500 z-10 py-2">
-        <p>© 2026 Kariyer Pusulası Inc. Tüm hakları saklıdır. — Linear & Notion UI İlhamı</p>
+        <p>© 2026 Kariyer Pusulası. Kariyerinizi hedefleriniz doğrultusunda yönetin. Tüm hakları saklıdır.</p>
       </footer>
     </div>
   );
