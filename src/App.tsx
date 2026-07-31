@@ -95,7 +95,7 @@ export function App() {
                 <Route path="/companies" element={<CompaniesPage />} />
                 <Route path="/companies/:id" element={<CompanyDetailPage />} />
                 <Route path="/interviews" element={<InterviewsPage />} />
-                <Route path="/ai-assistant" element={<AiAssistantPage />} />
+                <Route path="/ai-assistant" element={<Navigate to="/dashboard" replace />} />
                 <Route path="/templates" element={<TemplatesPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/settings" element={<SettingsPage />} />

@@ -41,7 +41,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
     if (href === '/companies') return companies.length > 0 ? companies.length : undefined;
     if (href === '/interviews') return interviews.length > 0 ? interviews.length : undefined;
     if (href === '/dashboard') return 'Yeni';
-    if (href === '/ai-assistant') return 'AI';
     return undefined;
   };
 
@@ -106,6 +105,35 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <nav className="space-y-1">
               {MAIN_NAV_ITEMS.map((item) => {
                 const Icon = item.icon;
+
+                if (item.disabled) {
+                  return (
+                    <div
+                      key={item.href}
+                      tabIndex={-1}
+                      aria-disabled="true"
+                      aria-label={`${item.title} (Yakında) - ${item.tooltip || 'Bu özellik yakında kullanıma açılacak.'}`}
+                      title={item.tooltip || 'Bu özellik yakında kullanıma açılacak.'}
+                      className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium opacity-50 text-slate-400 dark:text-slate-500 cursor-not-allowed select-none group relative bg-slate-100/30 dark:bg-slate-900/30"
+                    >
+                      <Icon className="w-4 h-4 shrink-0 text-slate-400 dark:text-slate-600" aria-hidden="true" />
+                      {!isCollapsed && (
+                        <span className="truncate flex-1 text-slate-400 dark:text-slate-500 font-medium">{item.title}</span>
+                      )}
+                      {!isCollapsed && (
+                        <span className="px-2 py-0.5 text-[9px] font-bold rounded-full bg-slate-200/80 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-300/60 dark:border-slate-700/60 shrink-0 whitespace-nowrap">
+                          {item.badge || 'Yakında'}
+                        </span>
+                      )}
+                      {isCollapsed && (
+                        <div className="absolute left-full ml-2 px-2.5 py-1 bg-slate-900 text-white text-xs rounded-lg shadow-xl whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50">
+                          {item.title} (Yakında)
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+
                 return (
                   <NavLink
                     key={item.href}

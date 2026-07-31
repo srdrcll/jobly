@@ -30,6 +30,8 @@ export interface NavItem {
   icon: ComponentType<LucideProps>;
   badge?: string | number;
   description?: string;
+  disabled?: boolean;
+  tooltip?: string;
 }
 
 export interface ToastMessage {

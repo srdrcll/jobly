@@ -42,7 +42,10 @@ export const MAIN_NAV_ITEMS: NavItem[] = [
     title: 'AI Kariyer Asistanı',
     href: '/ai-assistant',
     icon: Bot,
-    description: 'Özgeçmiş analizi, mülakat koçu ve kariyer rehberi'
+    description: 'Özgeçmiş analizi, mülakat koçu ve kariyer rehberi',
+    disabled: true,
+    badge: 'Yakında',
+    tooltip: 'Bu özellik yakında kullanıma açılacak.'
   },
   {
     title: 'Şablonlar',
