@@ -20,6 +20,7 @@ import {
   useCreateAiConversationMutation,
   useRenameAiConversationMutation,
   useToggleAiFavoriteMutation,
+  useToggleAiArchiveMutation,
   useDeleteAiConversationMutation,
   useSendAiMessageMutation,
   useAiSettingsQuery
