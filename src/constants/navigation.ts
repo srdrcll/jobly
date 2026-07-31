@@ -51,7 +51,10 @@ export const MAIN_NAV_ITEMS: NavItem[] = [
     title: 'Şablonlar',
     href: '/templates',
     icon: LayoutTemplate,
-    description: 'Özgeçmiş, ön mektup ve mülakat şablonları'
+    description: 'Özgeçmiş, ön mektup ve mülakat şablonları',
+    disabled: true,
+    badge: 'Yakında',
+    tooltip: 'Şablon kütüphanesi yakında kullanıma açılacak.'
   },
 ];
 
