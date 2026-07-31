@@ -8,7 +8,8 @@ import {
   Compass, 
   ChevronLeft, 
   ChevronRight, 
-  LogOut 
+  LogOut,
+  Linkedin
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
@@ -215,10 +216,24 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Bottom User Card */}
       <div className="p-3 border-t border-slate-200 dark:border-slate-800/80">
+        {!isCollapsed && (
+          <div className="mb-2">
+            <a
+              href="https://www.linkedin.com/in/srdrcll/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-400 hover:text-blue-500 hover:bg-blue-500/10 transition-colors border border-transparent hover:border-blue-500/20"
+            >
+              <Linkedin className="w-3.5 h-3.5 text-blue-500 shrink-0" aria-hidden="true" />
+              <span className="truncate">LinkedIn / srdrcll</span>
+            </a>
+          </div>
+        )}
+
         {!isCollapsed ? (
           <div className="p-2.5 rounded-2xl bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-xs shrink-0 shadow-sm">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center text-white font-bold text-xs shrink-0 shadow-sm">
                 {avatarInitials}
               </div>
               <div className="flex flex-col min-w-0">
@@ -238,10 +253,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
           </div>
         ) : (
-          <div className="flex justify-center">
+          <div className="flex flex-col items-center gap-2">
+            <a
+              href="https://www.linkedin.com/in/srdrcll/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2 rounded-xl text-slate-400 hover:text-blue-500 hover:bg-blue-500/10 transition-colors"
+              title="LinkedIn / srdrcll"
+            >
+              <Linkedin className="w-4 h-4 text-blue-500" aria-hidden="true" />
+            </a>
             <button
               onClick={() => logout()}
-              className="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-xs shadow-md hover:opacity-90 transition-opacity"
+              className="w-9 h-9 rounded-full bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center text-white font-bold text-xs shadow-md hover:opacity-90 transition-opacity"
               title="Çıkış Yap"
             >
               {avatarInitials}

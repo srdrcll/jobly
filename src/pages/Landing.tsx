@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { 
   Compass, 
   Sparkles, 
-  ArrowRight 
+  ArrowRight,
+  Linkedin
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { StatusBadge } from '@/components/ui/StatusBadge';
@@ -79,8 +80,17 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* Landing Footer */}
-      <footer className="border-t border-slate-200 dark:border-slate-800/80 py-8 px-6 text-center text-xs text-slate-500">
-        <p>© 2026 Kariyer Pusulası. Kariyer yolculuğunuzda en güçlü rehberiniz. Tüm hakları saklıdır.</p>
+      <footer className="border-t border-slate-200 dark:border-slate-800/80 py-8 px-6 text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-4 max-w-7xl w-full mx-auto">
+        <p>© 2026 Kariyer Pusulası. Tüm hakları saklıdır.</p>
+        <a
+          href="https://www.linkedin.com/in/srdrcll/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 font-bold text-blue-500 hover:text-blue-400 hover:underline transition-colors"
+        >
+          <Linkedin className="w-4 h-4 text-blue-500" aria-hidden="true" />
+          <span>Geliştirici LinkedIn Profili (srdrcll)</span>
+        </a>
       </footer>
     </div>
   );
