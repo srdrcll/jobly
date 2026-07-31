@@ -47,7 +47,7 @@ export const LandingPage: React.FC = () => {
         <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-foreground leading-[1.15]">
           İş Başvurularınızı <br />
           <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-300 bg-clip-text text-transparent">
-            Linear Disipliniyle
+            Kusursuz Bir Düzenle
           </span> Yönetin.
         </h1>
 
