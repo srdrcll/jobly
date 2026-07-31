@@ -154,9 +154,9 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={handleAttemptClose}
-      title="Başvuruyu Düzenle"
-      description="İş başvurunuza ait bilgileri güncelleyin."
-      maxWidth="lg"
+      title="Başvuru Bilgilerini Düzenle"
+      description="Mevcut iş başvurusu detaylarını güncelleyin."
+      maxWidth="xl"
       footer={
         <div className="flex items-center justify-end gap-3 w-full">
           <Button
@@ -180,9 +180,9 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
         </div>
       }
     >
-      <form id="edit-application-form" onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
-        {/* Required Fields */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <form id="edit-application-form" onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
+        {/* Main Required & Core Fields */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
           <Input
             label="Şirket Adı *"
             placeholder="örn. Teknoloji A.Ş., Global Corp"
@@ -221,14 +221,29 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
               </select>
             </div>
           </div>
+
+          {/* Work Type Select */}
+          <div className="space-y-1.5 w-full">
+            <label htmlFor="edit-work-type" className="block text-xs font-semibold text-slate-600 dark:text-slate-300">
+              Çalışma Modeli
+            </label>
+            <select
+              id="edit-work-type"
+              className="w-full h-10 px-3.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+              {...register('work_type')}
+            >
+              <option value="Remote">Remote (Uzaktan)</option>
+              <option value="Hybrid">Hybrid (Karma)</option>
+              <option value="On-site">On-site (Ofis)</option>
+            </select>
+          </div>
         </div>
 
         {/* Optional Fields Section */}
-        <div className="pt-2 border-t border-slate-200 dark:border-slate-800/60 space-y-4">
+        <div className="pt-3 border-t border-slate-200 dark:border-slate-800/60 space-y-4">
           <h4 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Ek Detaylar (Opsiyonel)</h4>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
             <Input
               label="Başvuru Tarihi"
               type="date"
@@ -245,65 +260,49 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
               {...register('salary')}
             />
 
-            <div className="space-y-1.5 w-full">
-              <label htmlFor="edit-work-type" className="block text-xs font-semibold text-slate-300">
-                Çalışma Modeli
-              </label>
-              <select
-                id="edit-work-type"
-                className="w-full h-10 px-3.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
-                {...register('work_type')}
-              >
-                <option value="Remote">Remote (Uzaktan)</option>
-                <option value="Hybrid">Hybrid (Karma)</option>
-                <option value="On-site">On-site (Ofis)</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
-              label="İlan Linki (URL)"
-              type="url"
-              placeholder="https://linkedin.com/jobs/..."
-              leftIcon={<Globe className="w-4 h-4" aria-hidden="true" />}
-              error={errors.job_url?.message}
-              {...register('job_url')}
+              label="İletişim Kişisi"
+              placeholder="örn. Ayşe Yılmaz"
+              leftIcon={<User className="w-4 h-4" aria-hidden="true" />}
+              {...register('contact_name')}
             />
 
-            <div className="grid grid-cols-2 gap-2">
+            <Input
+              label="İletişim E-Postası"
+              type="email"
+              placeholder="hr@company.com"
+              leftIcon={<Mail className="w-4 h-4" aria-hidden="true" />}
+              error={errors.contact_email?.message}
+              {...register('contact_email')}
+            />
+
+            <div className="sm:col-span-2">
               <Input
-                label="İletişim Kişisi"
-                placeholder="örn. Ayşe Yılmaz"
-                leftIcon={<User className="w-4 h-4" aria-hidden="true" />}
-                {...register('contact_name')}
-              />
-              <Input
-                label="İletişim E-Postası"
-                type="email"
-                placeholder="hr@company.com"
-                leftIcon={<Mail className="w-4 h-4" aria-hidden="true" />}
-                error={errors.contact_email?.message}
-                {...register('contact_email')}
+                label="İlan Linki (URL)"
+                type="url"
+                placeholder="https://linkedin.com/jobs/..."
+                leftIcon={<Globe className="w-4 h-4" aria-hidden="true" />}
+                error={errors.job_url?.message}
+                {...register('job_url')}
               />
             </div>
-          </div>
 
-          {/* Notes Area */}
-          <div className="space-y-1.5 w-full">
-            <label htmlFor="edit-notes" className="block text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-              <FileText className="w-3.5 h-3.5 text-indigo-400" aria-hidden="true" /> Özel Notlar & Detaylar
-            </label>
-            <textarea
-              id="edit-notes"
-              rows={3}
-              placeholder="Mülakat detayları veya notlarınızı ekleyin..."
-              className="w-full p-3 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-foreground placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 resize-none"
-              {...register('notes')}
-            />
-            {errors.notes?.message && (
-              <p className="text-[11px] text-rose-400 font-medium" role="alert" aria-live="assertive">{errors.notes.message}</p>
-            )}
+            {/* Notes Area */}
+            <div className="sm:col-span-2 space-y-1.5 w-full">
+              <label htmlFor="edit-notes" className="block text-xs font-semibold text-slate-600 dark:text-slate-300 flex items-center gap-1.5">
+                <FileText className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" aria-hidden="true" /> Özel Notlar & Detaylar
+              </label>
+              <textarea
+                id="edit-notes"
+                rows={3}
+                placeholder="Mülakat detayları veya notlarınızı ekleyin..."
+                className="w-full p-3 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 resize-none"
+                {...register('notes')}
+              />
+              {errors.notes?.message && (
+                <p className="text-[11px] text-rose-400 font-medium" role="alert" aria-live="assertive">{errors.notes.message}</p>
+              )}
+            </div>
           </div>
         </div>
       </form>
