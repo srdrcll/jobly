@@ -592,7 +592,10 @@ export const ApplicationsPage: React.FC = () => {
           title="Henüz Başvuru Bulunmuyor"
           description="Veritabanında kayıtlı iş başvurunuz yok. Yeni başvuru ekleyerek takibe başlayabilirsiniz."
           actionText="Yeni Başvuru Ekle"
-          onAction={() => set        /* Filter / Search No Results Found State */
+          onAction={() => setIsCreateModalOpen(true)}
+        />
+      ) : filteredApplications.length === 0 ? (
+        /* Filter / Search No Results Found State */
         <div className="p-12 rounded-3xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft text-center space-y-4">
           <div className="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-500 flex items-center justify-center mx-auto">
             <SearchX className="w-6 h-6" aria-hidden="true" />
