@@ -29,9 +29,9 @@ export const LandingPage: React.FC = () => {
               Giriş Yap
             </Button>
           </Link>
-          <Link to="/dashboard">
-            <Button variant="primary" size="sm" rightIcon={<ArrowRight className="w-4 h-4" aria-hidden="true" />}>
-              Paneli Keşfet
+          <Link to="/register">
+            <Button variant="primary" size="sm">
+              Kayıt Ol
             </Button>
           </Link>
         </div>
