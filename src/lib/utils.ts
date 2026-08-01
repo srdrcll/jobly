@@ -43,3 +43,20 @@ export function formatDateTime(dateString?: string | null): string {
     return dateString;
   }
 }
+
+/**
+ * Safely computes initials from a name string (e.g. company name, full name).
+ * Returns empty string for null/undefined/empty input without throwing.
+ */
+export function getInitials(name?: string | null): string {
+  if (!name || typeof name !== 'string') return '';
+  return name
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0))
+    .filter(Boolean)
+    .join('')
+    .substring(0, 2)
+    .toUpperCase();
+}

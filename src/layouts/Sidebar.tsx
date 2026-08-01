@@ -11,7 +11,7 @@ import {
   LogOut,
   Linkedin
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn, getInitials } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
 import { useApplicationsListQuery } from '@/hooks/queries/useApplicationsQuery';
 import { useCompaniesListQuery } from '@/hooks/queries/useCompaniesQuery';
@@ -44,12 +44,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   };
 
   const fullName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Kullanıcı';
-  const avatarInitials = fullName
-    .split(' ')
-    .map((part: string) => part.charAt(0))
-    .join('')
-    .substring(0, 2)
-    .toUpperCase();
+  const avatarInitials = getInitials(fullName) || 'K';
 
   return (
     <aside

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { getInitials } from '@/lib/utils';
 import { 
   User, 
   Mail, 
@@ -28,12 +29,7 @@ export const ProfilePage: React.FC = () => {
   const fullName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Kullanıcı';
   const email = user?.email || 'ornek@domain.com';
 
-  const avatarInitials = fullName
-    .split(' ')
-    .map((part: string) => part.charAt(0))
-    .join('')
-    .substring(0, 2)
-    .toUpperCase();
+  const avatarInitials = getInitials(fullName) || 'K';
 
   const createdAt = user?.created_at
     ? new Date(user.created_at).toLocaleDateString('tr-TR', {

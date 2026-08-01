@@ -5,16 +5,19 @@ import { queryClient } from '@/lib/queryClient';
 import { ToastProvider } from '@/hooks/useToast';
 import { AuthProvider } from '@/context/AuthContext';
 import { ToastContainer } from '@/components/ui/Toast';
+import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 
 export const RootLayout: React.FC = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ToastProvider>
-        <AuthProvider>
-          <Outlet />
-          <ToastContainer />
-        </AuthProvider>
-      </ToastProvider>
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <ToastProvider>
+          <AuthProvider>
+            <Outlet />
+            <ToastContainer />
+          </AuthProvider>
+        </ToastProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 };

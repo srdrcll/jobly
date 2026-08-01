@@ -31,7 +31,7 @@ import {
   useDeleteApplicationMutation 
 } from '@/hooks/queries/useApplicationsQuery';
 import { ApplicationStatus } from '@/types';
-import { formatDate, formatDateTime } from '@/lib/utils';
+import { formatDate, formatDateTime, getInitials } from '@/lib/utils';
 
 export const ApplicationDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -127,13 +127,7 @@ export const ApplicationDetailPage: React.FC = () => {
     );
   }
 
-  // All fields are now properly typed — no more `as any` casts
-  const companyInitials = application.company_name
-    .split(' ')
-    .map((word) => word[0])
-    .join('')
-    .substring(0, 2)
-    .toUpperCase();
+  const companyInitials = getInitials(application.company_name);
 
   const targetRoleDisplay = application.target_role ?? 'Belirtilmedi';
   const priorityDisplay = (application.priority ?? 'Orta') as PriorityLevel;

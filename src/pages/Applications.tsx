@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { formatDate } from '@/lib/utils';
+import { formatDate, getInitials } from '@/lib/utils';
 import { 
   Briefcase, 
   Plus, 
@@ -644,12 +644,7 @@ export const ApplicationsPage: React.FC = () => {
               </TableHeader>
               <TableBody>
                 {filteredAndSortedApplications.map((app) => {
-                  const companyInitials = app.company_name
-                    .split(' ')
-                    .map((word) => word[0])
-                    .join('')
-                    .substring(0, 2)
-                    .toUpperCase();
+                  const companyInitials = getInitials(app.company_name);
 
                   const targetRoleDisplay = app.target_role ?? 'Software Engineer';
                   const priorityDisplay = (app.priority ?? 'Orta') as PriorityLevel;
@@ -770,12 +765,7 @@ export const ApplicationsPage: React.FC = () => {
           {/* Mobile Card Layout */}
           <div className="block md:hidden space-y-3">
             {filteredAndSortedApplications.map((app) => {
-              const companyInitials = app.company_name
-                .split(' ')
-                .map((word) => word[0])
-                .join('')
-                .substring(0, 2)
-                .toUpperCase();
+              const companyInitials = getInitials(app.company_name);
 
               const targetRoleDisplay = app.target_role ?? 'Software Engineer';
               const priorityDisplay = (app.priority ?? 'Orta') as PriorityLevel;
