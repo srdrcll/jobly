@@ -56,27 +56,27 @@ export const InterviewsPage: React.FC = () => {
 
   // Filtered & Sorted Interviews
   const filteredInterviews = useMemo(() => {
-    return interviews
+    return (interviews || [])
       .filter((interview) => {
         const query = searchQuery.toLowerCase().trim();
         const matchesSearch =
           !query ||
-          interview.company_name.toLowerCase().includes(query) ||
-          interview.position.toLowerCase().includes(query) ||
-          (interview.interviewer_name && interview.interviewer_name.toLowerCase().includes(query)) ||
-          (interview.stage && interview.stage.toLowerCase().includes(query));
+          (interview?.company_name || '').toLowerCase().includes(query) ||
+          (interview?.position || '').toLowerCase().includes(query) ||
+          (interview?.interviewer_name && interview.interviewer_name.toLowerCase().includes(query)) ||
+          (interview?.stage && interview.stage.toLowerCase().includes(query));
 
-        const matchesResult = selectedResult === 'all' || interview.result === selectedResult;
-        const matchesType = selectedType === 'all' || interview.type === selectedType;
+        const matchesResult = selectedResult === 'all' || interview?.result === selectedResult;
+        const matchesType = selectedType === 'all' || interview?.type === selectedType;
 
         return matchesSearch && matchesResult && matchesType;
       })
       .sort((a, b) => {
         if (sortBy === 'company') {
-          return a.company_name.localeCompare(b.company_name, 'tr');
+          return (a?.company_name || '').localeCompare(b?.company_name || '', 'tr');
         }
-        const timeA = new Date(`${a.date}T${a.time || '00:00'}`).getTime();
-        const timeB = new Date(`${b.date}T${b.time || '00:00'}`).getTime();
+        const timeA = new Date(`${a?.date || ''}T${a?.time || '00:00'}`).getTime();
+        const timeB = new Date(`${b?.date || ''}T${b?.time || '00:00'}`).getTime();
         if (sortBy === 'date_desc') {
           return timeB - timeA;
         }
@@ -89,14 +89,14 @@ export const InterviewsPage: React.FC = () => {
   const twentyFourHoursLater = new Date(now.getTime() + 24 * 60 * 60 * 1000);
 
   const upcoming24hCount = useMemo(() => {
-    return interviews.filter((i) => {
-      const d = new Date(`${i.date}T${i.time || '00:00'}`);
+    return (interviews || []).filter((i) => {
+      const d = new Date(`${i?.date || ''}T${i?.time || '00:00'}`);
       return !isNaN(d.getTime()) && d >= now && d <= twentyFourHoursLater;
     }).length;
   }, [interviews, now, twentyFourHoursLater]);
 
-  const passedCount = useMemo(() => interviews.filter((i) => i.result === 'Passed').length, [interviews]);
-  const offersCount = useMemo(() => interviews.filter((i) => i.result === 'Offer').length, [interviews]);
+  const passedCount = useMemo(() => (interviews || []).filter((i) => i?.result === 'Passed').length, [interviews]);
+  const offersCount = useMemo(() => (interviews || []).filter((i) => i?.result === 'Offer').length, [interviews]);
 
   const handleDeleteConfirm = () => {
     if (deleteId) {

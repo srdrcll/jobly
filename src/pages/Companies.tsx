@@ -74,41 +74,41 @@ export const CompaniesPage: React.FC = () => {
 
   // Filtered and Sorted Companies
   const filteredCompanies = useMemo(() => {
-    return companies
+    return (companies || [])
       .filter((company) => {
         const query = searchQuery.toLowerCase().trim();
         const matchesSearch =
           !query ||
-          company.name.toLowerCase().includes(query) ||
-          (company.industry && company.industry.toLowerCase().includes(query)) ||
-          (company.location && company.location.toLowerCase().includes(query)) ||
-          (company.contact_person && company.contact_person.toLowerCase().includes(query));
+          (company?.name || '').toLowerCase().includes(query) ||
+          (company?.industry && company.industry.toLowerCase().includes(query)) ||
+          (company?.location && company.location.toLowerCase().includes(query)) ||
+          (company?.contact_person && company.contact_person.toLowerCase().includes(query));
 
-        const matchesStatus = selectedStatus === 'all' || company.status === selectedStatus;
-        const matchesIndustry = selectedIndustry === 'all' || company.industry === selectedIndustry;
-        const matchesSize = selectedSize === 'all' || company.company_size === selectedSize;
-        const matchesFavorite = !showFavoritesOnly || Boolean(company.is_favorite);
+        const matchesStatus = selectedStatus === 'all' || company?.status === selectedStatus;
+        const matchesIndustry = selectedIndustry === 'all' || company?.industry === selectedIndustry;
+        const matchesSize = selectedSize === 'all' || company?.company_size === selectedSize;
+        const matchesFavorite = !showFavoritesOnly || Boolean(company?.is_favorite);
 
         return matchesSearch && matchesStatus && matchesIndustry && matchesSize && matchesFavorite;
       })
       .sort((a, b) => {
         if (sortBy === 'name') {
-          return a.name.localeCompare(b.name, 'tr');
+          return (a?.name || '').localeCompare(b?.name || '', 'tr');
         }
         if (sortBy === 'rating') {
-          return (b.rating || 0) - (a.rating || 0);
+          return (b?.rating || 0) - (a?.rating || 0);
         }
         if (sortBy === 'status') {
-          return (a.status || '').localeCompare(b.status || '', 'tr');
+          return (a?.status || '').localeCompare(b?.status || '', 'tr');
         }
-        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+        return new Date(b?.created_at || 0).getTime() - new Date(a?.created_at || 0).getTime();
       });
   }, [companies, searchQuery, selectedStatus, selectedIndustry, selectedSize, showFavoritesOnly, sortBy]);
 
   // Metric counts
-  const targetCount = useMemo(() => companies.filter((c) => c.status === 'Target').length, [companies]);
-  const interviewCount = useMemo(() => companies.filter((c) => c.status === 'Interviewed').length, [companies]);
-  const favoriteCount = useMemo(() => companies.filter((c) => c.is_favorite).length, [companies]);
+  const targetCount = useMemo(() => (companies || []).filter((c) => c?.status === 'Target').length, [companies]);
+  const interviewCount = useMemo(() => (companies || []).filter((c) => c?.status === 'Interviewed').length, [companies]);
+  const favoriteCount = useMemo(() => (companies || []).filter((c) => c?.is_favorite).length, [companies]);
 
   // Bulk Selection Handlers
   const handleSelectAll = (checked: boolean) => {

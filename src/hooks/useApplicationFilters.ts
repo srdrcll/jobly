@@ -113,58 +113,61 @@ export function useApplicationFilters(applications: DbApplication[] = [], search
     filters.workModels.length;
 
   const filteredAndSortedApplications = useMemo(() => {
-    let result = [...applications];
+    let result = Array.isArray(applications) ? [...applications] : [];
 
     // 1. Search Query Filter (Company, Position, Notes)
     const trimmedQuery = searchQuery.trim().toLowerCase();
     if (trimmedQuery) {
       result = result.filter((app) => {
-        const companyMatch = app.company_name?.toLowerCase().includes(trimmedQuery);
-        const positionMatch = app.position?.toLowerCase().includes(trimmedQuery);
-        const notesMatch = app.notes?.toLowerCase().includes(trimmedQuery);
+        const companyMatch = app?.company_name?.toLowerCase().includes(trimmedQuery);
+        const positionMatch = app?.position?.toLowerCase().includes(trimmedQuery);
+        const notesMatch = app?.notes?.toLowerCase().includes(trimmedQuery);
         return companyMatch || positionMatch || notesMatch;
       });
     }
 
     // 2. Status Multi-select Filter
     if (filters.statuses.length > 0) {
-      result = result.filter((app) => filters.statuses.includes(app.status as ApplicationStatus));
+      result = result.filter((app) => filters.statuses.includes(app?.status as ApplicationStatus));
     }
 
     // 3. Priority Multi-select Filter
     if (filters.priorities.length > 0) {
       result = result.filter((app) => {
-        const appPriority = (app.priority ?? 'Orta') as PriorityLevel;
+        const appPriority = (app?.priority ?? 'Orta') as PriorityLevel;
         return filters.priorities.includes(appPriority);
       });
     }
 
     // 4. Work Model Multi-select Filter
     if (filters.workModels.length > 0) {
-      result = result.filter((app) => app.work_type && filters.workModels.includes(app.work_type));
+      result = result.filter((app) => app?.work_type && filters.workModels.includes(app.work_type));
     }
 
     // 5. Combined Sorting Engine
     result.sort((a, b) => {
+      const compA = a?.company_name || '';
+      const compB = b?.company_name || '';
+
       switch (filters.sortBy) {
         case 'date-asc': {
-          const dateA = new Date(a.applied_date || a.created_at).getTime();
-          const dateB = new Date(b.applied_date || b.created_at).getTime();
+          const dateA = new Date(a?.applied_date || a?.created_at || 0).getTime();
+          const dateB = new Date(b?.applied_date || b?.created_at || 0).getTime();
           return dateA - dateB;
         }
         case 'company-asc':
-          return a.company_name.localeCompare(b.company_name, 'tr-TR');
+          return compA.localeCompare(compB, 'tr-TR');
         case 'company-desc':
-          return b.company_name.localeCompare(a.company_name, 'tr-TR');
+          return compB.localeCompare(compA, 'tr-TR');
         case 'priority-desc': {
-          const rankA = PRIORITY_RANK[a.priority ?? 'Orta'] ?? 2;
-          const rankB = PRIORITY_RANK[b.priority ?? 'Orta'] ?? 2;
+          const rankA = PRIORITY_RANK[a?.priority ?? 'Orta'] ?? 2;
+          const rankB = PRIORITY_RANK[b?.priority ?? 'Orta'] ?? 2;
           return rankB - rankA;
         }
         case 'date-desc':
         default: {
-          const dateA = new Date(a.applied_date || a.created_at).getTime();
-          const dateB = new Date(b.applied_date || b.created_at).getTime();
+          const dateA = new Date(a?.applied_date || a?.created_at || 0).getTime();
+          const dateB = new Date(b?.applied_date || b?.created_at || 0).getTime();
           return dateB - dateA;
         }
       }
