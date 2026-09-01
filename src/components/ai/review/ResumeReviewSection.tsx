@@ -21,7 +21,7 @@ export const ResumeReviewSection: React.FC = () => {
 
   const [fileName, setFileName] = useState('Senior_Frontend_Developer_CV.pdf');
   const [contentText, setContentText] = useState(
-    'Serdar Çil — Senior Frontend Developer\nE-posta: serdar@example.com | LinkedIn: linkedin.com/in/srdrcll | GitHub: github.com/srdrcll\n\nÖzet:\n7+ yıl deneyimli Frontend Mühendisi. React 19, TypeScript, Tailwind CSS ve bulut mimarileri ile yüksek ölçekli SaaS uygulamaları geliştirme konusunda uzmanım.\n\nİş Deneyimi:\nKıdemli Yazılım Geliştirici (2023 - Halen)\n- SaaS ATS platformu frontend mimarisini tasarladı.\n- TanStack Query ile sayfa yükleme sürelerini %35 düşürdü.'
+    'Ahmet Yılmaz — Senior Frontend Developer\nE-posta: ahmet@example.com | LinkedIn: linkedin.com/in/ahmetyilmaz | GitHub: github.com/ahmetyilmaz\n\nÖzet:\n7+ yıl deneyimli Frontend Mühendisi. React 19, TypeScript, Tailwind CSS ve bulut mimarileri ile yüksek ölçekli SaaS uygulamaları geliştirme konusunda uzmanım.\n\nİş Deneyimi:\nKıdemli Yazılım Geliştirici (2023 - Halen)\n- SaaS ATS platformu frontend mimarisini tasarladı.\n- TanStack Query ile sayfa yükleme sürelerini %35 düşürdü.'
   );
 
   const [activeReview, setActiveReview] = useState<ResumeReviewRecord | null>(() => reviews[0] || null);

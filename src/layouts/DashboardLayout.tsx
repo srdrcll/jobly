@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import { Linkedin } from 'lucide-react';
 import { Sidebar } from './Sidebar';
 import { TopNavbar } from './TopNavbar';
 import { useSidebar } from '@/hooks/useSidebar';
@@ -59,15 +58,7 @@ export const DashboardLayout: React.FC = () => {
         {/* Global Footer */}
         <footer className="border-t border-slate-200/80 dark:border-slate-800/80 py-4 px-6 text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 max-w-7xl w-full mx-auto">
           <p>© 2026 Jobly. Tüm hakları saklıdır.</p>
-          <a
-            href="https://www.linkedin.com/in/srdrcll/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-slate-400 hover:text-blue-500 hover:underline transition-colors"
-          >
-            <Linkedin className="w-3.5 h-3.5" aria-hidden="true" />
-            <span>LinkedIn Profilim (srdrcll)</span>
-          </a>
+          <span className="text-[11px] text-slate-400">Modern Kariyer ve Başvuru Takip Platformu</span>
         </footer>
       </div>
 

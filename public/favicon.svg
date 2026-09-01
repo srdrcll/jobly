@@ -1,24 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
   <defs>
-    <linearGradient id="joblyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#2563EB" />
-      <stop offset="50%" stop-color="#4F46E5" />
+    <linearGradient id="favGrad" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="50%" stop-color="#3B82F6" />
+      <stop offset="100%" stop-color="#6366F1" />
+    </linearGradient>
+    <linearGradient id="sparkGrad" x1="28" y1="6" x2="42" y2="20" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#60A5FA" />
       <stop offset="100%" stop-color="#06B6D4" />
     </linearGradient>
-    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#2563EB" flood-opacity="0.35"/>
-    </filter>
   </defs>
   
-  <!-- Outer Rounded Squircle with Shadow -->
-  <rect x="4" y="4" width="56" height="56" rx="16" fill="url(#joblyGrad)" filter="url(#glow)"/>
+  <!-- Outer Dark Obsidian Container with Subtle Border -->
+  <rect x="2" y="2" width="44" height="44" rx="12" fill="#0B0F19" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
   
-  <!-- Subtle Inner Specular Ring -->
-  <rect x="5" y="5" width="54" height="54" rx="15" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" fill="none"/>
+  <!-- Dynamic J Monogram -->
+  <path d="M12 12C12 10.8954 12.8954 10 14 10H32C33.1046 10 34 10.8954 34 12V15C34 16.1046 33.1046 17 32 17H20C18.8954 17 18 17.8954 18 19V28C18 31.3137 20.6863 34 24 34C27.3137 34 30 31.3137 30 28V22C30 20.8954 30.8954 20 32 20H33C34.1046 20 35 20.8954 35 22V28C35 34.0751 30.0751 39 24 39C17.9249 39 13 34.0751 13 28V14C13 12.8954 13.8954 12 15 12Z" fill="url(#favGrad)"/>
   
-  <!-- Stylized Modern 'J' + Momentum Spark -->
-  <path d="M38 18V36C38 41.5228 33.5228 46 28 46C23.5817 46 20 42.4183 20 38C20 35.7909 21.7909 34 24 34C26.2091 34 28 35.7909 28 38C28 38.5523 28.4477 39 29 39C30.6569 39 32 37.6569 32 36V18C32 16.8954 32.8954 16 34 16H36C37.1046 16 38 16.8954 38 18Z" fill="#FFFFFF"/>
-  
-  <!-- Top Right Momentum Star / Career Spark -->
-  <path d="M43 14L44.5 18.5L49 20L44.5 21.5L43 26L41.5 21.5L37 20L41.5 18.5L43 14Z" fill="#38BDF8"/>
+  <!-- Momentum Diamond -->
+  <rect x="32" y="8" width="7" height="7" rx="2" transform="rotate(45 32 8)" fill="url(#sparkGrad)"/>
 </svg>
