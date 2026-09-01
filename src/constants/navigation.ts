@@ -78,7 +78,7 @@ export const AUTH_NAV_ITEMS: NavItem[] = [
     title: 'Tanıtım',
     href: '/landing',
     icon: Compass,
-    description: 'JOBLY Tanıtım ve Karşılama Sayfası'
+    description: 'Jobly Tanıtım ve Karşılama Sayfası'
   },
   {
     title: 'Giriş Yap',

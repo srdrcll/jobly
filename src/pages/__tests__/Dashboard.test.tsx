@@ -23,7 +23,7 @@ describe('DashboardPage Component', () => {
 
     expect(screen.getByText(/Hoş Geldin/)).toBeInTheDocument();
     expect(screen.getByText(/Canlı İstatistik/)).toBeInTheDocument();
-    expect(screen.getByText(/Pusula Tavsiyeleri/)).toBeInTheDocument();
+    expect(screen.getByText(/Tavsiyeleri/)).toBeInTheDocument();
     expect(screen.getByText(/Aktivite Akışı/)).toBeInTheDocument();
   });
 });

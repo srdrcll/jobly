@@ -62,7 +62,7 @@ export function buildInterviewDescription(interview: DbInterview): string {
     lines.push(`\n📝 Hazırlık Notları:\n${interview.prep_notes}`);
   }
 
-  lines.push('\n---\n🧭 JOBLY tarafından oluşturuldu.');
+  lines.push('\n---\n💼 Jobly tarafından oluşturuldu.');
 
   return lines.join('\n');
 }
@@ -155,7 +155,7 @@ export function generateIcsContent(interviewsInput: DbInterview | DbInterview[])
   return [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//JOBLY//Mülakat Takvimi v2.0//TR',
+    'PRODID:-//Jobly//Mülakat Takvimi v2.0//TR',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
     ...eventBlocks,

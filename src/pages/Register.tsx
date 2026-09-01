@@ -32,7 +32,7 @@ export const RegisterPage: React.FC = () => {
         toast.info('Doğrulama E-postası Gönderildi', 'Hesabınızı aktif etmek için lütfen e-postanıza gönderilen doğrulama bağlantısına tıklayın.');
         navigate('/login');
       } else {
-        toast.success('Kayıt Başarılı', 'JOBLY hesabınız oluşturuldu.');
+        toast.success('Kayıt Başarılı', 'Jobly hesabınız oluşturuldu.');
         navigate('/dashboard');
       }
     } else {
@@ -47,7 +47,7 @@ export const RegisterPage: React.FC = () => {
           <UserPlus className="w-6 h-6" />
         </div>
         <h2 className="text-2xl font-extrabold text-foreground">Ücretsiz Kaydolun</h2>
-        <p className="text-xs text-slate-400">Kariyer yolculuğunuzu JOBLY ile profesyonelce yönetin</p>
+        <p className="text-xs text-slate-400">Kariyer yolculuğunuzu Jobly ile profesyonelce yönetin</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">

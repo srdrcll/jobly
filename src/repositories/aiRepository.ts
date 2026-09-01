@@ -30,7 +30,7 @@ function getInitialConversations(): AiConversation[] {
           id: 'msg-1',
           conversationId: initialId,
           role: 'assistant',
-          content: 'Merhaba! Ben **JOBLY AI Asistanınız**. Özgeçmiş incelemesi, mülakat simülasyonu, maaş pazarlığı veya LinkedIn profil iyileştirme konularında size nasıl yardımcı olabilirim?',
+          content: 'Merhaba! Ben **Jobly AI Asistanınız**. Özgeçmiş incelemesi, mülakat simülasyonu, maaş pazarlığı veya LinkedIn profil iyileştirme konularında size nasıl yardımcı olabilirim?',
           timestamp: new Date().toISOString(),
         },
       ],

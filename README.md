@@ -1,6 +1,6 @@
 <div align="center">
 
-  <h1>💼 JOBLY</h1>
+  <h1>💼 Jobly</h1>
   <h3><i>Personal Applicant Tracking System (ATS) & Candidate CRM for Ambitious Job Seekers</i></h3>
 
   <p>
@@ -21,7 +21,7 @@
 
 ### 📌 Purpose
 
-**JOBLY** is a modern, candidate-centric Applicant Tracking System (ATS) and Candidate CRM built for job seekers. It replaces messy spreadsheets and lost emails with a structured SaaS workspace to track applications, target companies, recruiter contacts, and interview timelines. Inspired by tools like Linear and Notion, it brings clarity and speed to your career journey.
+**Jobly** is a modern, candidate-centric Applicant Tracking System (ATS) and Candidate CRM built for job seekers. It replaces messy spreadsheets and lost emails with a structured SaaS workspace to track applications, target companies, recruiter contacts, and interview timelines. Inspired by tools like Linear and Notion, it brings clarity and speed to your career journey.
 
 ---
 

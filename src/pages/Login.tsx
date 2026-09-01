@@ -38,7 +38,7 @@ export const LoginPage: React.FC = () => {
           <LogIn className="w-6 h-6" />
         </div>
         <h2 className="text-2xl font-extrabold text-foreground">Hesabınıza Giriş Yapın</h2>
-        <p className="text-xs text-slate-400">JOBLY hesabınızla oturum açın</p>
+        <p className="text-xs text-slate-400">Jobly hesabınızla oturum açın</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">

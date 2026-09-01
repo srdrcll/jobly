@@ -15,6 +15,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useApplicationsListQuery } from '@/hooks/queries/useApplicationsQuery';
 import { useCompaniesListQuery } from '@/hooks/queries/useCompaniesQuery';
 import { useInterviewsListQuery } from '@/hooks/queries/useInterviewsQuery';
+import { JoblyLogo } from '@/components/common/JoblyLogo';
 
 interface SidebarProps {
   isCollapsed: boolean;
@@ -76,24 +77,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
             to="/dashboard"
             onClick={onMobileClose}
             className={cn(
-              'flex items-center gap-3 overflow-hidden group focus:outline-none',
+              'flex items-center overflow-hidden focus:outline-none',
               isCollapsed && 'justify-center w-full'
             )}
-            title={isCollapsed ? 'JOBLY' : undefined}
+            title={isCollapsed ? 'Jobly' : undefined}
           >
-            <div className="relative p-2.5 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 text-white shadow-lg shadow-blue-500/25 group-hover:scale-105 group-hover:shadow-blue-500/40 transition-all shrink-0">
-              <Compass className="w-5 h-5 transition-transform group-hover:rotate-45" aria-hidden="true" />
-            </div>
-            {!isCollapsed && (
-              <div className="flex flex-col min-w-0">
-                <span className="font-black text-lg tracking-tight text-foreground leading-none">
-                  JOB<span className="bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent">LY</span>
-                </span>
-                <span className="text-[10px] text-slate-400 font-medium tracking-wide mt-0.5">
-                  Career & Application OS
-                </span>
-              </div>
-            )}
+            <JoblyLogo
+              size="md"
+              showText={!isCollapsed}
+              subtitle="Career & Application OS"
+            />
           </NavLink>
         </div>
 

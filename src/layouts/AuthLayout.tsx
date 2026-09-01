@@ -1,7 +1,8 @@
 import React from 'react';
 import { Outlet, Link } from 'react-router-dom';
-import { Compass, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { ThemeSwitch } from '@/components/ui/ThemeSwitch';
+import { JoblyLogo } from '@/components/common/JoblyLogo';
 
 export const AuthLayout: React.FC = () => {
   return (
@@ -20,13 +21,8 @@ export const AuthLayout: React.FC = () => {
           <span>Paneli İncele</span>
         </Link>
 
-        <Link to="/landing" className="flex items-center gap-2.5 group">
-          <div className="p-2 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 text-white shadow-md shadow-indigo-600/30 group-hover:scale-105 transition-transform">
-            <Compass className="w-5 h-5" aria-hidden="true" />
-          </div>
-          <span className="font-extrabold text-lg tracking-tight text-foreground">
-            JOB<span className="text-indigo-500">LY</span>
-          </span>
+        <Link to="/landing" className="focus:outline-none">
+          <JoblyLogo size="md" showText={true} />
         </Link>
 
         <ThemeSwitch />
@@ -39,7 +35,7 @@ export const AuthLayout: React.FC = () => {
 
       {/* Bottom Footer */}
       <footer className="text-center text-xs text-slate-500 dark:text-slate-500 z-10 py-2">
-        <p>© 2026 JOBLY. Kariyerinizi hedefleriniz doğrultusunda yönetin. Tüm hakları saklıdır.</p>
+        <p>© 2026 Jobly. Kariyerinizi hedefleriniz doğrultusunda yönetin. Tüm hakları saklıdır.</p>
       </footer>
     </div>
   );

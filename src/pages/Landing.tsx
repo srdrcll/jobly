@@ -1,27 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  Compass, 
   Sparkles, 
   ArrowRight,
   Linkedin
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { StatusBadge } from '@/components/ui/StatusBadge';
+import { JoblyLogo } from '@/components/common/JoblyLogo';
 
 export const LandingPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col selection:bg-blue-500 selection:text-white">
       {/* Landing Navigation */}
       <header className="h-20 max-w-7xl w-full mx-auto px-6 flex items-center justify-between z-10">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-2xl bg-gradient-to-tr from-blue-600 to-cyan-500 text-white shadow-lg shadow-blue-500/25">
-            <Compass className="w-6 h-6" aria-hidden="true" />
-          </div>
-          <span className="font-extrabold text-2xl tracking-tight text-foreground">
-            JOB<span className="text-blue-500">LY</span>
-          </span>
-        </div>
+        <Link to="/" className="focus:outline-none">
+          <JoblyLogo size="lg" showText={true} />
+        </Link>
 
         <div className="flex items-center gap-3">
           <Link to="/login">
@@ -52,7 +47,7 @@ export const LandingPage: React.FC = () => {
         </h1>
 
         <p className="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
-          JOBLY; başvurduğunuz pozisyonları, mülakat aşamalarını ve tekliflerinizi yüksek netlik ve estetikte takip etmenizi sağlayan yeni nesil SaaS platformu.
+          Jobly; başvurduğunuz pozisyonları, mülakat aşamalarını ve tekliflerinizi yüksek netlik ve estetikte takip etmenizi sağlayan yeni nesil SaaS platformu.
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
@@ -81,7 +76,7 @@ export const LandingPage: React.FC = () => {
 
       {/* Landing Footer */}
       <footer className="border-t border-slate-200 dark:border-slate-800/80 py-8 px-6 text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-4 max-w-7xl w-full mx-auto">
-        <p>© 2026 JOBLY. Tüm hakları saklıdır.</p>
+        <p>© 2026 Jobly. Tüm hakları saklıdır.</p>
         <a
           href="https://www.linkedin.com/in/srdrcll/"
           target="_blank"

@@ -49,7 +49,7 @@ export const InsightsList: React.FC = () => {
   }
 
   return (
-    <section aria-label="Pusula Tavsiyeleri ve İpuçları" className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-soft dark:shadow-soft-dark space-y-4">
+    <section aria-label="Jobly Tavsiyeleri ve İpuçları" className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-soft dark:shadow-soft-dark space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
@@ -57,7 +57,7 @@ export const InsightsList: React.FC = () => {
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-foreground">Pusula Tavsiyeleri & İpuçları</h3>
+            <h3 className="text-base font-bold text-foreground">Jobly Tavsiyeleri & İpuçları</h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">Başvuru verilerinize göre otomatik oluşturulan öneriler</p>
           </div>
         </div>
