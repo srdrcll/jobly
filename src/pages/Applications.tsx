@@ -1055,17 +1055,6 @@ export const ApplicationsPage: React.FC = () => {
         variant="danger"
         isLoading={bulkDeleteMutation.isPending}
       />
-      {/* Mobile Floating Action Button (FAB) */}
-      <div className="sm:hidden fixed bottom-6 right-6 z-40">
-        <button
-          type="button"
-          onClick={() => setIsCreateModalOpen(true)}
-          className="w-14 h-14 rounded-full bg-gradient-to-tr from-blue-600 to-cyan-500 text-white flex items-center justify-center shadow-lg shadow-blue-500/40 border border-white/20 active:scale-95 transition-all"
-          aria-label="Yeni Başvuru Ekle"
-        >
-          <Plus className="w-7 h-7 text-white" aria-hidden="true" />
-        </button>
-      </div>
     </div>
   );
 };
