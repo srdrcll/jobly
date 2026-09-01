@@ -24,29 +24,50 @@ export const Modal: React.FC<ModalProps> = ({
   maxWidth = 'md',
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
+  const onCloseRef = useRef(onClose);
 
+  // Always keep onCloseRef updated without re-triggering effects
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  });
+
+  // Initial focus management when modal opens (runs ONLY when isOpen transitions to true)
   useEffect(() => {
     if (!isOpen) return;
 
-    // Focus Trap & Keyboard Navigation
     const modalElement = modalRef.current;
-    const focusableElements = modalElement?.querySelectorAll<HTMLElement>(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
-    const firstElement = focusableElements?.[0];
-    const lastElement = focusableElements?.[focusableElements.length - 1];
-
-    if (firstElement) {
-      firstElement.focus();
+    // Set initial focus ONLY if focus is currently outside the modal container
+    if (document.activeElement && !modalElement?.contains(document.activeElement)) {
+      const focusableElements = modalElement?.querySelectorAll<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      const firstInput = Array.from(focusableElements || []).find((el) =>
+        ['INPUT', 'SELECT', 'TEXTAREA'].includes(el.tagName)
+      );
+      (firstInput || focusableElements?.[0])?.focus();
     }
+  }, [isOpen]);
+
+  // Keyboard navigation & body overflow handling
+  useEffect(() => {
+    if (!isOpen) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onClose();
+        onCloseRef.current();
         return;
       }
 
       if (e.key === 'Tab') {
+        const modalElement = modalRef.current;
+        const focusableElements = modalElement?.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        if (!focusableElements || focusableElements.length === 0) return;
+
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
         if (e.shiftKey) {
           if (document.activeElement === firstElement) {
             e.preventDefault();
@@ -68,7 +89,7 @@ export const Modal: React.FC<ModalProps> = ({
       document.body.style.overflow = 'unset';
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -111,7 +132,7 @@ export const Modal: React.FC<ModalProps> = ({
               </div>
             )}
             <div>
-              <h3 id="modal-title" className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">{title}</h3>
+              <h3 id="modal-title" className="text-lg font-bold tracking-tight text-slate-900 dark:white">{title}</h3>
               {description && (
                 <p id="modal-description" className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">{description}</p>
               )}

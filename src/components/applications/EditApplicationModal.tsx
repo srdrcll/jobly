@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { 
@@ -94,13 +94,13 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
     if (!isOpen) setShowUnsavedWarning(false);
   }, [isOpen]);
 
-  const handleAttemptClose = () => {
+  const handleAttemptClose = useCallback(() => {
     if (isDirty) {
       setShowUnsavedWarning(true);
     } else {
       onClose();
     }
-  };
+  }, [isDirty, onClose]);
 
   const onSubmit = async (values: ApplicationFormValues) => {
     if (!application?.id) return;
