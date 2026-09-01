@@ -7,6 +7,7 @@ export interface PageHeaderProps {
   description?: string;
   icon?: ComponentType<LucideProps>;
   actionSlot?: ReactNode;
+  action?: ReactNode;
   badge?: string;
   className?: string;
 }
@@ -16,9 +17,12 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
   description,
   icon: Icon,
   actionSlot,
+  action,
   badge,
   className,
 }) => {
+  const currentAction = actionSlot || action;
+
   return (
     <div
       className={cn(
@@ -49,9 +53,9 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
         </div>
       </div>
 
-      {actionSlot && (
-        <div className="flex items-center gap-3 shrink-0 self-start sm:self-auto">
-          {actionSlot}
+      {currentAction && (
+        <div className="flex items-center gap-3 shrink-0 self-start sm:self-auto w-full sm:w-auto justify-start sm:justify-end">
+          {currentAction}
         </div>
       )}
     </div>

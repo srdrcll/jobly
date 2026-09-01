@@ -1,6 +1,7 @@
 import React, { ComponentType, ReactNode } from 'react';
-import { LucideProps, FolderOpen } from 'lucide-react';
+import { LucideProps, FolderOpen, Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/Button';
 
 export interface EmptyStateProps {
   icon?: ComponentType<LucideProps>;
@@ -8,6 +9,8 @@ export interface EmptyStateProps {
   description: string;
   actionSlot?: ReactNode;
   secondaryActionSlot?: ReactNode;
+  actionText?: string;
+  onAction?: () => void;
   className?: string;
 }
 
@@ -17,8 +20,23 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   description,
   actionSlot,
   secondaryActionSlot,
+  actionText,
+  onAction,
   className,
 }) => {
+  const mainAction =
+    actionSlot ||
+    (actionText && onAction ? (
+      <Button
+        variant="primary"
+        size="md"
+        onClick={onAction}
+        leftIcon={<Plus className="w-4 h-4" aria-hidden="true" />}
+      >
+        {actionText}
+      </Button>
+    ) : null);
+
   return (
     <div
       className={cn(
@@ -35,9 +53,9 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
         {description}
       </p>
 
-      {(actionSlot || secondaryActionSlot) && (
+      {(mainAction || secondaryActionSlot) && (
         <div className="flex flex-wrap items-center justify-center gap-3">
-          {actionSlot}
+          {mainAction}
           {secondaryActionSlot}
         </div>
       )}
