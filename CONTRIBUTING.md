@@ -1,6 +1,6 @@
-# 🤝 Contributing to Kariyer Pusulası
+# 🤝 Contributing to Jobly
 
-Thank you for your interest in contributing to **Kariyer Pusulası**! We welcome bug fixes, documentation improvements, and feature contributions.
+Thank you for your interest in contributing to **Jobly**! We welcome bug fixes, documentation improvements, and feature contributions.
 
 ---
 
@@ -8,8 +8,8 @@ Thank you for your interest in contributing to **Kariyer Pusulası**! We welcome
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/srdrcll/kariyer-pusulasi.git
-   cd kariyer-pusulasi
+   git clone https://github.com/srdrcll/jobly.git
+   cd jobly
    ```
 
 2. **Install dependencies**:

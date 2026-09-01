@@ -1,6 +1,6 @@
-# 🧪 Kariyer Pusulası - Test & Kalite Rehberi
+# 🧪 Jobly - Test & Kalite Rehberi
 
-Bu belge, Kariyer Pusulası (ATS SaaS) projesindeki test mimarisi, çalıştırma komutları ve kalite standartlarını özetler.
+Bu belge, Jobly (ATS SaaS) projesindeki test mimarisi, çalıştırma komutları ve kalite standartlarını özetler.
 
 ---
 

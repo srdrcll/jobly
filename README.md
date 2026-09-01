@@ -58,8 +58,8 @@
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/srdrcll/kariyer-pusulasi.git
-   cd kariyer-pusulasi
+   git clone https://github.com/srdrcll/jobly.git
+   cd jobly
    ```
 
 2. **Install dependencies**:
@@ -88,7 +88,7 @@
 
 ## ☁️ Deployment Guide (Vercel)
 
-1. **Import Repository to Vercel**: Connect your GitHub repository `srdrcll/kariyer-pusulasi`.
+1. **Import Repository to Vercel**: Connect your GitHub repository `srdrcll/jobly`.
 2. **Framework Preset**: Select **Vite**.
 3. **Environment Variables**:
    - `VITE_SUPABASE_URL`: Your Supabase URL

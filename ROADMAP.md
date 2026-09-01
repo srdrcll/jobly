@@ -1,6 +1,6 @@
-# 🗺️ Kariyer Pusulası — Product Roadmap
+# 🗺️ Jobly — Product Roadmap
 
-This document outlines the strategic vision, completed milestones, and upcoming feature roadmap for **Kariyer Pusulası (Candidate-Centric ATS & CRM SaaS)**.
+This document outlines the strategic vision, completed milestones, and upcoming feature roadmap for **Jobly (Candidate-Centric ATS & CRM SaaS)**.
 
 ---
 

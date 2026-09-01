@@ -1,6 +1,6 @@
 # 📜 Changelog
 
-All notable changes to the **Kariyer Pusulası** project will be documented in this file.
+All notable changes to the **Jobly** project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [v1.0.0] - 2026-07-30
 
 ### 🚀 Public Production Release (v1.0.0)
-- **First Public Release**: Full production release of Kariyer Pusulası candidate-centric ATS & CRM SaaS platform.
+- **First Public Release**: Full production release of Jobly candidate-centric ATS & CRM SaaS platform.
 - **Complete Module Coverage**:
   - 🔐 **Authentication & RLS**: Email/password auth, protected routes, session persistence, and Supabase Row Level Security data isolation.
   - 📊 **Dashboard & Analytics**: KPI summary cards, Recharts visualizations, active reminders, and next interview countdown.
