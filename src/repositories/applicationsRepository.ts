@@ -67,6 +67,47 @@ export const applicationsRepository = {
       const remoteItems = (data as DbApplication[]) || [];
       const localItems = getLocalApplications();
 
+      // Auto-sync un-synced local items (e.g. created on phone offline) to remote Supabase
+      try {
+        const { data: authData } = await supabase.auth.getUser();
+        const currentAuthUser = authData?.user;
+
+        if (currentAuthUser?.id) {
+          const unSynced = localItems.filter((item) => item.id.startsWith('app-'));
+          for (const item of unSynced) {
+            const { data: synced } = await supabase
+              .from('applications')
+              .insert({
+                user_id: currentAuthUser.id,
+                company_name: item.company_name,
+                position: item.position,
+                status: item.status,
+                applied_date: item.applied_date,
+                location: item.location,
+                work_type: item.work_type,
+                salary: item.salary,
+                target_role: item.target_role,
+                priority: item.priority,
+                job_url: item.job_url,
+                contact_name: item.contact_name,
+                contact_email: item.contact_email,
+                source: item.source,
+                notes: item.notes,
+              })
+              .select()
+              .single();
+
+            if (synced) {
+              const idx = localItems.findIndex((l) => l.id === item.id);
+              if (idx !== -1) localItems.splice(idx, 1);
+              remoteItems.unshift(synced as DbApplication);
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Auto-sync local applications error:', e);
+      }
+
       // Merge remote and local items by ID to guarantee data persistence
       const combinedMap = new Map<string, DbApplication>();
       localItems.forEach((item) => combinedMap.set(item.id, item));
@@ -143,10 +184,19 @@ export const applicationsRepository = {
     }
 
     try {
+      // Ensure real authenticated user ID from active Supabase session
+      const { data: authData } = await supabase.auth.getUser();
+      const currentAuthUser = authData?.user;
+
+      const insertPayload = {
+        ...payload,
+        user_id: currentAuthUser?.id || payload.user_id,
+      };
+
       const response = await withSupabaseTimeout(
         supabase
           .from('applications')
-          .insert(payload)
+          .insert(insertPayload)
           .select()
           .single(),
         2500
@@ -154,6 +204,7 @@ export const applicationsRepository = {
 
       const { data, error } = response;
       if (error) {
+        console.warn('Supabase insert application error, saving locally:', error);
         local.unshift(newItem);
         saveLocalApplications(local);
         return newItem;
@@ -163,7 +214,8 @@ export const applicationsRepository = {
       local.unshift(createdRemote);
       saveLocalApplications(local);
       return createdRemote;
-    } catch {
+    } catch (e) {
+      console.warn('Supabase insert exception:', e);
       local.unshift(newItem);
       saveLocalApplications(local);
       return newItem;
