@@ -43,19 +43,9 @@ export const applicationSchema = z.object({
   work_type: workTypeEnum.nullable().optional(),
   salary: z.string().max(80, 'Maaş bilgisi en fazla 80 karakter olabilir.').nullable().optional(),
   applied_date: z.string().nullable().optional(),
-  job_url: z
-    .string()
-    .url('Geçerli bir web adresi (URL) giriniz.')
-    .or(z.literal(''))
-    .nullable()
-    .optional(),
-  contact_name: z.string().max(100).nullable().optional(),
-  contact_email: z
-    .string()
-    .email('Geçerli bir e-posta adresi giriniz.')
-    .or(z.literal(''))
-    .nullable()
-    .optional(),
+  job_url: z.string().max(500, 'İlan linki en fazla 500 karakter olabilir.').nullable().optional(),
+  contact_name: z.string().max(100, 'İletişim kişisi en fazla 100 karakter olabilir.').nullable().optional(),
+  contact_email: z.string().max(120, 'İletişim e-postası en fazla 120 karakter olabilir.').nullable().optional(),
   priority: priorityEnum.default('Orta').optional(),
   source: z.string().max(80, 'Başvuru kaynağı en fazla 80 karakter olabilir.').nullable().optional(),
   notes: z.string().max(1000, 'Notlar en fazla 1000 karakter olabilir.').nullable().optional(),

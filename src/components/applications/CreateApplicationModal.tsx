@@ -26,6 +26,7 @@ import {
 import { useCreateApplicationMutation } from '@/hooks/queries/useApplicationsQuery';
 import { STATUS_CONFIG } from '@/constants/status';
 import { detectPlatformFromUrl } from '@/utils/platformUtils';
+import { useToast } from '@/hooks/useToast';
 
 /** Default values extracted as a constant to prevent duplication. */
 const CREATE_DEFAULTS: ApplicationFormValues = {
@@ -57,6 +58,7 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
   initialValues,
 }) => {
   const createMutation = useCreateApplicationMutation();
+  const { toast } = useToast();
   const [showUnsavedWarning, setShowUnsavedWarning] = useState(false);
 
   const {
@@ -110,6 +112,14 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
       onClose();
     } catch {
       // Error handled by mutation onError callback
+    }
+  };
+
+  const onFormError = (formErrors: Record<string, any>) => {
+    const errorKeys = Object.keys(formErrors);
+    if (errorKeys.length > 0) {
+      const firstError = formErrors[errorKeys[0]];
+      toast.error('Formu Kontrol Edin', firstError?.message || 'Lütfen zorunlu alanları kontrol edin.');
     }
   };
 
@@ -180,7 +190,7 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
         </div>
       }
     >
-      <form id="create-application-form" onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
+      <form id="create-application-form" onSubmit={handleSubmit(onSubmit, onFormError)} className="space-y-5" noValidate>
         {/* Main Required & Core Fields */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
           <Input
@@ -193,24 +203,21 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
 
           <Input
             label="Pozisyon Ünvanı *"
-            placeholder="örn. Frontend Developer"
+            placeholder="örn. Senior Frontend Developer"
             leftIcon={<Briefcase className="w-4 h-4" aria-hidden="true" />}
             error={errors.position?.message}
             {...register('position')}
           />
 
-          {/* Status Select */}
+          {/* Status Selection with Visual Color Indicators */}
           <div className="space-y-1.5 w-full">
             <label htmlFor="create-status" className="block text-xs font-semibold text-slate-600 dark:text-slate-300">
               Başvuru Durumu *
             </label>
             <div className="relative flex items-center w-full">
-              <div className="absolute left-3.5 text-slate-500 pointer-events-none shrink-0" aria-hidden="true">
-                <Sparkles className="w-4 h-4 text-blue-500" />
-              </div>
               <select
                 id="create-status"
-                className="w-full h-10 pl-10 pr-3.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+                className="w-full h-10 px-3 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/40 cursor-pointer"
                 {...register('status')}
               >
                 {Object.entries(STATUS_CONFIG).map(([key, config]) => (
@@ -220,22 +227,30 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
                 ))}
               </select>
             </div>
+            {errors.status?.message && (
+              <p className="text-[11px] text-rose-400 font-medium" role="alert" aria-live="assertive">{errors.status.message}</p>
+            )}
           </div>
 
-          {/* Work Type Select */}
+          {/* Work Type Selection */}
           <div className="space-y-1.5 w-full">
             <label htmlFor="create-work-type" className="block text-xs font-semibold text-slate-600 dark:text-slate-300">
               Çalışma Modeli
             </label>
-            <select
-              id="create-work-type"
-              className="w-full h-10 px-3.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
-              {...register('work_type')}
-            >
-              <option value="Remote">Remote (Uzaktan)</option>
-              <option value="Hybrid">Hybrid (Karma)</option>
-              <option value="On-site">On-site (Ofis)</option>
-            </select>
+            <div className="relative flex items-center w-full">
+              <select
+                id="create-work-type"
+                className="w-full h-10 px-3 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/40 cursor-pointer"
+                {...register('work_type')}
+              >
+                <option value="Remote">Remote (Uzaktan)</option>
+                <option value="Hybrid">Hybrid (Karma)</option>
+                <option value="On-site">On-site (Ofis)</option>
+              </select>
+            </div>
+            {errors.work_type?.message && (
+              <p className="text-[11px] text-rose-400 font-medium" role="alert" aria-live="assertive">{errors.work_type.message}</p>
+            )}
           </div>
 
           <Input
@@ -246,6 +261,7 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
             {...register('applied_date')}
           />
 
+          {/* Quick Platform Source with Autocomplete Suggestions */}
           <div className="space-y-1.5 w-full">
             <label htmlFor="create-source" className="block text-xs font-semibold text-slate-600 dark:text-slate-300">
               Başvuru Kaynağı (Platform)
@@ -298,7 +314,8 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
 
             <Input
               label="İletişim E-Postası"
-              type="email"
+              type="text"
+              inputMode="email"
               placeholder="hr@company.com"
               leftIcon={<Mail className="w-4 h-4" aria-hidden="true" />}
               error={errors.contact_email?.message}
@@ -307,7 +324,8 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
 
             <Input
               label="İlan Linki (URL)"
-              type="url"
+              type="text"
+              inputMode="url"
               placeholder="https://linkedin.com/jobs/..."
               leftIcon={<Globe className="w-4 h-4" aria-hidden="true" />}
               error={errors.job_url?.message}

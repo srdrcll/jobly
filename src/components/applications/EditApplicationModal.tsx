@@ -27,6 +27,7 @@ import { useUpdateApplicationMutation } from '@/hooks/queries/useApplicationsQue
 import { STATUS_CONFIG } from '@/constants/status';
 import { DbApplication } from '@/types';
 import { detectPlatformFromUrl } from '@/utils/platformUtils';
+import { useToast } from '@/hooks/useToast';
 
 interface EditApplicationModalProps {
   isOpen: boolean;
@@ -40,6 +41,7 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
   application,
 }) => {
   const updateMutation = useUpdateApplicationMutation();
+  const { toast } = useToast();
   const [showUnsavedWarning, setShowUnsavedWarning] = useState(false);
 
   const {
@@ -128,6 +130,14 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
     }
   };
 
+  const onFormError = (formErrors: Record<string, any>) => {
+    const errorKeys = Object.keys(formErrors);
+    if (errorKeys.length > 0) {
+      const firstError = formErrors[errorKeys[0]];
+      toast.error('Formu Kontrol Edin', firstError?.message || 'Lütfen zorunlu alanları kontrol edin.');
+    }
+  };
+
   // Unsaved changes confirmation dialog
   if (showUnsavedWarning) {
     return (
@@ -144,7 +154,7 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
               size="sm"
               onClick={() => setShowUnsavedWarning(false)}
             >
-              Düzenlemeye Devam Et
+              Doldurmaya Devam Et
             </Button>
             <Button
               variant="destructive"
@@ -159,8 +169,8 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
           </div>
         }
       >
-        <p className="text-sm text-slate-300 leading-relaxed">
-          Kaydedilmemiş değişiklikleriniz var. Çıkarsanız bu değişiklikler kaybolacaktır.
+        <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+          Yaptığınız değişiklikler kaydedilmedi. Çıkmak istediğinizden emin misiniz?
         </p>
       </Modal>
     );
@@ -170,8 +180,8 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={handleAttemptClose}
-      title="Başvuru Bilgilerini Düzenle"
-      description="Mevcut iş başvurusu detaylarını güncelleyin."
+      title="Başvuruyu Düzenle"
+      description="Başvuru durumunu ve detaylarını güncelleyin."
       maxWidth="xl"
       footer={
         <div className="flex items-center justify-end gap-3 w-full">
@@ -196,7 +206,7 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
         </div>
       }
     >
-      <form id="edit-application-form" onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
+      <form id="edit-application-form" onSubmit={handleSubmit(onSubmit, onFormError)} className="space-y-5" noValidate>
         {/* Main Required & Core Fields */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
           <Input
@@ -314,7 +324,8 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
 
             <Input
               label="İletişim E-Postası"
-              type="email"
+              type="text"
+              inputMode="email"
               placeholder="hr@company.com"
               leftIcon={<Mail className="w-4 h-4" aria-hidden="true" />}
               error={errors.contact_email?.message}
@@ -323,7 +334,8 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
 
             <Input
               label="İlan Linki (URL)"
-              type="url"
+              type="text"
+              inputMode="url"
               placeholder="https://linkedin.com/jobs/..."
               leftIcon={<Globe className="w-4 h-4" aria-hidden="true" />}
               error={errors.job_url?.message}
