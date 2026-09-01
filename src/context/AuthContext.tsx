@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
 import { User, Session, AuthChangeEvent } from '@supabase/supabase-js';
-import { supabase, isSupabaseConfigured, getTurkishAuthErrorMessage } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured, getTurkishAuthErrorMessage, withSupabaseTimeout } from '@/lib/supabase';
 import { useToast } from '@/hooks/useToast';
 
 interface AuthContextType {
@@ -46,18 +46,40 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
 
       try {
-        const { data: { session: serverSession }, error } = await supabase.auth.getSession();
+        const res = await withSupabaseTimeout(supabase.auth.getSession(), 3000);
+        const serverSession = res?.data?.session;
+        const error = res?.error;
+
         if (isMounted) {
           if (error || !serverSession) {
-            clearSession();
+            // Check if there is local cached session
+            const cached = localStorage.getItem('sb-mock-session');
+            if (cached) {
+              try {
+                setSession(JSON.parse(cached));
+              } catch (e) {
+                clearSession();
+              }
+            } else {
+              clearSession();
+            }
           } else {
             setSession(serverSession);
           }
         }
       } catch (err: unknown) {
-        console.error('Auth init error:', err);
+        console.warn('Auth init timeout/error, proceeding gracefully:', err);
         if (isMounted) {
-          clearSession();
+          const cached = localStorage.getItem('sb-mock-session');
+          if (cached) {
+            try {
+              setSession(JSON.parse(cached));
+            } catch (e) {
+              clearSession();
+            }
+          } else {
+            clearSession();
+          }
         }
       } finally {
         if (isMounted) {

@@ -1,13 +1,10 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const rawUrl = import.meta.env.VITE_SUPABASE_URL;
+const rawKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error(
-    'Supabase bağlantı bilgileri eksik. Lütfen .env.local dosyasında VITE_SUPABASE_URL ve VITE_SUPABASE_ANON_KEY tanımlayın.'
-  );
-}
+const supabaseUrl = (rawUrl && typeof rawUrl === 'string' && rawUrl.trim()) ? rawUrl.trim() : 'https://placeholder.supabase.co';
+const supabaseAnonKey = (rawKey && typeof rawKey === 'string' && rawKey.trim()) ? rawKey.trim() : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder';
 
 /**
  * Determines whether Supabase is configured with real production credentials.
@@ -23,6 +20,7 @@ export const isSupabaseConfigured = (): boolean => {
     !url.includes('example.com') &&
     !url.includes('placeholder') &&
     !key.includes('your-actual-anon-key-here') &&
+    !key.includes('placeholder') &&
     !key.includes('anon-key') &&
     url.startsWith('https://')
   );
