@@ -26,42 +26,53 @@ export const JoblyLogo: React.FC<JoblyLogoProps> = ({
   const currentSize = sizeMap[size];
 
   return (
-    <div className={cn('flex items-center gap-3 select-none group', className)}>
-      {/* Sleek Modern Gradient Squircle Badge */}
+    <div className={cn('flex items-center gap-2.5 select-none group', className)}>
+      {/* Sleek Minimalist Geometric Vector Mark */}
       <div
         className={cn(
-          'relative rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-400 p-1.5 shadow-lg shadow-blue-500/25 group-hover:shadow-blue-500/40 group-hover:scale-105 transition-all duration-300 flex items-center justify-center shrink-0',
+          'relative rounded-xl bg-slate-900 border border-slate-700/60 dark:border-white/10 p-1.5 shadow-md shadow-blue-500/10 group-hover:shadow-blue-500/25 group-hover:border-blue-500/50 group-hover:scale-105 transition-all duration-300 flex items-center justify-center shrink-0 overflow-hidden',
           currentSize.icon,
           classNameIcon
         )}
       >
+        {/* Subtle Ambient Radial Glow inside Icon */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/30 via-indigo-600/20 to-cyan-400/30 opacity-70 group-hover:opacity-100 transition-opacity" />
+
         <svg
-          viewBox="0 0 32 32"
+          viewBox="0 0 36 36"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="w-full h-full drop-shadow-md"
+          className="w-full h-full relative z-10 drop-shadow-sm"
           aria-hidden="true"
         >
-          {/* Subtle Inner Glass Ring */}
-          <rect
-            x="1.5"
-            y="1.5"
-            width="29"
-            height="29"
-            rx="7"
-            stroke="rgba(255, 255, 255, 0.35)"
-            strokeWidth="1"
-            fill="none"
-          />
+          <defs>
+            <linearGradient id="joblyPrimaryGrad" x1="4" y1="4" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stopColor="#38BDF8" />
+              <stop offset="50%" stopColor="#3B82F6" />
+              <stop offset="100%" stopColor="#6366F1" />
+            </linearGradient>
+            <linearGradient id="joblyAccentGrad" x1="18" y1="4" x2="32" y2="18" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stopColor="#60A5FA" />
+              <stop offset="100%" stopColor="#06B6D4" />
+            </linearGradient>
+          </defs>
 
-          {/* Clean, Bold, True 'J' Lettermark */}
+          {/* Dynamic Cybernetic Loop Glyphs */}
           <path
-            d="M19 8C19 6.89543 19.8954 6 21 6H22C23.1046 6 24 6.89543 24 8V18C24 22.4183 20.4183 26 16 26C12.6863 26 10 23.3137 10 20C10 18.8954 10.8954 18 12 18C13.1046 18 14 18.8954 14 20C14 21.1046 14.8954 22 16 22C18.2091 22 20 20.2091 20 18V8C20 8 19.5 8 19 8Z"
-            fill="#FFFFFF"
+            d="M8 8C8 6.89543 8.89543 6 10 6H26C27.1046 6 28 6.89543 28 8V11C28 12.1046 27.1046 13 26 13H14C12.8954 13 12 13.8954 12 15V22C12 25.3137 14.6863 28 18 28C21.3137 28 24 25.3137 24 22V17C24 15.8954 24.8954 15 26 15H27C28.1046 15 29 15.8954 29 17V22C29 28.0751 24.0751 33 18 33C11.9249 33 7 28.0751 7 22V10C7 8.89543 7.89543 8 8 8Z"
+            fill="url(#joblyPrimaryGrad)"
           />
 
-          {/* Bright Cyan Momentum Accent / Spark */}
-          <circle cx="21.5" cy="8.5" r="2" fill="#38BDF8" />
+          {/* Dynamic Momentum Diamond / Spark */}
+          <rect
+            x="24"
+            y="5"
+            width="6"
+            height="6"
+            rx="2"
+            transform="rotate(45 24 5)"
+            fill="url(#joblyAccentGrad)"
+          />
         </svg>
       </div>
 
@@ -72,7 +83,7 @@ export const JoblyLogo: React.FC<JoblyLogoProps> = ({
             <span className={cn('font-black tracking-tight text-foreground flex items-center', currentSize.text)}>
               Job<span className="text-blue-500">ly</span>
             </span>
-            <span className={cn('rounded-full bg-blue-500 animate-pulse', currentSize.dot)} />
+            <span className={cn('rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 animate-pulse', currentSize.dot)} />
           </div>
           {subtitle && (
             <span className="text-[10px] text-slate-400 font-medium tracking-wide mt-1">
