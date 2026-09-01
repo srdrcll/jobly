@@ -74,7 +74,7 @@ export class MockAiReviewProvider implements IAiReviewProvider {
           score: projectsScore,
           status: 'good',
           feedback: 'Kişisel ve açık kaynak projeler iyi detaylandırılmış.',
-          strengths: ['Kariyer Pusulası SaaS projesi mimarisi anlatılmış'],
+          strengths: ['JOBLY ATS ve CRM SaaS projesi mimarisi anlatılmış'],
           improvements: ['Canlı demo linki ekleyin'],
         },
         {

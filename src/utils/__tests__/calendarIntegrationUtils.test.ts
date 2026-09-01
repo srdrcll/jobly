@@ -69,7 +69,7 @@ describe('calendarIntegrationUtils', () => {
       expect(desc).toContain('Ahmet Yılmaz');
       expect(desc).toContain('https://meet.google.com/abc-def-ghi');
       expect(desc).toContain('React state management');
-      expect(desc).toContain('Kariyer Pusulası');
+      expect(desc).toContain('JOBLY');
     });
   });
 
@@ -99,7 +99,7 @@ describe('calendarIntegrationUtils', () => {
       const ics = generateIcsContent(sampleInterview);
       expect(ics).toContain('BEGIN:VCALENDAR');
       expect(ics).toContain('VERSION:2.0');
-      expect(ics).toContain('PRODID:-//Kariyer Pusulasi//Mülakat Takvimi v1.0//TR');
+      expect(ics).toContain('PRODID:-//JOBLY//Mülakat Takvimi v2.0//TR');
       expect(ics).toContain('BEGIN:VEVENT');
       expect(ics).toContain('SUMMARY:Mülakat: Tech Corp - Senior Frontend Developer');
       expect(ics).toContain('STATUS:CONFIRMED');

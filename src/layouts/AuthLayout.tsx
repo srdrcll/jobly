@@ -25,7 +25,7 @@ export const AuthLayout: React.FC = () => {
             <Compass className="w-5 h-5" aria-hidden="true" />
           </div>
           <span className="font-extrabold text-lg tracking-tight text-foreground">
-            Kariyer <span className="text-indigo-500">Pusulası</span>
+            JOB<span className="text-indigo-500">LY</span>
           </span>
         </Link>
 
@@ -39,7 +39,7 @@ export const AuthLayout: React.FC = () => {
 
       {/* Bottom Footer */}
       <footer className="text-center text-xs text-slate-500 dark:text-slate-500 z-10 py-2">
-        <p>© 2026 Kariyer Pusulası. Kariyerinizi hedefleriniz doğrultusunda yönetin. Tüm hakları saklıdır.</p>
+        <p>© 2026 JOBLY. Kariyerinizi hedefleriniz doğrultusunda yönetin. Tüm hakları saklıdır.</p>
       </footer>
     </div>
   );

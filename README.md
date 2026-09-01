@@ -1,6 +1,6 @@
 <div align="center">
 
-  <h1>🧭 Kariyer Pusulası</h1>
+  <h1>💼 JOBLY</h1>
   <h3><i>Personal Applicant Tracking System (ATS) & Candidate CRM for Ambitious Job Seekers</i></h3>
 
   <p>
@@ -9,7 +9,7 @@
 
   <p>
     <a href="#"><img src="https://img.shields.io/badge/Build-Passing-success?style=for-the-badge&logo=github-actions&logoColor=white" alt="Build" /></a>
-    <a href="#"><img src="https://img.shields.io/badge/Current_Release-v1.0.0_Public_Release-blue?style=for-the-badge&logo=git&logoColor=white" alt="Current Release" /></a>
+    <a href="#"><img src="https://img.shields.io/badge/Current_Release-v2.0.0_Public_Release-blue?style=for-the-badge&logo=git&logoColor=white" alt="Current Release" /></a>
     <a href="#"><img src="https://img.shields.io/badge/Production_Readiness-100%2F100-emerald?style=for-the-badge&logo=target&logoColor=white" alt="Production Readiness" /></a>
     <a href="#"><img src="https://img.shields.io/badge/License-MIT-amber?style=for-the-badge" alt="License" /></a>
     <a href="#"><img src="https://img.shields.io/badge/PRs-Welcome-emerald?style=for-the-badge&logo=github&logoColor=white" alt="PRs Welcome" /></a>
@@ -21,7 +21,7 @@
 
 ### 📌 Purpose
 
-**Kariyer Pusulası** is a modern, candidate-centric Applicant Tracking System (ATS) and Candidate CRM built for job seekers. It replaces messy spreadsheets and lost emails with a structured SaaS workspace to track applications, target companies, recruiter contacts, and interview timelines. Inspired by tools like Linear and Notion, it brings clarity and speed to your career journey.
+**JOBLY** is a modern, candidate-centric Applicant Tracking System (ATS) and Candidate CRM built for job seekers. It replaces messy spreadsheets and lost emails with a structured SaaS workspace to track applications, target companies, recruiter contacts, and interview timelines. Inspired by tools like Linear and Notion, it brings clarity and speed to your career journey.
 
 ---
 

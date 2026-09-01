@@ -62,7 +62,7 @@ export function buildInterviewDescription(interview: DbInterview): string {
     lines.push(`\n📝 Hazırlık Notları:\n${interview.prep_notes}`);
   }
 
-  lines.push('\n---\n🧭 Kariyer Pusulası tarafından oluşturuldu.');
+  lines.push('\n---\n🧭 JOBLY tarafından oluşturuldu.');
 
   return lines.join('\n');
 }
@@ -134,7 +134,7 @@ export function generateIcsContent(interviewsInput: DbInterview | DbInterview[])
       .replace(/,/g, '\\,')
       .replace(/;/g, '\\;');
 
-    const uid = `interview-${interview.id}-${Date.now()}@kariyerpusulasi.com`;
+    const uid = `interview-${interview.id}-${Date.now()}@jobly.app`;
 
     return [
       'BEGIN:VEVENT',
@@ -155,7 +155,7 @@ export function generateIcsContent(interviewsInput: DbInterview | DbInterview[])
   return [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Kariyer Pusulasi//Mülakat Takvimi v1.0//TR',
+    'PRODID:-//JOBLY//Mülakat Takvimi v2.0//TR',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
     ...eventBlocks,

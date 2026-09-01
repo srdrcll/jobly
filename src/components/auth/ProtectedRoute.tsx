@@ -16,7 +16,7 @@ export const ProtectedRoute: React.FC = () => {
           </div>
           <div className="space-y-1">
             <h3 className="text-base font-bold text-foreground">Oturum Kontrol Ediliyor</h3>
-            <p className="text-xs text-slate-400">Kariyer Pusulası doğrulanıyor...</p>
+            <p className="text-xs text-slate-400">JOBLY güvenli oturumu doğrulanıyor...</p>
           </div>
           <Loader2 className="w-5 h-5 text-indigo-500 animate-spin mt-2" aria-hidden="true" />
         </div>

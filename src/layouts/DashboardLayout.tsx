@@ -58,7 +58,7 @@ export const DashboardLayout: React.FC = () => {
 
         {/* Global Footer */}
         <footer className="border-t border-slate-200/80 dark:border-slate-800/80 py-4 px-6 text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 max-w-7xl w-full mx-auto">
-          <p>© 2026 Kariyer Pusulası. Tüm hakları saklıdır.</p>
+          <p>© 2026 JOBLY. Tüm hakları saklıdır.</p>
           <a
             href="https://www.linkedin.com/in/srdrcll/"
             target="_blank"
