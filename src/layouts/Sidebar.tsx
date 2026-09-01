@@ -47,26 +47,47 @@ export const Sidebar: React.FC<SidebarProps> = ({
   return (
     <aside
       className={cn(
-        'h-screen bg-white/80 dark:bg-[#0B101D]/90 backdrop-blur-xl border-r border-slate-200/80 dark:border-slate-800/60 flex flex-col justify-between transition-all duration-300 select-none z-30 relative specular-border',
+        'h-screen bg-white/90 dark:bg-[#0B101D]/95 backdrop-blur-2xl border-r border-slate-200/80 dark:border-slate-800/80 flex flex-col justify-between transition-all duration-300 select-none z-30 relative',
         isCollapsed ? 'w-20' : 'w-64'
       )}
       aria-label="Ana Gezinme Menüsü"
     >
+      {/* Floating Desktop Collapse/Expand Toggle Button on Sidebar Edge */}
+      <button
+        onClick={onToggleCollapse}
+        className="hidden md:flex absolute -right-3.5 top-6 z-40 w-7 h-7 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-md items-center justify-center text-slate-500 hover:text-blue-500 hover:scale-110 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+        title={isCollapsed ? 'Menüyü Genişlet' : 'Menüyü Daralt'}
+        aria-label={isCollapsed ? 'Menüyü Genişlet' : 'Menüyü Daralt'}
+      >
+        {isCollapsed ? (
+          <ChevronRight className="w-4 h-4" aria-hidden="true" />
+        ) : (
+          <ChevronLeft className="w-4 h-4" aria-hidden="true" />
+        )}
+      </button>
+
       {/* Top Header & Logo */}
-      <div>
-        <div className="h-16 px-4 flex items-center justify-between border-b border-slate-200/70 dark:border-slate-800/60">
+      <div className="flex flex-col flex-1 min-h-0">
+        <div className={cn(
+          'h-16 flex items-center border-b border-slate-200/70 dark:border-slate-800/60 shrink-0 transition-all',
+          isCollapsed ? 'justify-center px-2' : 'justify-between px-4'
+        )}>
           <NavLink
             to="/dashboard"
             onClick={onMobileClose}
-            className="flex items-center gap-3 overflow-hidden group"
+            className={cn(
+              'flex items-center gap-3 overflow-hidden group focus:outline-none',
+              isCollapsed && 'justify-center w-full'
+            )}
+            title={isCollapsed ? 'Kariyer Pusulası' : undefined}
           >
-            <div className="relative p-2.5 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 text-white shadow-lg shadow-blue-500/25 group-hover:scale-105 group-hover:shadow-blue-500/40 transition-all shrink-0">
+            <div className="relative p-2.5 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 text-white shadow-lg shadow-blue-500/25 group-hover:scale-105 group-hover:shadow-blue-500/40 transition-all shrink-0">
               <Compass className="w-5 h-5 transition-transform group-hover:rotate-45" aria-hidden="true" />
             </div>
             {!isCollapsed && (
-              <div className="flex flex-col">
-                <span className="font-extrabold text-base tracking-tight text-foreground leading-none bg-gradient-to-r from-slate-900 via-slate-800 to-slate-700 dark:from-white dark:via-slate-100 dark:to-slate-300 bg-clip-text text-transparent">
-                  Kariyer <span className="text-blue-500 font-black">Pusulası</span>
+              <div className="flex flex-col min-w-0">
+                <span className="font-black text-base tracking-tight text-foreground leading-none">
+                  Kariyer <span className="bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent">Pusulası</span>
                 </span>
                 <span className="text-[10px] text-slate-400 font-medium tracking-wide mt-0.5">
                   Career Compass
@@ -74,57 +95,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </div>
             )}
           </NavLink>
-
-          {/* Desktop Collapse Toggle */}
-          <button
-            onClick={onToggleCollapse}
-            className="hidden md:flex p-1.5 rounded-lg text-slate-400 hover:text-foreground hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors"
-            title={isCollapsed ? 'Menüyü Genişlet' : 'Menüyü Daralt'}
-            aria-label={isCollapsed ? 'Menüyü Genişlet' : 'Menüyü Daralt'}
-          >
-            {isCollapsed ? <ChevronRight className="w-4 h-4" aria-hidden="true" /> : <ChevronLeft className="w-4 h-4" aria-hidden="true" />}
-          </button>
         </div>
 
-        {/* Navigation Group 1: Main App */}
-        <div className="p-3 space-y-6 overflow-y-auto max-h-[calc(100vh-14rem)]">
+        {/* Navigation Groups (Scrollable) */}
+        <div className="p-3 space-y-5 overflow-y-auto flex-1 custom-scrollbar">
+          {/* Navigation Group 1: Main App */}
           <div>
             {!isCollapsed && (
-              <h4 className="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+              <h4 className="px-3 text-[10px] font-extrabold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">
                 Kariyer Yönetimi
               </h4>
             )}
-            <nav className="space-y-1">
+            <nav className="space-y-1.5">
               {MAIN_NAV_ITEMS.filter(item => !item.disabled).map((item) => {
                 const Icon = item.icon;
-
-                if (item.disabled) {
-                  return (
-                    <div
-                      key={item.href}
-                      tabIndex={-1}
-                      aria-disabled="true"
-                      aria-label={`${item.title} (Yakında) - ${item.tooltip || 'Bu özellik yakında kullanıma açılacak.'}`}
-                      title={item.tooltip || 'Bu özellik yakında kullanıma açılacak.'}
-                      className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium opacity-50 text-slate-400 dark:text-slate-500 cursor-not-allowed select-none group relative bg-slate-100/30 dark:bg-slate-900/30"
-                    >
-                      <Icon className="w-4 h-4 shrink-0 text-slate-400 dark:text-slate-600" aria-hidden="true" />
-                      {!isCollapsed && (
-                        <span className="truncate flex-1 text-slate-400 dark:text-slate-500 font-medium">{item.title}</span>
-                      )}
-                      {!isCollapsed && (
-                        <span className="px-2 py-0.5 text-[9px] font-bold rounded-full bg-slate-200/80 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-300/60 dark:border-slate-700/60 shrink-0 whitespace-nowrap">
-                          {item.badge || 'Yakında'}
-                        </span>
-                      )}
-                      {isCollapsed && (
-                        <div className="absolute left-full ml-2 px-2.5 py-1 bg-slate-900 text-white text-xs rounded-lg shadow-xl whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50">
-                          {item.title} (Yakında)
-                        </div>
-                      )}
-                    </div>
-                  );
-                }
+                const badge = getDynamicBadge(item.href);
 
                 return (
                   <NavLink
@@ -133,27 +118,41 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     onClick={onMobileClose}
                     className={({ isActive }) =>
                       cn(
-                        'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group relative',
+                        'flex items-center rounded-2xl text-sm font-medium transition-all duration-200 group relative',
+                        isCollapsed 
+                          ? 'w-12 h-12 mx-auto justify-center' 
+                          : 'px-3.5 py-2.5 gap-3',
                         isActive
-                          ? 'bg-gradient-to-r from-blue-500/15 via-indigo-500/10 to-transparent text-blue-600 dark:text-blue-400 font-semibold border-l-2 border-blue-500 shadow-xs'
-                          : 'text-slate-600 dark:text-slate-400 hover:text-foreground hover:bg-slate-100/80 dark:hover:bg-slate-900/50'
+                          ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold shadow-lg shadow-blue-500/25'
+                          : 'text-slate-600 dark:text-slate-400 hover:text-foreground hover:bg-slate-100/80 dark:hover:bg-slate-900/60'
                       )
                     }
                   >
                     {({ isActive }) => (
                       <>
-                        <Icon className={cn('w-5 h-5 shrink-0 transition-transform group-hover:scale-110', isActive ? 'text-blue-500' : 'text-slate-400')} aria-hidden="true" />
+                        <Icon className={cn('w-5 h-5 shrink-0 transition-transform group-hover:scale-110', isActive ? 'text-white' : 'text-slate-400')} aria-hidden="true" />
                         {!isCollapsed && (
                           <span className="truncate flex-1">{item.title}</span>
                         )}
-                        {!isCollapsed && getDynamicBadge(item.href) && (
-                          <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/25">
-                            {getDynamicBadge(item.href)}
+                        {!isCollapsed && badge !== undefined && (
+                          <span className={cn(
+                            'px-2 py-0.5 text-[10px] font-bold rounded-full border',
+                            isActive 
+                              ? 'bg-white/20 text-white border-white/30' 
+                              : 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20'
+                          )}>
+                            {badge}
                           </span>
                         )}
+                        {/* Collapsed Tooltip */}
                         {isCollapsed && (
-                          <div className="absolute left-full ml-2 px-2.5 py-1 bg-slate-900 text-white text-xs rounded-lg shadow-xl whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50">
-                            {item.title}
+                          <div className="absolute left-full ml-3 px-3 py-1.5 bg-slate-900/95 text-white text-xs font-semibold rounded-xl shadow-2xl border border-slate-700/80 whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50 flex items-center gap-2">
+                            <span>{item.title}</span>
+                            {badge !== undefined && (
+                              <span className="px-1.5 py-0.2 rounded-full bg-blue-500 text-[10px] font-bold">
+                                {badge}
+                              </span>
+                            )}
                           </div>
                         )}
                       </>
@@ -167,11 +166,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {/* Navigation Group 2: Account & Settings */}
           <div>
             {!isCollapsed && (
-              <h4 className="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+              <h4 className="px-3 text-[10px] font-extrabold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">
                 Hesap & Tercihler
               </h4>
             )}
-            <nav className="space-y-1">
+            <nav className="space-y-1.5">
               {SECONDARY_NAV_ITEMS.map((item) => {
                 const Icon = item.icon;
                 return (
@@ -181,19 +180,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     onClick={onMobileClose}
                     className={({ isActive }) =>
                       cn(
-                        'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group relative',
+                        'flex items-center rounded-2xl text-sm font-medium transition-all duration-200 group relative',
+                        isCollapsed 
+                          ? 'w-12 h-12 mx-auto justify-center' 
+                          : 'px-3.5 py-2.5 gap-3',
                         isActive
-                          ? 'bg-gradient-to-r from-blue-500/15 via-indigo-500/10 to-transparent text-blue-600 dark:text-blue-400 font-semibold border-l-2 border-blue-500 shadow-xs'
-                          : 'text-slate-600 dark:text-slate-400 hover:text-foreground hover:bg-slate-100/80 dark:hover:bg-slate-900/50'
+                          ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold shadow-lg shadow-blue-500/25'
+                          : 'text-slate-600 dark:text-slate-400 hover:text-foreground hover:bg-slate-100/80 dark:hover:bg-slate-900/60'
                       )
                     }
                   >
                     {({ isActive }) => (
                       <>
-                        <Icon className={cn('w-5 h-5 shrink-0 transition-transform group-hover:scale-110', isActive ? 'text-blue-500' : 'text-slate-400')} aria-hidden="true" />
+                        <Icon className={cn('w-5 h-5 shrink-0 transition-transform group-hover:scale-110', isActive ? 'text-white' : 'text-slate-400')} aria-hidden="true" />
                         {!isCollapsed && <span className="truncate">{item.title}</span>}
+                        {/* Collapsed Tooltip */}
                         {isCollapsed && (
-                          <div className="absolute left-full ml-2 px-2.5 py-1 bg-slate-900 text-white text-xs rounded-lg shadow-xl whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50">
+                          <div className="absolute left-full ml-3 px-3 py-1.5 bg-slate-900/95 text-white text-xs font-semibold rounded-xl shadow-2xl border border-slate-700/80 whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50">
                             {item.title}
                           </div>
                         )}
@@ -207,24 +210,24 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
       </div>
 
-      {/* Bottom User Card */}
-      <div className="p-3 border-t border-slate-200/70 dark:border-slate-800/60">
+      {/* Bottom User Profile Card */}
+      <div className="p-3 border-t border-slate-200/70 dark:border-slate-800/60 shrink-0">
         {!isCollapsed ? (
-          <div className="p-2.5 rounded-2xl bg-slate-100/70 dark:bg-slate-900/60 backdrop-blur-md border border-slate-200/80 dark:border-slate-800/80 flex items-center justify-between shadow-soft">
-            <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 flex items-center justify-center text-white font-bold text-xs shrink-0 shadow-md shadow-blue-500/20">
+          <div className="p-2.5 rounded-2xl bg-slate-100/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200/80 dark:border-slate-800/80 flex items-center justify-between shadow-soft">
+            <NavLink to="/profile" className="flex items-center gap-2.5 min-w-0 flex-1 group">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 flex items-center justify-center text-white font-bold text-xs shrink-0 shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
                 {avatarInitials}
               </div>
               <div className="flex flex-col min-w-0">
-                <span className="text-xs font-bold text-foreground truncate">{fullName}</span>
+                <span className="text-xs font-bold text-foreground truncate group-hover:text-blue-500 transition-colors">{fullName}</span>
                 <span className="text-[10px] text-slate-400 dark:text-slate-500 truncate">
                   {user?.email || 'Aktif Oturum'}
                 </span>
               </div>
-            </div>
+            </NavLink>
             <button
               onClick={() => logout()}
-              className="p-1.5 text-slate-400 hover:text-rose-500 transition-colors rounded-lg hover:bg-rose-500/10"
+              className="p-1.5 text-slate-400 hover:text-rose-500 transition-colors rounded-xl hover:bg-rose-500/10 focus:outline-none"
               title="Çıkış Yap"
               aria-label="Çıkış Yap"
             >
@@ -233,12 +236,25 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
         ) : (
           <div className="flex flex-col items-center gap-2">
-            <button
-              onClick={() => logout()}
-              className="w-9 h-9 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 flex items-center justify-center text-white font-bold text-xs shadow-md shadow-blue-500/20 hover:opacity-90 transition-opacity"
-              title="Çıkış Yap"
+            <NavLink
+              to="/profile"
+              className="group relative w-10 h-10 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 flex items-center justify-center text-white font-bold text-xs shadow-md shadow-blue-500/20 hover:scale-105 transition-all"
             >
               {avatarInitials}
+              <div className="absolute left-full ml-3 px-3 py-1.5 bg-slate-900/95 text-white text-xs font-semibold rounded-xl shadow-2xl border border-slate-700/80 whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50">
+                <p className="font-bold">{fullName}</p>
+                <p className="text-[10px] text-slate-400">{user?.email}</p>
+              </div>
+            </NavLink>
+            <button
+              onClick={() => logout()}
+              className="group relative w-10 h-10 rounded-xl flex items-center justify-center text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors focus:outline-none"
+              aria-label="Çıkış Yap"
+            >
+              <LogOut className="w-4 h-4" aria-hidden="true" />
+              <div className="absolute left-full ml-3 px-3 py-1.5 bg-rose-950/95 text-rose-200 text-xs font-semibold rounded-xl shadow-2xl border border-rose-800/80 whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50">
+                Çıkış Yap
+              </div>
             </button>
           </div>
         )}

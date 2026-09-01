@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, Bell } from 'lucide-react';
+import { Menu, Bell, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { ThemeSwitch } from '@/components/ui/ThemeSwitch';
 import { Button } from '@/components/ui/Button';
@@ -8,11 +8,15 @@ import { Plus } from 'lucide-react';
 
 interface TopNavbarProps {
   onMobileToggle: () => void;
+  onDesktopToggle?: () => void;
+  isSidebarCollapsed?: boolean;
   onOpenNewModal?: () => void;
 }
 
 export const TopNavbar: React.FC<TopNavbarProps> = ({
   onMobileToggle,
+  onDesktopToggle,
+  isSidebarCollapsed,
   onOpenNewModal,
 }) => {
   const [hasUnread, setHasUnread] = useState(true);
@@ -20,13 +24,14 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
 
   const handleNotificationClick = () => {
     setHasUnread(false);
-    toast.info('Bildirim Bildirimi', 'Şu an okunmamış 3 yeni mülakat güncellemeniz var.');
+    toast.info('Bildirimler', 'Şu an okunmamış 3 yeni mülakat güncellemeniz var.');
   };
 
   return (
     <header className="sticky top-0 z-20 h-16 w-full glass-panel border-b border-slate-200 dark:border-slate-800/80 px-4 sm:px-6 flex items-center justify-between gap-4 transition-colors">
-      {/* Left: Mobile Toggle & Breadcrumb */}
-      <div className="flex items-center gap-3">
+      {/* Left: Mobile/Desktop Toggle & Breadcrumb */}
+      <div className="flex items-center gap-2.5 sm:gap-3">
+        {/* Mobile Hamburger */}
         <button
           onClick={onMobileToggle}
           className="md:hidden p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-500 hover:text-foreground hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
@@ -34,6 +39,22 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         >
           <Menu className="w-5 h-5" aria-hidden="true" />
         </button>
+
+        {/* Desktop Sidebar Toggle Button */}
+        {onDesktopToggle && (
+          <button
+            onClick={onDesktopToggle}
+            className="hidden md:flex p-2 rounded-xl border border-slate-200 dark:border-slate-800/80 text-slate-400 hover:text-blue-500 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors"
+            title={isSidebarCollapsed ? 'Kenar Çubuğunu Aç' : 'Kenar Çubuğunu Daralt'}
+            aria-label={isSidebarCollapsed ? 'Kenar Çubuğunu Aç' : 'Kenar Çubuğunu Daralt'}
+          >
+            {isSidebarCollapsed ? (
+              <PanelLeftOpen className="w-4 h-4" aria-hidden="true" />
+            ) : (
+              <PanelLeftClose className="w-4 h-4" aria-hidden="true" />
+            )}
+          </button>
+        )}
 
         <Breadcrumb />
       </div>
