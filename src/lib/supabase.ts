@@ -9,6 +9,50 @@ if (!supabaseUrl || !supabaseAnonKey) {
   );
 }
 
+/**
+ * Determines whether Supabase is configured with real production credentials.
+ * Returns false if placeholder/mock credentials or unconfigured URLs are detected.
+ */
+export const isSupabaseConfigured = (): boolean => {
+  const url = (import.meta.env.VITE_SUPABASE_URL || '').trim();
+  const key = (import.meta.env.VITE_SUPABASE_ANON_KEY || '').trim();
+  return Boolean(
+    url &&
+    key &&
+    !url.includes('your-project-id') &&
+    !url.includes('example.com') &&
+    !url.includes('placeholder') &&
+    !key.includes('your-actual-anon-key-here') &&
+    !key.includes('anon-key') &&
+    url.startsWith('https://')
+  );
+};
+
+/**
+ * Wraps any Supabase request promise with a strict timeout (default: 2500ms)
+ * to prevent the UI from freezing or hanging when remote network is degraded.
+ */
+export async function withSupabaseTimeout<T>(
+  promise: Promise<T>,
+  timeoutMs = 2500
+): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => {
+      reject(new Error('Supabase request timed out'));
+    }, timeoutMs);
+  });
+
+  try {
+    const res = await Promise.race([promise, timeoutPromise]);
+    if (timer) clearTimeout(timer);
+    return res;
+  } catch (err) {
+    if (timer) clearTimeout(timer);
+    throw err;
+  }
+}
+
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,

@@ -8,8 +8,7 @@ import {
   Compass, 
   ChevronLeft, 
   ChevronRight, 
-  LogOut,
-  Linkedin
+  LogOut
 } from 'lucide-react';
 import { cn, getInitials } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
@@ -39,7 +38,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
     if (href === '/applications') return applications.length > 0 ? applications.length : undefined;
     if (href === '/companies') return companies.length > 0 ? companies.length : undefined;
     if (href === '/interviews') return interviews.length > 0 ? interviews.length : undefined;
-    if (href === '/dashboard') return 'Yeni';
     return undefined;
   };
 
@@ -49,29 +47,29 @@ export const Sidebar: React.FC<SidebarProps> = ({
   return (
     <aside
       className={cn(
-        'h-screen bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800/80 flex flex-col justify-between transition-all duration-300 select-none z-30 relative',
+        'h-screen bg-white/80 dark:bg-[#0B101D]/90 backdrop-blur-xl border-r border-slate-200/80 dark:border-slate-800/60 flex flex-col justify-between transition-all duration-300 select-none z-30 relative specular-border',
         isCollapsed ? 'w-20' : 'w-64'
       )}
       aria-label="Ana Gezinme Menüsü"
     >
       {/* Top Header & Logo */}
       <div>
-        <div className="h-16 px-4 flex items-center justify-between border-b border-slate-200 dark:border-slate-800/80">
+        <div className="h-16 px-4 flex items-center justify-between border-b border-slate-200/70 dark:border-slate-800/60">
           <NavLink
             to="/dashboard"
             onClick={onMobileClose}
             className="flex items-center gap-3 overflow-hidden group"
           >
-            <div className="p-2 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-500 text-white shadow-md shadow-blue-500/25 group-hover:scale-105 transition-transform shrink-0">
-              <Compass className="w-5 h-5" aria-hidden="true" />
+            <div className="relative p-2.5 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 text-white shadow-lg shadow-blue-500/25 group-hover:scale-105 group-hover:shadow-blue-500/40 transition-all shrink-0">
+              <Compass className="w-5 h-5 transition-transform group-hover:rotate-45" aria-hidden="true" />
             </div>
             {!isCollapsed && (
               <div className="flex flex-col">
-                <span className="font-extrabold text-base tracking-tight text-foreground leading-none">
-                  Kariyer <span className="text-blue-500">Pusulası</span>
+                <span className="font-extrabold text-base tracking-tight text-foreground leading-none bg-gradient-to-r from-slate-900 via-slate-800 to-slate-700 dark:from-white dark:via-slate-100 dark:to-slate-300 bg-clip-text text-transparent">
+                  Kariyer <span className="text-blue-500 font-black">Pusulası</span>
                 </span>
                 <span className="text-[10px] text-slate-400 font-medium tracking-wide mt-0.5">
-                  Career Compass v1.0
+                  Career Compass
                 </span>
               </div>
             )}
@@ -80,7 +78,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {/* Desktop Collapse Toggle */}
           <button
             onClick={onToggleCollapse}
-            className="hidden md:flex p-1.5 rounded-lg text-slate-400 hover:text-foreground hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors"
+            className="hidden md:flex p-1.5 rounded-lg text-slate-400 hover:text-foreground hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors"
             title={isCollapsed ? 'Menüyü Genişlet' : 'Menüyü Daralt'}
             aria-label={isCollapsed ? 'Menüyü Genişlet' : 'Menüyü Daralt'}
           >
@@ -97,7 +95,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </h4>
             )}
             <nav className="space-y-1">
-              {MAIN_NAV_ITEMS.map((item) => {
+              {MAIN_NAV_ITEMS.filter(item => !item.disabled).map((item) => {
                 const Icon = item.icon;
 
                 if (item.disabled) {
@@ -137,8 +135,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       cn(
                         'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group relative',
                         isActive
-                          ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400 font-semibold shadow-sm'
-                          : 'text-slate-600 dark:text-slate-400 hover:text-foreground hover:bg-slate-100 dark:hover:bg-slate-900/60'
+                          ? 'bg-gradient-to-r from-blue-500/15 via-indigo-500/10 to-transparent text-blue-600 dark:text-blue-400 font-semibold border-l-2 border-blue-500 shadow-xs'
+                          : 'text-slate-600 dark:text-slate-400 hover:text-foreground hover:bg-slate-100/80 dark:hover:bg-slate-900/50'
                       )
                     }
                   >
@@ -185,8 +183,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       cn(
                         'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group relative',
                         isActive
-                          ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400 font-semibold shadow-sm'
-                          : 'text-slate-600 dark:text-slate-400 hover:text-foreground hover:bg-slate-100 dark:hover:bg-slate-900/60'
+                          ? 'bg-gradient-to-r from-blue-500/15 via-indigo-500/10 to-transparent text-blue-600 dark:text-blue-400 font-semibold border-l-2 border-blue-500 shadow-xs'
+                          : 'text-slate-600 dark:text-slate-400 hover:text-foreground hover:bg-slate-100/80 dark:hover:bg-slate-900/50'
                       )
                     }
                   >
@@ -210,25 +208,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* Bottom User Card */}
-      <div className="p-3 border-t border-slate-200 dark:border-slate-800/80">
-        {!isCollapsed && (
-          <div className="mb-2">
-            <a
-              href="https://www.linkedin.com/in/srdrcll/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-400 hover:text-blue-500 hover:bg-blue-500/10 transition-colors border border-transparent hover:border-blue-500/20"
-            >
-              <Linkedin className="w-3.5 h-3.5 text-blue-500 shrink-0" aria-hidden="true" />
-              <span className="truncate">LinkedIn / srdrcll</span>
-            </a>
-          </div>
-        )}
-
+      <div className="p-3 border-t border-slate-200/70 dark:border-slate-800/60">
         {!isCollapsed ? (
-          <div className="p-2.5 rounded-2xl bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
+          <div className="p-2.5 rounded-2xl bg-slate-100/70 dark:bg-slate-900/60 backdrop-blur-md border border-slate-200/80 dark:border-slate-800/80 flex items-center justify-between shadow-soft">
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center text-white font-bold text-xs shrink-0 shadow-sm">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 flex items-center justify-center text-white font-bold text-xs shrink-0 shadow-md shadow-blue-500/20">
                 {avatarInitials}
               </div>
               <div className="flex flex-col min-w-0">
@@ -240,7 +224,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
             <button
               onClick={() => logout()}
-              className="p-1.5 text-slate-400 hover:text-rose-500 transition-colors rounded-lg"
+              className="p-1.5 text-slate-400 hover:text-rose-500 transition-colors rounded-lg hover:bg-rose-500/10"
               title="Çıkış Yap"
               aria-label="Çıkış Yap"
             >
@@ -249,18 +233,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
         ) : (
           <div className="flex flex-col items-center gap-2">
-            <a
-              href="https://www.linkedin.com/in/srdrcll/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-2 rounded-xl text-slate-400 hover:text-blue-500 hover:bg-blue-500/10 transition-colors"
-              title="LinkedIn / srdrcll"
-            >
-              <Linkedin className="w-4 h-4 text-blue-500" aria-hidden="true" />
-            </a>
             <button
               onClick={() => logout()}
-              className="w-9 h-9 rounded-full bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center text-white font-bold text-xs shadow-md hover:opacity-90 transition-opacity"
+              className="w-9 h-9 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 flex items-center justify-center text-white font-bold text-xs shadow-md shadow-blue-500/20 hover:opacity-90 transition-opacity"
               title="Çıkış Yap"
             >
               {avatarInitials}

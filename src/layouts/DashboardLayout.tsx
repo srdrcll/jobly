@@ -11,9 +11,13 @@ export const DashboardLayout: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex overflow-hidden">
+    <div className="min-h-screen bg-background text-foreground flex overflow-hidden relative">
+      {/* Ambient Aurora Light Spots in Background */}
+      <div className="ambient-glow-blue -top-24 -left-24 hidden dark:block" aria-hidden="true" />
+      <div className="ambient-glow-purple top-1/3 -right-24 hidden dark:block" aria-hidden="true" />
+
       {/* Desktop Sidebar */}
-      <div className="hidden md:block shrink-0">
+      <div className="hidden md:block shrink-0 z-20">
         <Sidebar
           isCollapsed={isCollapsed}
           onToggleCollapse={toggleSidebar}
@@ -25,7 +29,7 @@ export const DashboardLayout: React.FC = () => {
         <div className="md:hidden fixed inset-0 z-50 flex" role="dialog" aria-modal="true">
           {/* Overlay */}
           <div
-            className="fixed inset-0 bg-slate-950/70 backdrop-blur-sm animate-fadeIn"
+            className="fixed inset-0 bg-slate-950/70 backdrop-blur-md animate-fadeIn"
             onClick={closeMobile}
             aria-hidden="true"
           />
@@ -40,7 +44,7 @@ export const DashboardLayout: React.FC = () => {
       )}
 
       {/* Main Content Column */}
-      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
+      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto z-10">
         <TopNavbar
           onMobileToggle={toggleMobile}
           onOpenNewModal={() => setIsCreateModalOpen(true)}
@@ -57,9 +61,9 @@ export const DashboardLayout: React.FC = () => {
             href="https://www.linkedin.com/in/srdrcll/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 font-bold text-blue-500 hover:text-blue-400 hover:underline transition-colors"
+            className="inline-flex items-center gap-1 text-slate-400 hover:text-blue-500 hover:underline transition-colors"
           >
-            <Linkedin className="w-4 h-4 text-blue-500" aria-hidden="true" />
+            <Linkedin className="w-3.5 h-3.5" aria-hidden="true" />
             <span>LinkedIn Profilim (srdrcll)</span>
           </a>
         </footer>

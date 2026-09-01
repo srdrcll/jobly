@@ -58,6 +58,7 @@ export function useCreateApplicationMutation() {
           job_url: newValues.job_url ?? null,
           contact_name: newValues.contact_name ?? null,
           contact_email: newValues.contact_email ?? null,
+          source: newValues.source ?? null,
           notes: newValues.notes ?? null,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),

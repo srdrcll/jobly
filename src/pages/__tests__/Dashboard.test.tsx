@@ -21,9 +21,9 @@ describe('DashboardPage Component', () => {
 
     render(<DashboardPage />);
 
-    expect(screen.getByText('HIZLI İŞ AKIŞLARI')).toBeInTheDocument();
-    expect(screen.getByText('CANLI İSTATİSTİK İCMALİ')).toBeInTheDocument();
-    expect(screen.getByText('Kariyer Analizleri & Akıllı Tavsiyeler')).toBeInTheDocument();
-    expect(screen.getByText('Son Aktiviteler & Mülakatlar')).toBeInTheDocument();
+    expect(screen.getByText(/Hoş Geldin/)).toBeInTheDocument();
+    expect(screen.getByText(/Canlı İstatistik/)).toBeInTheDocument();
+    expect(screen.getByText(/Pusula Tavsiyeleri/)).toBeInTheDocument();
+    expect(screen.getByText(/Aktivite Akışı/)).toBeInTheDocument();
   });
 });

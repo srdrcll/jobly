@@ -41,9 +41,9 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
   const IconComponent = STATUS_ICONS[status] || STATUS_ICONS.applied;
 
   const sizeClasses = {
-    sm: 'text-xs px-2.5 py-0.5 gap-1.5 font-medium rounded-md',
-    md: 'text-xs px-3 py-1 gap-1.5 font-semibold rounded-lg',
-    lg: 'text-sm px-3.5 py-1.5 gap-2 font-semibold rounded-xl',
+    sm: 'text-xs px-2.5 py-0.5 gap-1.5 font-medium rounded-full shadow-2xs',
+    md: 'text-xs px-3 py-1 gap-1.5 font-semibold rounded-full shadow-xs',
+    lg: 'text-sm px-3.5 py-1.5 gap-2 font-semibold rounded-full shadow-sm',
   };
 
   const iconSizes = {

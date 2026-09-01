@@ -8,6 +8,7 @@ import * as useAiQueryModule from '@/hooks/queries/useAiQuery';
 describe('AiAssistantPage Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    Element.prototype.scrollIntoView = vi.fn();
 
     vi.spyOn(useAiQueryModule, 'useAiConversationsQuery').mockReturnValue({
       data: [

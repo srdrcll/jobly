@@ -44,7 +44,7 @@ describe('CreateInterviewModal Component', () => {
     render(<CreateInterviewModal isOpen={true} onClose={mockOnClose} />);
 
     await userEvent.type(screen.getByLabelText(/şirket adı \*/i), 'Apex Sistemleri');
-    await userEvent.type(screen.getByLabelText(/pozisyon \*/i), 'Software Engineer');
+    await userEvent.type(screen.getByLabelText(/pozisyon adı \*/i), 'Senior Software Engineer');
 
     await userEvent.click(screen.getByRole('button', { name: /mülakatı kaydet/i }));
 

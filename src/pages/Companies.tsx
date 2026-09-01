@@ -25,9 +25,11 @@ import {
 import { useApplicationsListQuery } from '@/hooks/queries/useApplicationsQuery';
 import { DbCompany } from '@/types';
 import { CompanyStatusBadge } from '@/components/companies/CompanyStatusBadge';
+import { InlineCompanyStatusDropdown } from '@/components/companies/InlineCompanyStatusDropdown';
 import { CreateCompanyModal } from '@/components/companies/CreateCompanyModal';
 import { EditCompanyModal } from '@/components/companies/EditCompanyModal';
 import { CompanyDetailModal } from '@/components/companies/CompanyDetailModal';
+import { CreateApplicationModal } from '@/components/applications/CreateApplicationModal';
 import { CompanyCrmWidgets } from '@/components/companies/crm/CompanyCrmWidgets';
 import { CompanyAnalyticsSection } from '@/components/companies/CompanyAnalyticsSection';
 import { Button } from '@/components/ui/Button';
@@ -51,6 +53,13 @@ export const CompaniesPage: React.FC = () => {
   const [selectedEdit, setSelectedEdit] = useState<DbCompany | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [showAnalytics, setShowAnalytics] = useState(false);
+
+  // 1-Click Create Application for Company Modal State
+  const [isAppModalOpen, setIsAppModalOpen] = useState(false);
+  const [appModalPrefill, setAppModalPrefill] = useState<{
+    company_name?: string;
+    location?: string;
+  } | undefined>(undefined);
 
   // Bulk Selection State
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -191,21 +200,23 @@ export const CompaniesPage: React.FC = () => {
             {showAnalytics ? 'Grafikleri Gizle' : 'CRM Analizleri'}
           </Button>
 
-          <Button
-            variant="primary"
-            size="md"
-            leftIcon={<Plus className="w-4 h-4" />}
-            onClick={() => setIsCreateOpen(true)}
-            className="shrink-0 focus-visible:ring-2 focus-visible:ring-blue-500"
-          >
-            Yeni Şirket Ekle
-          </Button>
+          {companies.length > 0 && (
+            <Button
+              variant="primary"
+              size="md"
+              leftIcon={<Plus className="w-4 h-4" />}
+              onClick={() => setIsCreateOpen(true)}
+              className="shrink-0 focus-visible:ring-2 focus-visible:ring-blue-500"
+            >
+              Yeni Şirket Ekle
+            </Button>
+          )}
         </div>
       </div>
 
       {/* 2. Top KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 flex items-center gap-3">
+        <div className="p-4 rounded-2xl bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark flex items-center gap-3 specular-border">
           <div className="p-2.5 rounded-xl bg-blue-500/10 text-blue-500 border border-blue-500/20">
             <Building2 className="w-5 h-5" />
           </div>
@@ -215,7 +226,7 @@ export const CompaniesPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 flex items-center gap-3">
+        <div className="p-4 rounded-2xl bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark flex items-center gap-3 specular-border">
           <div className="p-2.5 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
             <Target className="w-5 h-5" />
           </div>
@@ -225,7 +236,7 @@ export const CompaniesPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 flex items-center gap-3">
+        <div className="p-4 rounded-2xl bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark flex items-center gap-3 specular-border">
           <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
             <Users className="w-5 h-5" />
           </div>
@@ -235,7 +246,7 @@ export const CompaniesPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 flex items-center gap-3">
+        <div className="p-4 rounded-2xl bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark flex items-center gap-3 specular-border">
           <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
             <Star className="w-5 h-5 fill-emerald-400" />
           </div>
@@ -276,6 +287,66 @@ export const CompaniesPage: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* 1-Click Quick Status Filter Bar */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
+        <button
+          type="button"
+          onClick={() => { setSelectedStatus('all'); setShowFavoritesOnly(false); }}
+          className={`px-3.5 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all text-xs ${
+            selectedStatus === 'all' && !showFavoritesOnly
+              ? 'bg-blue-600 text-white shadow-md shadow-blue-600/25 scale-[1.02]'
+              : 'bg-white/80 dark:bg-[#0D1424]/75 text-slate-400 hover:text-foreground border border-slate-200/80 dark:border-slate-800/70'
+          }`}
+        >
+          Tümü ({companies.length})
+        </button>
+        <button
+          type="button"
+          onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+          className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all flex items-center gap-1.5 text-xs ${
+            showFavoritesOnly
+              ? 'bg-amber-500 text-slate-900 shadow-md shadow-amber-500/25 scale-[1.02]'
+              : 'bg-white/80 dark:bg-[#0D1424]/75 text-slate-400 hover:text-foreground border border-slate-200/80 dark:border-slate-800/70'
+          }`}
+        >
+          <Star className={`w-3.5 h-3.5 ${showFavoritesOnly ? 'fill-slate-900' : 'text-amber-400'}`} />
+          <span>Favoriler</span>
+          <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${showFavoritesOnly ? 'bg-black/20 text-slate-900' : 'bg-amber-500/20 text-amber-300'}`}>
+            {favoriteCount}
+          </span>
+        </button>
+        {[
+          { id: 'Target', label: '🎯 Hedef' },
+          { id: 'Researching', label: '🔍 Araştırılıyor' },
+          { id: 'Applied', label: '📩 Başvuruldu' },
+          { id: 'Interviewed', label: '👥 Mülakat' },
+          { id: 'Offer', label: '🏆 Teklif' },
+        ].map((item) => {
+          const isSelected = selectedStatus === item.id && !showFavoritesOnly;
+          const count = companies.filter((c) => c.status === item.id).length;
+          return (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => {
+                setShowFavoritesOnly(false);
+                setSelectedStatus(isSelected ? 'all' : item.id);
+              }}
+              className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all flex items-center gap-1.5 text-xs ${
+                isSelected
+                  ? 'bg-blue-600 text-white shadow-md shadow-blue-600/25 scale-[1.02]'
+                  : 'bg-white/80 dark:bg-[#0D1424]/75 text-slate-400 hover:text-foreground border border-slate-200/80 dark:border-slate-800/70'
+              }`}
+            >
+              <span>{item.label}</span>
+              <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-white/20 text-white' : 'bg-slate-200/50 dark:bg-slate-800 text-slate-400'}`}>
+                {count}
+              </span>
+            </button>
+          );
+        })}
+      </div>
 
       {/* 6. Toolbar: Search, Filters & Sorting */}
       <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft dark:shadow-soft-dark space-y-4">
@@ -404,14 +475,16 @@ export const CompaniesPage: React.FC = () => {
               Arama kriterlerinize uyan bir şirket bulunamadı veya henüz hiç şirket eklemediniz.
             </p>
           </div>
-          <Button
-            variant="primary"
-            size="sm"
-            leftIcon={<Plus className="w-4 h-4" />}
-            onClick={() => setIsCreateOpen(true)}
-          >
-            İlk Şirketi Ekle
-          </Button>
+          {companies.length === 0 && (
+            <Button
+              variant="primary"
+              size="sm"
+              leftIcon={<Plus className="w-4 h-4" />}
+              onClick={() => setIsCreateOpen(true)}
+            >
+              İlk Şirketi Ekle
+            </Button>
+          )}
         </div>
       ) : (
         <>
@@ -498,8 +571,12 @@ export const CompaniesPage: React.FC = () => {
                       </div>
                     </td>
 
-                    <td className="py-3.5 px-4">
-                      <CompanyStatusBadge status={company.status} />
+                    {/* Status Column with 1-Click Dropdown */}
+                    <td className="py-3.5 px-4" onClick={(e) => e.stopPropagation()}>
+                      <InlineCompanyStatusDropdown
+                        currentStatus={company.status}
+                        onSelectStatus={(newStatus) => updateMutation.mutate({ id: company.id, payload: { status: newStatus } })}
+                      />
                     </td>
 
                     <td className="py-3.5 px-4 text-center">
@@ -511,6 +588,21 @@ export const CompaniesPage: React.FC = () => {
 
                     <td className="py-3.5 px-4 text-right" onClick={(e) => e.stopPropagation()}>
                       <div className="flex items-center justify-end gap-1">
+                        {/* 1-Click Quick Create Application for this Company */}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setAppModalPrefill({
+                              company_name: company.name,
+                              location: company.location || '',
+                            });
+                            setIsAppModalOpen(true);
+                          }}
+                          className="p-1.5 rounded-lg hover:bg-cyan-500/10 text-slate-400 hover:text-cyan-400 transition-colors"
+                          title="Bu Şirkete 1 Tıkla Başvuru Ekle"
+                        >
+                          <Plus className="w-4 h-4" />
+                        </button>
                         <button
                           type="button"
                           onClick={() => setSelectedDetail(company)}
@@ -562,24 +654,42 @@ export const CompaniesPage: React.FC = () => {
                     </div>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleFavoriteMutation.mutate({ id: company.id, currentStatus: Boolean(company.is_favorite) });
-                    }}
-                    className="p-1"
-                  >
-                    <Star
-                      className={`w-5 h-5 ${
-                        company.is_favorite ? 'fill-amber-400 text-amber-400' : 'text-slate-600'
-                      }`}
-                    />
-                  </button>
+                  <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAppModalPrefill({
+                          company_name: company.name,
+                          location: company.location || '',
+                        });
+                        setIsAppModalOpen(true);
+                      }}
+                      className="p-1 text-slate-400 hover:text-cyan-400"
+                      title="1 Tıkla Başvuru Ekle"
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        toggleFavoriteMutation.mutate({ id: company.id, currentStatus: Boolean(company.is_favorite) });
+                      }}
+                      className="p-1"
+                    >
+                      <Star
+                        className={`w-5 h-5 ${
+                          company.is_favorite ? 'fill-amber-400 text-amber-400' : 'text-slate-600'
+                        }`}
+                      />
+                    </button>
+                  </div>
                 </div>
 
-                <div className="flex items-center justify-between text-xs pt-2 border-t border-slate-100 dark:border-slate-800">
-                  <CompanyStatusBadge status={company.status} />
+                <div className="flex items-center justify-between text-xs pt-2 border-t border-slate-100 dark:border-slate-800" onClick={(e) => e.stopPropagation()}>
+                  <InlineCompanyStatusDropdown
+                    currentStatus={company.status}
+                    onSelectStatus={(newStatus) => updateMutation.mutate({ id: company.id, payload: { status: newStatus } })}
+                  />
                   <div className="flex items-center gap-1 text-amber-400 font-bold">
                     <Star className="w-3.5 h-3.5 fill-amber-400" />
                     <span>{company.rating || 3} / 5</span>
@@ -606,6 +716,16 @@ export const CompaniesPage: React.FC = () => {
         onClose={() => setSelectedDetail(null)}
         onEdit={(company) => setSelectedEdit(company)}
         onDelete={(id) => setDeleteId(id)}
+      />
+
+      {/* 1-Click Create Application Modal for this Company */}
+      <CreateApplicationModal
+        isOpen={isAppModalOpen}
+        onClose={() => {
+          setIsAppModalOpen(false);
+          setAppModalPrefill(undefined);
+        }}
+        initialValues={appModalPrefill}
       />
 
       {/* Delete Confirmation Modal */}

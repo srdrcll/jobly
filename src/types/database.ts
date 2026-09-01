@@ -27,6 +27,7 @@ export interface Database {
           job_url: string | null;
           contact_name: string | null;
           contact_email: string | null;
+          source: string | null;
           notes: string | null;
           created_at: string;
           updated_at: string;
@@ -48,6 +49,7 @@ export interface Database {
           job_url?: string | null;
           contact_name?: string | null;
           contact_email?: string | null;
+          source?: string | null;
           notes?: string | null;
           created_at?: string;
           updated_at?: string;
@@ -69,6 +71,7 @@ export interface Database {
           job_url?: string | null;
           contact_name?: string | null;
           contact_email?: string | null;
+          source?: string | null;
           notes?: string | null;
           created_at?: string;
           updated_at?: string;

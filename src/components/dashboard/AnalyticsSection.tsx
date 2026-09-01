@@ -63,6 +63,26 @@ export const AnalyticsSection: React.FC = () => {
     );
   }
 
+  // 3. Empty State (No Applications)
+  if (applications.length === 0) {
+    return (
+      <section aria-label="Analiz ve Performans Grafikleri" className="space-y-4 animate-fadeIn">
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            Analiz ve Performans Grafikleri
+          </h2>
+          <span className="text-xs text-slate-400 font-medium">Canlı Analiz</span>
+        </div>
+        <div className="p-8 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft dark:shadow-soft-dark text-center space-y-2">
+          <p className="text-sm font-bold text-slate-500 dark:text-slate-400">Analiz Edilecek Veri Bulunmuyor</p>
+          <p className="text-xs text-slate-400">
+            Grafiklerin ve performans analizlerinin oluşturulabilmesi için en az bir iş başvurusu eklemiş olmanız gerekmektedir.
+          </p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section aria-label="Analiz ve Performans Grafikleri" className="space-y-4 animate-fadeIn">
       <div className="flex items-center justify-between">
@@ -74,9 +94,9 @@ export const AnalyticsSection: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Chart 1: Status Distribution Pie/Donut Chart */}
-        <article className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-soft dark:shadow-soft-dark space-y-4 flex flex-col justify-between">
+        <article className="bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 rounded-3xl p-6 shadow-soft dark:shadow-soft-dark space-y-4 flex flex-col justify-between specular-border hover:border-slate-300 dark:hover:border-slate-700/80 transition-all">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400" aria-hidden="true">
+            <div className="p-2.5 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400" aria-hidden="true">
               <PieChart className="w-5 h-5" />
             </div>
             <div>
@@ -88,9 +108,9 @@ export const AnalyticsSection: React.FC = () => {
         </article>
 
         {/* Chart 2: Monthly Applications Bar Chart */}
-        <article className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-soft dark:shadow-soft-dark space-y-4 flex flex-col justify-between">
+        <article className="bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 rounded-3xl p-6 shadow-soft dark:shadow-soft-dark space-y-4 flex flex-col justify-between specular-border hover:border-slate-300 dark:hover:border-slate-700/80 transition-all">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-violet-500/10 border border-violet-500/20 text-violet-400" aria-hidden="true">
+            <div className="p-2.5 rounded-2xl bg-violet-500/10 border border-violet-500/20 text-violet-400" aria-hidden="true">
               <BarChart3 className="w-5 h-5" />
             </div>
             <div>
@@ -102,9 +122,9 @@ export const AnalyticsSection: React.FC = () => {
         </article>
 
         {/* Chart 3: Weekly Activity Line Chart */}
-        <article className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-soft dark:shadow-soft-dark space-y-4 flex flex-col justify-between">
+        <article className="bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 rounded-3xl p-6 shadow-soft dark:shadow-soft-dark space-y-4 flex flex-col justify-between specular-border hover:border-slate-300 dark:hover:border-slate-700/80 transition-all">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400" aria-hidden="true">
+            <div className="p-2.5 rounded-2xl bg-purple-500/10 border border-purple-500/20 text-purple-400" aria-hidden="true">
               <Activity className="w-5 h-5" />
             </div>
             <div>

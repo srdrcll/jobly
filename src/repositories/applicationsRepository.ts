@@ -1,14 +1,35 @@
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured, withSupabaseTimeout } from '@/lib/supabase';
 import { DbApplication, DbApplicationInsert, DbApplicationUpdate, ApplicationStatus } from '@/types';
-import { handleDatabaseError } from '@/lib/errors';
 import { getUserStorageKey } from '@/utils/userStorageUtils';
 
 const BASE_STORAGE_KEY = 'kp_applications_fallback_v1';
 
 function getLocalApplications(): DbApplication[] {
   try {
-    const raw = localStorage.getItem(getUserStorageKey(BASE_STORAGE_KEY));
-    return raw ? JSON.parse(raw) : [];
+    const userKey = getUserStorageKey(BASE_STORAGE_KEY);
+    const raw = localStorage.getItem(userKey);
+    if (raw) return JSON.parse(raw);
+
+    // Fallback: migrate from anonymous or legacy key if present
+    const anonRaw = localStorage.getItem(`${BASE_STORAGE_KEY}_anonymous`);
+    if (anonRaw) {
+      const parsed = JSON.parse(anonRaw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        localStorage.setItem(userKey, anonRaw);
+        return parsed;
+      }
+    }
+
+    const legacyRaw = localStorage.getItem(BASE_STORAGE_KEY);
+    if (legacyRaw) {
+      const parsed = JSON.parse(legacyRaw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        localStorage.setItem(userKey, legacyRaw);
+        return parsed;
+      }
+    }
+
+    return [];
   } catch {
     return [];
   }
@@ -24,12 +45,21 @@ function saveLocalApplications(items: DbApplication[]) {
 
 export const applicationsRepository = {
   async getAll(): Promise<DbApplication[]> {
-    try {
-      const { data, error } = await supabase
-        .from('applications')
-        .select('*')
-        .order('created_at', { ascending: false });
+    // 1. Instant local return if Supabase is not configured or in offline/mock mode
+    if (!isSupabaseConfigured()) {
+      return getLocalApplications();
+    }
 
+    try {
+      const response = await withSupabaseTimeout(
+        supabase
+          .from('applications')
+          .select('*')
+          .order('created_at', { ascending: false }),
+        2000
+      );
+
+      const { data, error } = response;
       if (error) {
         return getLocalApplications();
       }
@@ -54,13 +84,22 @@ export const applicationsRepository = {
   },
 
   async getById(id: string): Promise<DbApplication | null> {
-    try {
-      const { data, error } = await supabase
-        .from('applications')
-        .select('*')
-        .eq('id', id)
-        .single();
+    if (!isSupabaseConfigured()) {
+      const local = getLocalApplications();
+      return local.find((a) => a.id === id) || null;
+    }
 
+    try {
+      const response = await withSupabaseTimeout(
+        supabase
+          .from('applications')
+          .select('*')
+          .eq('id', id)
+          .single(),
+        2000
+      );
+
+      const { data, error } = response;
       if (error) {
         const local = getLocalApplications();
         return local.find((a) => a.id === id) || null;
@@ -91,20 +130,30 @@ export const applicationsRepository = {
       job_url: payload.job_url ?? null,
       contact_name: payload.contact_name ?? null,
       contact_email: payload.contact_email ?? null,
+      source: payload.source ?? null,
       notes: payload.notes ?? null,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };
 
-    try {
-      const { data, error } = await supabase
-        .from('applications')
-        .insert(payload)
-        .select()
-        .single();
+    if (!isSupabaseConfigured()) {
+      local.unshift(newItem);
+      saveLocalApplications(local);
+      return newItem;
+    }
 
+    try {
+      const response = await withSupabaseTimeout(
+        supabase
+          .from('applications')
+          .insert(payload)
+          .select()
+          .single(),
+        2500
+      );
+
+      const { data, error } = response;
       if (error) {
-        // Fallback: save to localStorage if Supabase RLS or table insert fails
         local.unshift(newItem);
         saveLocalApplications(local);
         return newItem;
@@ -125,14 +174,27 @@ export const applicationsRepository = {
     const local = getLocalApplications();
     const idx = local.findIndex((a) => a.id === id);
 
-    try {
-      const { data, error } = await supabase
-        .from('applications')
-        .update({ ...payload, updated_at: new Date().toISOString() })
-        .eq('id', id)
-        .select()
-        .single();
+    if (!isSupabaseConfigured()) {
+      if (idx !== -1) {
+        local[idx] = { ...local[idx], ...payload, updated_at: new Date().toISOString() };
+        saveLocalApplications(local);
+        return local[idx];
+      }
+      throw new Error('Başvuru bulunamadı.');
+    }
 
+    try {
+      const response = await withSupabaseTimeout(
+        supabase
+          .from('applications')
+          .update({ ...payload, updated_at: new Date().toISOString() })
+          .eq('id', id)
+          .select()
+          .single(),
+        2500
+      );
+
+      const { data, error } = response;
       if (error) {
         if (idx !== -1) {
           local[idx] = { ...local[idx], ...payload, updated_at: new Date().toISOString() };
@@ -172,11 +234,16 @@ export const applicationsRepository = {
     );
     saveLocalApplications(updatedLocal);
 
+    if (!isSupabaseConfigured()) return;
+
     try {
-      await supabase
-        .from('applications')
-        .update({ status })
-        .in('id', ids);
+      await withSupabaseTimeout(
+        supabase
+          .from('applications')
+          .update({ status })
+          .in('id', ids),
+        2500
+      );
     } catch {
       // Handled by local update fallback
     }
@@ -186,11 +253,16 @@ export const applicationsRepository = {
     const local = getLocalApplications();
     saveLocalApplications(local.filter((a) => a.id !== id));
 
+    if (!isSupabaseConfigured()) return;
+
     try {
-      await supabase
-        .from('applications')
-        .delete()
-        .eq('id', id);
+      await withSupabaseTimeout(
+        supabase
+          .from('applications')
+          .delete()
+          .eq('id', id),
+        2500
+      );
     } catch {
       // Handled by local deletion fallback
     }
@@ -201,11 +273,16 @@ export const applicationsRepository = {
     const local = getLocalApplications();
     saveLocalApplications(local.filter((a) => !ids.includes(a.id)));
 
+    if (!isSupabaseConfigured()) return;
+
     try {
-      await supabase
-        .from('applications')
-        .delete()
-        .in('id', ids);
+      await withSupabaseTimeout(
+        supabase
+          .from('applications')
+          .delete()
+          .in('id', ids),
+        2500
+      );
     } catch {
       // Handled by local bulk deletion fallback
     }

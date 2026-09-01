@@ -75,11 +75,11 @@ export const ProfilePage: React.FC = () => {
       />
 
       {/* Main Profile Header Card */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft relative overflow-hidden">
+      <div className="p-6 sm:p-8 rounded-3xl bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark relative overflow-hidden specular-border">
         <div className="absolute top-0 right-0 w-48 h-48 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" aria-hidden="true" />
 
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
-          <div className="w-24 h-24 rounded-3xl bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center text-white text-3xl font-black shadow-xl shrink-0">
+          <div className="w-24 h-24 rounded-3xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 flex items-center justify-center text-white text-3xl font-black shadow-xl shrink-0">
             {avatarInitials}
           </div>
 
@@ -87,7 +87,6 @@ export const ProfilePage: React.FC = () => {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <h2 className="text-2xl font-extrabold text-foreground">{fullName}</h2>
-                <p className="text-sm font-semibold text-blue-500">{email}</p>
               </div>
               <span className="self-center sm:self-auto px-3 py-1 text-xs font-bold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5">
                 <ShieldCheck className="w-4 h-4 text-emerald-400" aria-hidden="true" /> Doğrulanmış Kullanıcı
@@ -113,7 +112,7 @@ export const ProfilePage: React.FC = () => {
       {/* Password Change & Security Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Security / Password Update Form */}
-        <div className="p-6 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft space-y-4">
+        <div className="p-6 rounded-3xl bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark space-y-4 specular-border">
           <h3 className="text-base font-bold text-foreground flex items-center gap-2">
             <Lock className="w-4 h-4 text-blue-500" aria-hidden="true" /> Şifre Değiştir
           </h3>
@@ -153,15 +152,11 @@ export const ProfilePage: React.FC = () => {
         </div>
 
         {/* Account Info Card */}
-        <div className="p-6 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft space-y-4">
+        <div className="p-6 rounded-3xl bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark space-y-4 specular-border">
           <h3 className="text-base font-bold text-foreground flex items-center gap-2">
             <Award className="w-4 h-4 text-blue-500" aria-hidden="true" /> Oturum Detayları
           </h3>
           <div className="space-y-3 text-xs text-slate-300">
-            <div className="flex justify-between py-1.5 border-b border-slate-100 dark:border-slate-800/60">
-              <span className="text-slate-400">User ID (UUID):</span>
-              <span className="font-mono text-[11px] text-blue-500 truncate max-w-[180px]">{user?.id || '—'}</span>
-            </div>
             <div className="flex justify-between py-1.5 border-b border-slate-100 dark:border-slate-800/60">
               <span className="text-slate-400">E-Posta Doğrulandı mı:</span>
               <span className="font-semibold text-emerald-400">{user?.email_confirmed_at ? 'Evet' : 'Evet (Test Modu)'}</span>

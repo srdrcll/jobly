@@ -14,6 +14,7 @@ export interface KpiCardProps {
   iconTextClass?: string;
   isLoading?: boolean;
   className?: string;
+  onClick?: () => void;
 }
 
 export const KpiCard: React.FC<KpiCardProps> = ({
@@ -26,6 +27,7 @@ export const KpiCard: React.FC<KpiCardProps> = ({
   iconBgClass = 'bg-slate-100 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300',
   isLoading = false,
   className,
+  onClick,
 }) => {
   if (isLoading) {
     return <CardSkeleton className={className} />;
@@ -36,20 +38,22 @@ export const KpiCard: React.FC<KpiCardProps> = ({
 
   return (
     <div
+      onClick={onClick}
       className={cn(
-        'group p-5 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft dark:shadow-soft-dark hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 relative overflow-hidden flex flex-col justify-between',
+        'group p-5 rounded-3xl bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark hover:border-slate-300 dark:hover:border-slate-700/80 hover:shadow-card-hover dark:hover:shadow-card-hover-dark hover:-translate-y-1 transition-all duration-300 relative overflow-hidden flex flex-col justify-between specular-border',
+        onClick && 'cursor-pointer hover:border-blue-500/50 dark:hover:border-blue-500/50 select-none active:scale-[0.98]',
         className
       )}
     >
       {/* Subtle Background Accent Glow */}
       <div
-        className="absolute -right-6 -bottom-6 w-24 h-24 bg-indigo-500/5 rounded-full blur-2xl group-hover:bg-indigo-500/10 transition-colors pointer-events-none"
+        className="absolute -right-6 -bottom-6 w-28 h-28 bg-blue-500/5 dark:bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/15 transition-colors pointer-events-none"
         aria-hidden="true"
       />
 
       {/* Top Header & Icon */}
       <div className="flex items-center justify-between gap-2 mb-3">
-        <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 truncate">
+        <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-normal">
           {title}
         </span>
         <div
@@ -88,7 +92,7 @@ export const KpiCard: React.FC<KpiCardProps> = ({
 
       {/* Small Trend / Helper Text */}
       <div className="mt-3 pt-2 border-t border-slate-100 dark:border-slate-800/60 flex items-center justify-between text-[11px] text-slate-400">
-        <span className="truncate">{helperText}</span>
+        <span className="whitespace-normal">{helperText}</span>
       </div>
     </div>
   );

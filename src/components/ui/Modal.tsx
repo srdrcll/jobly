@@ -84,7 +84,7 @@ export const Modal: React.FC<ModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-950/60 dark:bg-slate-950/75 backdrop-blur-sm transition-opacity animate-fadeIn"
+        className="fixed inset-0 bg-slate-950/70 backdrop-blur-md transition-opacity animate-fadeIn"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -93,7 +93,7 @@ export const Modal: React.FC<ModalProps> = ({
       <div
         ref={modalRef}
         className={cn(
-          'relative w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl overflow-hidden z-10 animate-slideUp text-slate-900 dark:text-slate-100 my-8 focus:outline-none',
+          'relative w-full bg-white/95 dark:bg-[#0D1322]/95 backdrop-blur-2xl border border-slate-200/90 dark:border-slate-800/80 rounded-3xl shadow-soft-dark overflow-hidden z-10 animate-slideUp text-slate-900 dark:text-slate-100 my-8 focus:outline-none specular-border',
           widthClasses[maxWidth]
         )}
         role="dialog"

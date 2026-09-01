@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Menu, Bell } from 'lucide-react';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
-import { SearchInput } from '@/components/ui/SearchInput';
 import { ThemeSwitch } from '@/components/ui/ThemeSwitch';
 import { Button } from '@/components/ui/Button';
 import { useToast } from '@/hooks/useToast';
@@ -16,7 +15,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   onMobileToggle,
   onOpenNewModal,
 }) => {
-  const [searchQuery, setSearchQuery] = useState('');
   const [hasUnread, setHasUnread] = useState(true);
   const { toast } = useToast();
 
@@ -38,16 +36,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         </button>
 
         <Breadcrumb />
-      </div>
-
-      {/* Middle: Search Bar (Responsive) */}
-      <div className="flex-1 max-w-md hidden md:block">
-        <SearchInput
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          onClear={() => setSearchQuery('')}
-          placeholder="Başvuru, şirket veya pozisyon ara..."
-        />
       </div>
 
       {/* Right: Actions, Notifications, Theme, User Button */}

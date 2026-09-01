@@ -5,8 +5,12 @@ export const interviewResultEnum = z.enum(['Pending', 'Passed', 'Failed', 'Offer
 
 export const interviewSchema = z.object({
   application_id: z.string().optional().nullable(),
-  company_name: z.string().min(2, 'Şirket adı en az 2 karakter olmalıdır'),
-  position: z.string().min(2, 'Pozisyon adı en az 2 karakter olmalıdır'),
+  company_name: z.string()
+    .min(1, 'Şirket adı zorunludur')
+    .min(2, 'Şirket adı en az 2 karakter olmalıdır'),
+  position: z.string()
+    .min(1, 'Pozisyon adı zorunludur')
+    .min(2, 'Pozisyon adı en az 2 karakter olmalıdır'),
   stage: z.string().min(2, 'Mülakat aşaması seçiniz veya yazınız').default('İK Görüşmesi'),
   type: interviewTypeEnum.default('Online'),
   date: z.string().min(1, 'Mülakat tarihi zorunludur'),

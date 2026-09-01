@@ -75,6 +75,20 @@ export function useApplicationFilters(applications: DbApplication[] = [], search
     }));
   }, []);
 
+  const setSingleStatus = useCallback((status: ApplicationStatus | null) => {
+    setFilters((prev) => ({
+      ...prev,
+      statuses: status === null ? [] : [status],
+    }));
+  }, []);
+
+  const setStatuses = useCallback((statuses: ApplicationStatus[]) => {
+    setFilters((prev) => ({
+      ...prev,
+      statuses,
+    }));
+  }, []);
+
   const togglePriority = useCallback((priority: PriorityLevel) => {
     setFilters((prev) => ({
       ...prev,
@@ -180,6 +194,8 @@ export function useApplicationFilters(applications: DbApplication[] = [], search
     filters,
     activeFiltersCount,
     toggleStatus,
+    setSingleStatus,
+    setStatuses,
     togglePriority,
     toggleWorkModel,
     setSortBy,

@@ -13,7 +13,9 @@ export const companyStatusEnum = z.enum([
 export type CompanyStatus = z.infer<typeof companyStatusEnum>;
 
 export const companySchema = z.object({
-  name: z.string().min(2, 'Şirket adı en az 2 karakter olmalıdır'),
+  name: z.string()
+    .min(1, 'Şirket adı zorunludur')
+    .min(2, 'Şirket adı en az 2 karakter olmalıdır'),
   industry: z.string().optional().nullable(),
   website: z.string().url('Geçerli bir web sitesi URL’si giriniz').or(z.literal('')).optional().nullable(),
   location: z.string().optional().nullable(),

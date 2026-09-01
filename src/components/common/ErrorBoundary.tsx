@@ -43,6 +43,13 @@ export class ErrorBoundary extends Component<Props, State> {
               <p className="text-xs text-slate-400 leading-relaxed">
                 Sayfa yüklenirken beklenmeyen bir hata meydana geldi. Lütfen sayfayı yenilemeyi deneyin.
               </p>
+              {this.state.error && (
+                <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-left">
+                  <p className="text-[11px] font-mono text-rose-400 break-words font-semibold">
+                    {this.state.error.message}
+                  </p>
+                </div>
+              )}
             </div>
             <Button
               variant="primary"

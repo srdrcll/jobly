@@ -74,6 +74,7 @@ CREATE TABLE IF NOT EXISTS applications (
     salary TEXT,
     status TEXT NOT NULL CHECK (status IN ('saved', 'applied', 'interview', 'case_study', 'offer', 'rejected')),
     applied_date TIMESTAMPTZ DEFAULT NOW(),
+    source TEXT,
     notes_count INT DEFAULT 0,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()

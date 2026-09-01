@@ -12,9 +12,14 @@ import { Building2, Calendar, Clock, Video, MapPin, User, Link as LinkIcon, File
 interface CreateInterviewModalProps {
   isOpen: boolean;
   onClose: () => void;
+  initialValues?: Partial<InterviewFormValues>;
 }
 
-export const CreateInterviewModal: React.FC<CreateInterviewModalProps> = ({ isOpen, onClose }) => {
+export const CreateInterviewModal: React.FC<CreateInterviewModalProps> = ({ 
+  isOpen, 
+  onClose,
+  initialValues 
+}) => {
   const createMutation = useCreateInterviewMutation();
   const { data: applications = [] } = useApplicationsListQuery();
 
@@ -42,8 +47,32 @@ export const CreateInterviewModal: React.FC<CreateInterviewModalProps> = ({ isOp
       prep_notes: '',
       interview_notes: '',
       result: 'Pending',
+      ...initialValues,
     },
   });
+
+  // Re-sync form when initialValues change or modal opens
+  useEffect(() => {
+    if (isOpen && initialValues) {
+      reset({
+        company_name: '',
+        position: '',
+        stage: 'İK Görüşmesi',
+        type: 'Online',
+        date: new Date().toISOString().split('T')[0],
+        time: '14:00',
+        duration_minutes: 45,
+        interviewer_name: '',
+        interviewer_role: '',
+        meeting_link: '',
+        location: '',
+        prep_notes: '',
+        interview_notes: '',
+        result: 'Pending',
+        ...initialValues,
+      });
+    }
+  }, [isOpen, initialValues, reset]);
 
   const selectedAppId = watch('application_id');
 

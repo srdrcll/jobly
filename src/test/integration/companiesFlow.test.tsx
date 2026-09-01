@@ -24,7 +24,7 @@ describe('Integration Test: Companies Module Flow', () => {
     render(<CompaniesPage />);
 
     expect(screen.getByRole('heading', { name: /hedef şirketler/i })).toBeInTheDocument();
-    expect(screen.getByText('Nova Teknoloji')).toBeInTheDocument();
-    expect(screen.getByText('Apex Sistemleri')).toBeInTheDocument();
+    expect(screen.getAllByText('Nova Teknoloji').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Apex Sistemleri').length).toBeGreaterThan(0);
   });
 });

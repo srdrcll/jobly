@@ -1,9 +1,6 @@
 -- ==============================================================================
 -- KARİYER PUSULASI (CAREER COMPASS) - PRODUCTION DATABASE SCHEMA (POSTGRESQL / SUPABASE)
 -- ==============================================================================
--- Bu SQL dosyasını Supabase Dashboard -> SQL Editor alanına yapıştırıp "Run" butonuna basarak
--- veritabanı tablolarını, indeksleri, RLS güvenlik politikalarını ve otomatik tetikleyicileri (triggers) tek seferde oluşturabilirsiniz.
--- ==============================================================================
 
 -- 0. Gerekli Eklentileri Etkinleştir
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";

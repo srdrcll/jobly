@@ -42,7 +42,7 @@ describe('KpiCardsGrid Component', () => {
     expect(screen.getByText('İstatistikler Yüklenemedi')).toBeInTheDocument();
     expect(screen.getByText('Sunucuya ulaşılamadı')).toBeInTheDocument();
 
-    const retryButton = screen.getByRole('button', { name: /tekrar dene/i });
+    const retryButton = screen.getByRole('button', { name: /tekrar yükle/i });
     await userEvent.click(retryButton);
 
     expect(mockRefetch).toHaveBeenCalledTimes(1);
@@ -63,7 +63,7 @@ describe('KpiCardsGrid Component', () => {
 
     expect(screen.getByText('Henüz Kayıtlı Başvurunuz Bulunmuyor')).toBeInTheDocument();
 
-    const addButton = screen.getByRole('button', { name: /ilk başvuruyu ekle/i });
+    const addButton = screen.getByRole('button', { name: /başvurusunu ekle/i });
     await userEvent.click(addButton);
 
     expect(handleOpenNewModal).toHaveBeenCalledTimes(1);
@@ -80,14 +80,14 @@ describe('KpiCardsGrid Component', () => {
 
     render(<KpiCardsGrid />);
 
-    expect(screen.getByText('TOPLAM BAŞVURU')).toBeInTheDocument();
-    expect(screen.getByText('AKTİF BAŞVURULAR')).toBeInTheDocument();
-    expect(screen.getByText('MÜLAKAT SÜRECİNDE')).toBeInTheDocument();
-    expect(screen.getByText('ALINAN TEKLİFLER')).toBeInTheDocument();
-    expect(screen.getByText('REDDEDİLENLER')).toBeInTheDocument();
-    expect(screen.getByText('BAŞARI ORANI')).toBeInTheDocument();
+    expect(screen.getByText(/toplam başvuru/i)).toBeInTheDocument();
+    expect(screen.getByText(/aktif başvurular/i)).toBeInTheDocument();
+    expect(screen.getByText(/mülakat sürecinde/i)).toBeInTheDocument();
+    expect(screen.getByText(/alınan teklifler/i)).toBeInTheDocument();
+    expect(screen.getByText(/reddedilenler/i)).toBeInTheDocument();
+    expect(screen.getByText(/başarı oranı/i)).toBeInTheDocument();
 
     // mockApplications total length is 2
-    expect(screen.getByText('2')).toBeInTheDocument();
+    expect(screen.getAllByText('2').length).toBeGreaterThan(0);
   });
 });

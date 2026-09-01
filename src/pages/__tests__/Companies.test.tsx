@@ -88,7 +88,7 @@ describe('CompaniesPage Component', () => {
 
     render(<CompaniesPage />);
 
-    expect(screen.getByText('Nova Teknoloji')).toBeInTheDocument();
+    expect(screen.getAllByText('Nova Teknoloji')[0]).toBeInTheDocument();
 
     const searchInput = screen.getByPlaceholderText(/ara/i);
     await userEvent.type(searchInput, 'Nova Teknoloji');

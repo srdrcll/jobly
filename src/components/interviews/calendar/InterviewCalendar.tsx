@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Video, Clock } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Download } from 'lucide-react';
 import { DbInterview } from '@/types';
 import { Button } from '@/components/ui/Button';
+import { exportAllInterviewsToIcs } from '@/utils/calendarIntegrationUtils';
 
 interface InterviewCalendarProps {
   interviews: DbInterview[];
@@ -82,7 +83,7 @@ export const InterviewCalendar: React.FC<InterviewCalendarProps> = ({
   }, [interviews]);
 
   return (
-    <div className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-soft dark:shadow-soft-dark space-y-4 animate-fadeIn">
+    <div className="bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 rounded-3xl p-6 shadow-soft dark:shadow-soft-dark space-y-4 animate-fadeIn specular-border">
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-2.5">
@@ -95,7 +96,18 @@ export const InterviewCalendar: React.FC<InterviewCalendarProps> = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center flex-wrap gap-2">
+          {interviews.length > 0 && (
+            <Button
+              variant="outline"
+              size="sm"
+              leftIcon={<Download className="w-3.5 h-3.5 text-purple-400" />}
+              onClick={() => exportAllInterviewsToIcs(interviews)}
+              title="Tüm mülakatları .ics takvim dosyası olarak indir"
+            >
+              Takvimi Dışa Aktar (.ics)
+            </Button>
+          )}
           <Button variant="outline" size="sm" onClick={handleToday}>
             Bugün
           </Button>

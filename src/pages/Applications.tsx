@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { formatDate, getInitials } from '@/lib/utils';
 import { 
   Briefcase, 
@@ -22,7 +22,9 @@ import {
   Check,
   SlidersHorizontal,
   CheckSquare,
-  Sparkles
+  Sparkles,
+  ExternalLink,
+  CalendarPlus
 } from 'lucide-react';
 import { PageHeader } from '@/components/common/PageHeader';
 import { Button } from '@/components/ui/Button';
@@ -33,12 +35,16 @@ import { EmptyState } from '@/components/common/EmptyState';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/Table';
 import { ConfirmationDialog } from '@/components/ui/ConfirmationDialog';
+import { getPlatformStyle } from '@/utils/platformUtils';
 import { CreateApplicationModal } from '@/components/applications/CreateApplicationModal';
 import { EditApplicationModal } from '@/components/applications/EditApplicationModal';
+import { CreateInterviewModal } from '@/components/interviews/CreateInterviewModal';
+import { InlineStatusDropdown } from '@/components/applications/InlineStatusDropdown';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useApplicationFilters, SortOption } from '@/hooks/useApplicationFilters';
 import { 
   useApplicationsListQuery, 
+  useUpdateApplicationMutation,
   useDeleteApplicationMutation,
   useBulkUpdateStatusMutation,
   useBulkDeleteMutation
@@ -56,6 +62,7 @@ const SORT_OPTIONS: { id: SortOption; label: string }[] = [
 
 export const ApplicationsPage: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
@@ -70,11 +77,20 @@ export const ApplicationsPage: React.FC = () => {
   const [deletingApplication, setDeletingApplication] = useState<DbApplication | null>(null);
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
 
+  // 1-Click Fast Interview Scheduling Modal State
+  const [isInterviewModalOpen, setIsInterviewModalOpen] = useState(false);
+  const [interviewPrefill, setInterviewPrefill] = useState<{
+    application_id?: string;
+    company_name?: string;
+    position?: string;
+  } | undefined>(undefined);
+
   // Popover Toggles
   const [isFilterPopoverOpen, setIsFilterPopoverOpen] = useState(false);
   const [isSortPopoverOpen, setIsSortPopoverOpen] = useState(false);
 
   const { data: applications, isLoading, isError, error, refetch } = useApplicationsListQuery();
+  const updateMutation = useUpdateApplicationMutation();
   const deleteMutation = useDeleteApplicationMutation();
   const bulkUpdateMutation = useBulkUpdateStatusMutation();
   const bulkDeleteMutation = useBulkDeleteMutation();
@@ -83,12 +99,41 @@ export const ApplicationsPage: React.FC = () => {
     filters,
     activeFiltersCount,
     toggleStatus,
+    setSingleStatus,
+    setStatuses,
     togglePriority,
     toggleWorkModel,
     setSortBy,
     clearFilters,
     filteredAndSortedApplications,
   } = useApplicationFilters(applications, debouncedSearchQuery);
+
+  // URL status query parameter sync (e.g., coming from dashboard KPI cards)
+  useEffect(() => {
+    const statusParam = searchParams.get('status');
+    if (statusParam && Object.keys(STATUS_CONFIG).includes(statusParam)) {
+      setSingleStatus(statusParam as ApplicationStatus);
+    }
+  }, [searchParams, setSingleStatus]);
+
+  // Global Keyboard Shortcut: 'N' or '⌘N' / 'Ctrl+N' to open Create Modal
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      const isInput = target?.tagName === 'INPUT' || target?.tagName === 'TEXTAREA' || target?.tagName === 'SELECT' || target?.isContentEditable;
+      
+      if (!isInput && (e.key === 'n' || e.key === 'N') && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        e.preventDefault();
+        setIsCreateModalOpen(true);
+      } else if ((e.metaKey || e.ctrlKey) && (e.key === 'n' || e.key === 'N')) {
+        e.preventDefault();
+        setIsCreateModalOpen(true);
+      }
+    };
+
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+  }, []);
 
   // Selection Handlers & Auto-Pruning for Filter Changes
   const visibleIds = filteredAndSortedApplications.map((a) => a.id);
@@ -295,8 +340,46 @@ export const ApplicationsPage: React.FC = () => {
         </div>
       )}
 
+      {/* 1-Click Quick Status Filter Bar */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
+        <button
+          type="button"
+          onClick={() => setSingleStatus(null)}
+          className={`px-3.5 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all text-xs ${
+            filters.statuses.length === 0
+              ? 'bg-blue-600 text-white shadow-md shadow-blue-600/25 scale-[1.02]'
+              : 'bg-white/80 dark:bg-[#0D1424]/75 text-slate-400 hover:text-foreground border border-slate-200/80 dark:border-slate-800/70'
+          }`}
+        >
+          Tümü ({applications?.length || 0})
+        </button>
+        {(['applied', 'interview', 'case_study', 'offer', 'rejected', 'saved'] as ApplicationStatus[]).map((st) => {
+          const isSelected = filters.statuses.length === 1 && filters.statuses.includes(st);
+          const count = (applications || []).filter((a) => a.status === st).length;
+          const config = STATUS_CONFIG[st] || STATUS_CONFIG.applied;
+          return (
+            <button
+              key={st}
+              type="button"
+              onClick={() => setSingleStatus(isSelected ? null : st)}
+              className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all flex items-center gap-1.5 text-xs ${
+                isSelected
+                  ? 'bg-blue-600 text-white shadow-md shadow-blue-600/25 scale-[1.02]'
+                  : 'bg-white/80 dark:bg-[#0D1424]/75 text-slate-400 hover:text-foreground border border-slate-200/80 dark:border-slate-800/70'
+              }`}
+            >
+              <span className={`w-2 h-2 rounded-full ${config.dotClass}`} />
+              <span>{config.label}</span>
+              <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-white/20 text-white' : 'bg-slate-200/50 dark:bg-slate-800 text-slate-400'}`}>
+                {count}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
       {/* Toolbar: Search, Filter, Sort Controls */}
-      <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft flex flex-col sm:flex-row items-center justify-between gap-4 relative">
+      <div className="p-4 rounded-3xl bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark flex flex-col sm:flex-row items-center justify-between gap-4 relative specular-border">
         <div className="w-full sm:w-80">
           <SearchInput
             value={searchQuery}
@@ -332,7 +415,7 @@ export const ApplicationsPage: React.FC = () => {
                 id="filter-popover-menu"
                 role="region"
                 aria-label="Filtreleme Seçenekleri"
-                className="absolute right-0 top-12 w-80 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-4 z-40 space-y-4 animate-fadeIn"
+                className="absolute right-0 top-12 w-80 bg-white/95 dark:bg-[#0E1424]/95 backdrop-blur-xl border border-slate-200/90 dark:border-slate-800/80 rounded-3xl shadow-soft-dark p-4 z-40 space-y-4 animate-fadeIn specular-border"
               >
                 <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
                   <h4 className="text-xs font-bold text-foreground flex items-center gap-1.5">
@@ -692,7 +775,18 @@ export const ApplicationsPage: React.FC = () => {
                       {/* Position Column */}
                       <TableCell>
                         <div>
-                          <span className="font-bold text-foreground text-xs block">{app.position}</span>
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span className="font-bold text-foreground text-xs block">{app.position}</span>
+                            {app.source ? (
+                              <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold border transition-colors shadow-xs ${getPlatformStyle(app.source)?.bg} ${getPlatformStyle(app.source)?.text} ${getPlatformStyle(app.source)?.border}`}>
+                                {getPlatformStyle(app.source)?.label}
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold border transition-colors shadow-xs bg-slate-100 dark:bg-slate-800/60 text-slate-400 border-slate-200 dark:border-slate-700/50">
+                                Belirtilmedi
+                              </span>
+                            )}
+                          </div>
                           {app.location && (
                             <span className="text-[10px] text-slate-400 flex items-center gap-1 mt-0.5">
                               <MapPin className="w-3 h-3 text-slate-500" aria-hidden="true" /> {app.location}
@@ -701,9 +795,12 @@ export const ApplicationsPage: React.FC = () => {
                         </div>
                       </TableCell>
 
-                      {/* Status Column */}
-                      <TableCell>
-                        <StatusBadge status={app.status as ApplicationStatus} size="sm" />
+                      {/* Status Column with 1-Click Inline Status Dropdown */}
+                      <TableCell onClick={(e) => e.stopPropagation()}>
+                        <InlineStatusDropdown
+                          currentStatus={app.status as ApplicationStatus}
+                          onSelectStatus={(newStatus) => updateMutation.mutate({ id: app.id, payload: { status: newStatus } })}
+                        />
                       </TableCell>
 
                       {/* Priority Column */}
@@ -719,41 +816,64 @@ export const ApplicationsPage: React.FC = () => {
                         </span>
                       </TableCell>
 
-                      {/* Actions Menu Column */}
-                      <TableCell className="text-right relative" onClick={(e) => e.stopPropagation()}>
-                        <button
-                          onClick={(e) => toggleMenu(app.id, e)}
-                          className="p-1.5 rounded-lg text-slate-400 hover:text-foreground hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                          title="İşlem Menüsü"
-                          aria-label="İşlem Menüsü"
-                          aria-haspopup="true"
-                          aria-expanded={isMenuOpen}
-                        >
-                          <MoreHorizontal className="w-4 h-4" aria-hidden="true" />
-                        </button>
+                      {/* Actions Column with 1-Click Direct Shortcuts */}
+                      <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
+                        <div className="flex items-center justify-end gap-1">
+                          {/* 1-Click Open Job Post Link */}
+                          {app.job_url && (
+                            <a
+                              href={app.job_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-cyan-400 transition-colors"
+                              title="İlanı Aç (1-Tık)"
+                            >
+                              <ExternalLink className="w-4 h-4" />
+                            </a>
+                          )}
 
-                        {isMenuOpen && (
-                          <div className="absolute right-4 top-12 w-40 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-xl py-1 z-30 animate-fadeIn text-left">
-                            <button
-                              onClick={() => handleNavigateDetail(app.id)}
-                              className="w-full px-3 py-2 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-blue-500/10 hover:text-blue-500 flex items-center gap-2 transition-colors"
-                            >
-                              <Eye className="w-3.5 h-3.5 text-blue-500" aria-hidden="true" /> Detayları Gör
-                            </button>
-                            <button
-                              onClick={(e) => handleOpenEdit(app, e)}
-                              className="w-full px-3 py-2 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-blue-500/10 hover:text-blue-500 flex items-center gap-2 transition-colors"
-                            >
-                              <Edit3 className="w-3.5 h-3.5 text-blue-500" aria-hidden="true" /> Düzenle
-                            </button>
-                            <button
-                              onClick={(e) => handleOpenDelete(app, e)}
-                              className="w-full px-3 py-2 text-left text-xs font-semibold text-rose-500 hover:bg-rose-500/10 flex items-center gap-2 transition-colors border-t border-slate-100 dark:border-slate-800/60"
-                            >
-                              <Trash2 className="w-3.5 h-3.5 text-rose-500" aria-hidden="true" /> Sil
-                            </button>
-                          </div>
-                        )}
+                          {/* 1-Click Fast Interview Schedule */}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setInterviewPrefill({
+                                application_id: app.id,
+                                company_name: app.company_name,
+                                position: app.position,
+                              });
+                              setIsInterviewModalOpen(true);
+                            }}
+                            className="p-1.5 rounded-lg hover:bg-purple-500/10 text-slate-400 hover:text-purple-400 transition-colors"
+                            title="1 Tıkla Mülakat Planla"
+                          >
+                            <CalendarPlus className="w-4 h-4" />
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => handleNavigateDetail(app.id)}
+                            className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-blue-500 transition-colors"
+                            title="Detay Gör"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => handleOpenEdit(app, e)}
+                            className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-blue-500 transition-colors"
+                            title="Düzenle"
+                          >
+                            <Edit3 className="w-4 h-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => handleOpenDelete(app, e)}
+                            className="p-1.5 rounded-lg hover:bg-rose-500/10 text-slate-400 hover:text-rose-500 transition-colors"
+                            title="Sil"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   );
@@ -837,9 +957,32 @@ export const ApplicationsPage: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-slate-100 dark:border-slate-800/60">
-                    <StatusBadge status={app.status as ApplicationStatus} size="sm" />
+                  <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-slate-100 dark:border-slate-800/60" onClick={(e) => e.stopPropagation()}>
+                    <InlineStatusDropdown
+                      currentStatus={app.status as ApplicationStatus}
+                      onSelectStatus={(newStatus) => updateMutation.mutate({ id: app.id, payload: { status: newStatus } })}
+                    />
                     <PriorityBadge priority={priorityDisplay} />
+                    {app.source ? (
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${getPlatformStyle(app.source)?.bg} ${getPlatformStyle(app.source)?.text} ${getPlatformStyle(app.source)?.border}`}>
+                        {getPlatformStyle(app.source)?.label}
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold border bg-slate-100 dark:bg-slate-800/60 text-slate-400 border-slate-200 dark:border-slate-700/50">
+                        Belirtilmedi
+                      </span>
+                    )}
+                    {app.job_url && (
+                      <a
+                        href={app.job_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-cyan-400 text-[10px] inline-flex items-center gap-1"
+                        title="İlanı Aç"
+                      >
+                        <ExternalLink className="w-3 h-3" /> İlan
+                      </a>
+                    )}
                   </div>
 
                   <div className="flex items-center justify-between text-xs text-slate-400 pt-1">
@@ -871,6 +1014,16 @@ export const ApplicationsPage: React.FC = () => {
         isOpen={Boolean(editingApplication)}
         onClose={() => setEditingApplication(null)}
         application={editingApplication}
+      />
+
+      {/* 1-Click Fast Interview Scheduling Modal */}
+      <CreateInterviewModal
+        isOpen={isInterviewModalOpen}
+        onClose={() => {
+          setIsInterviewModalOpen(false);
+          setInterviewPrefill(undefined);
+        }}
+        initialValues={interviewPrefill}
       />
 
       {/* Single Delete Confirmation Dialog */}

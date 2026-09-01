@@ -14,7 +14,7 @@ describe('StatisticCard Component', () => {
       />
     );
 
-    expect(screen.getByText('AKTİF BAŞVURULAR')).toBeInTheDocument();
+    expect(screen.getByText(/aktif başvurular/i)).toBeInTheDocument();
     expect(screen.getByText('12')).toBeInTheDocument();
   });
 

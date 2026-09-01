@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
 import { User, Session, AuthChangeEvent } from '@supabase/supabase-js';
-import { supabase, getTurkishAuthErrorMessage } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured, getTurkishAuthErrorMessage } from '@/lib/supabase';
 import { useToast } from '@/hooks/useToast';
 
 interface AuthContextType {
@@ -32,6 +32,19 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     // Initial Session Restore — validates with Supabase server
     const initSession = async () => {
+      if (!isSupabaseConfigured()) {
+        const cached = localStorage.getItem('sb-mock-session');
+        if (cached && isMounted) {
+          try {
+            setSession(JSON.parse(cached));
+          } catch (e) {}
+        }
+        if (isMounted) {
+          setLoading(false);
+        }
+        return;
+      }
+
       try {
         const { data: { session: serverSession }, error } = await supabase.auth.getSession();
         if (isMounted) {
@@ -58,6 +71,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     // Subscribe to Auth State Changes from Supabase
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event: AuthChangeEvent, currentSession: Session | null) => {
+        if (!isSupabaseConfigured()) return;
+
         if (!isMounted) return;
 
         switch (event) {
@@ -83,6 +98,23 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }, [clearSession]);
 
   const login = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
+    if (!isSupabaseConfigured()) {
+      const mockSession = {
+        access_token: 'mock-token',
+        user: {
+          id: 'db69db32-391c-4447-9dde-822e11a3d3c7',
+          email,
+          user_metadata: {
+            full_name: email.split('@')[0],
+          },
+          created_at: new Date().toISOString(),
+        } as unknown as User
+      } as Session;
+      setSession(mockSession);
+      localStorage.setItem('sb-mock-session', JSON.stringify(mockSession));
+      return { success: true };
+    }
+
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -106,6 +138,23 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const register = async (email: string, password: string, fullName: string): Promise<{ success: boolean; error?: string; requiresVerification?: boolean }> => {
+    if (!isSupabaseConfigured()) {
+      const mockSession = {
+        access_token: 'mock-token',
+        user: {
+          id: 'db69db32-391c-4447-9dde-822e11a3d3c7',
+          email,
+          user_metadata: {
+            full_name: fullName,
+          },
+          created_at: new Date().toISOString(),
+        } as unknown as User
+      } as Session;
+      setSession(mockSession);
+      localStorage.setItem('sb-mock-session', JSON.stringify(mockSession));
+      return { success: true, requiresVerification: false };
+    }
+
     try {
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -134,6 +183,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const logout = async () => {
+    if (!isSupabaseConfigured()) {
+      localStorage.removeItem('sb-mock-session');
+      clearSession();
+      toast.info('Oturum Kapatıldı', 'Güvenli bir şekilde çıkış yaptınız.');
+      return;
+    }
+
     try {
       await supabase.auth.signOut();
       clearSession();

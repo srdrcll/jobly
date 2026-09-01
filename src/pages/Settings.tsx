@@ -9,7 +9,6 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { PageHeader } from '@/components/common/PageHeader';
-import { ThemeSwitch } from '@/components/ui/ThemeSwitch';
 import { Button } from '@/components/ui/Button';
 import { useToast } from '@/hooks/useToast';
 import { applicationsRepository } from '@/repositories/applicationsRepository';
@@ -147,20 +146,12 @@ export const SettingsPage: React.FC = () => {
         </div>
 
         {/* Content Box */}
-        <div className="md:col-span-3 bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-soft space-y-6">
+        <div className="md:col-span-3 bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 rounded-3xl p-6 shadow-soft dark:shadow-soft-dark space-y-6 specular-border">
           {activeSection === 'general' && (
             <div className="space-y-6">
               <h3 className="text-base font-bold text-foreground border-b border-slate-100 dark:border-slate-800/60 pb-3">
-                Genel Görünüm & Bölge
+                Bölgesel Tercihler
               </h3>
-
-              <div className="flex items-center justify-between">
-                <div>
-                  <h4 className="text-sm font-semibold text-foreground">Tema Modu</h4>
-                  <p className="text-xs text-slate-400">Karanlık, Aydınlık veya sistem temasını seçin.</p>
-                </div>
-                <ThemeSwitch />
-              </div>
 
               <div className="space-y-2 pt-3 border-t border-slate-100 dark:border-slate-800/60">
                 <label htmlFor="currency-select" className="block text-xs font-semibold text-slate-300">
@@ -222,7 +213,7 @@ export const SettingsPage: React.FC = () => {
           {activeSection === 'security' && (
             <div className="space-y-6">
               <h3 className="text-base font-bold text-foreground border-b border-slate-100 dark:border-slate-800/60 pb-3">
-                Veri Dışa Aktarma & Dışa Aktarım
+                Veri Dışa Aktarma
               </h3>
 
               <div className="flex items-center justify-between">

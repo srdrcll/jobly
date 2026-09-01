@@ -26,6 +26,7 @@ import {
 import { useUpdateApplicationMutation } from '@/hooks/queries/useApplicationsQuery';
 import { STATUS_CONFIG } from '@/constants/status';
 import { DbApplication } from '@/types';
+import { detectPlatformFromUrl } from '@/utils/platformUtils';
 
 interface EditApplicationModalProps {
   isOpen: boolean;
@@ -45,10 +46,23 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
     register,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors, isDirty, isSubmitting },
   } = useForm<ApplicationFormValues>({
     resolver: zodResolver(applicationSchema),
   });
+
+  const watchedJobUrl = watch('job_url');
+
+  useEffect(() => {
+    if (watchedJobUrl) {
+      const detected = detectPlatformFromUrl(watchedJobUrl);
+      if (detected) {
+        setValue('source', detected, { shouldDirty: true });
+      }
+    }
+  }, [watchedJobUrl, setValue]);
 
   useEffect(() => {
     if (isOpen && application) {
@@ -66,6 +80,7 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
         contact_name: application.contact_name ?? '',
         contact_email: application.contact_email ?? '',
         priority: application.priority ?? 'Orta',
+        source: application.source ?? '',
         notes: application.notes ?? '',
         notes_count: application.notes_count ?? 0,
       });
@@ -103,6 +118,7 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
           contact_name: values.contact_name || null,
           contact_email: values.contact_email || null,
           priority: values.priority ?? 'Orta',
+          source: values.source || null,
           notes: values.notes || null,
         },
       });
@@ -237,6 +253,43 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
               <option value="On-site">On-site (Ofis)</option>
             </select>
           </div>
+
+          <Input
+            label="Başvuru Tarihi"
+            type="date"
+            leftIcon={<Calendar className="w-4 h-4" aria-hidden="true" />}
+            error={errors.applied_date?.message}
+            {...register('applied_date')}
+          />
+
+          <div className="space-y-1.5 w-full">
+            <label htmlFor="edit-source" className="block text-xs font-semibold text-slate-600 dark:text-slate-300">
+              Başvuru Kaynağı (Platform)
+            </label>
+            <div className="relative flex items-center w-full">
+              <div className="absolute left-3.5 text-slate-500 pointer-events-none shrink-0" aria-hidden="true">
+                <Globe className="w-4 h-4 text-blue-500" />
+              </div>
+              <input
+                id="edit-source"
+                list="edit-platform-sources"
+                placeholder="örn. LinkedIn, Kariyer.net, Youthall"
+                className="w-full h-10 pl-10 pr-3.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+                {...register('source')}
+              />
+            </div>
+            <datalist id="edit-platform-sources">
+              <option value="LinkedIn" />
+              <option value="Kariyer.net" />
+              <option value="Youthall" />
+              <option value="Indeed" />
+              <option value="Glassdoor" />
+              <option value="Şirket Sitesi" />
+            </datalist>
+            {errors.source?.message && (
+              <p className="text-[11px] text-rose-400 font-medium" role="alert" aria-live="assertive">{errors.source.message}</p>
+            )}
+          </div>
         </div>
 
         {/* Optional Fields Section */}
@@ -244,14 +297,6 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
           <h4 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Ek Detaylar (Opsiyonel)</h4>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-            <Input
-              label="Başvuru Tarihi"
-              type="date"
-              leftIcon={<Calendar className="w-4 h-4" aria-hidden="true" />}
-              error={errors.applied_date?.message}
-              {...register('applied_date')}
-            />
-
             <Input
               label="Maaş Beklentisi"
               placeholder="örn. 45.000 TL / Ay"
@@ -276,16 +321,14 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
               {...register('contact_email')}
             />
 
-            <div className="sm:col-span-2">
-              <Input
-                label="İlan Linki (URL)"
-                type="url"
-                placeholder="https://linkedin.com/jobs/..."
-                leftIcon={<Globe className="w-4 h-4" aria-hidden="true" />}
-                error={errors.job_url?.message}
-                {...register('job_url')}
-              />
-            </div>
+            <Input
+              label="İlan Linki (URL)"
+              type="url"
+              placeholder="https://linkedin.com/jobs/..."
+              leftIcon={<Globe className="w-4 h-4" aria-hidden="true" />}
+              error={errors.job_url?.message}
+              {...register('job_url')}
+            />
 
             {/* Notes Area */}
             <div className="sm:col-span-2 space-y-1.5 w-full">

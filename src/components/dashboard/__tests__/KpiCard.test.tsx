@@ -17,7 +17,7 @@ describe('KpiCard Component', () => {
       />
     );
 
-    expect(screen.getByText('TOPLAM BAŞVURU')).toBeInTheDocument();
+    expect(screen.getByText(/toplam başvuru/i)).toBeInTheDocument();
     expect(screen.getByText('15')).toBeInTheDocument();
     expect(screen.getByText('+15')).toBeInTheDocument();
     expect(screen.getByText('Tüm zamanların verisi')).toBeInTheDocument();

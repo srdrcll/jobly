@@ -27,7 +27,7 @@ describe('PublicRoute Guard Component', () => {
       <Routes>
         <Route path="/dashboard" element={<div>Dashboard Paneli</div>} />
         <Route element={<PublicRoute />}>
-          <Route path="/login" element={<div>Giriş Yap</div>} />
+          <Route path="/" element={<div>Giriş Yap</div>} />
         </Route>
       </Routes>
     );
@@ -51,7 +51,7 @@ describe('PublicRoute Guard Component', () => {
     render(
       <Routes>
         <Route element={<PublicRoute />}>
-          <Route path="/login" element={<div>Genel Giriş Sayfası</div>} />
+          <Route path="/" element={<div>Genel Giriş Sayfası</div>} />
         </Route>
       </Routes>
     );

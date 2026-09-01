@@ -27,7 +27,7 @@ describe('InterviewsPage Component', () => {
     expect(screen.getByRole('heading', { name: /mülakat yönetimi & takvim/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /yeni mülakat planla/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /liste/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /takvim/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /^takvim$/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /analiz/i })).toBeInTheDocument();
   });
 
@@ -90,7 +90,7 @@ describe('InterviewsPage Component', () => {
 
     render(<InterviewsPage />);
 
-    expect(screen.getByText('Software Engineer')).toBeInTheDocument();
+    expect(screen.getAllByText('Software Engineer')[0]).toBeInTheDocument();
 
     const searchInput = screen.getByPlaceholderText(/ara/i);
     await userEvent.type(searchInput, 'Apex Sistemleri');

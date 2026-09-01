@@ -1,7 +1,6 @@
 import React from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { WelcomeSection } from '@/components/dashboard/WelcomeSection';
-import { QuickActions } from '@/components/dashboard/QuickActions';
 import { KpiCardsGrid } from '@/components/dashboard/KpiCardsGrid';
 import { InsightsList } from '@/components/dashboard/InsightsList';
 import { AnalyticsSection } from '@/components/dashboard/AnalyticsSection';
@@ -14,9 +13,6 @@ export const DashboardPage: React.FC = () => {
     <div className="space-y-8 animate-fadeIn">
       {/* 1. Welcome Section with Dynamic Greeting & Motivational Text */}
       <WelcomeSection onOpenNewModal={context?.onOpenNewModal} />
-
-      {/* 2. Quick Actions Section (4 Interactive Action Cards) */}
-      <QuickActions onOpenNewModal={context?.onOpenNewModal} />
 
       {/* 3. Reusable KPI Metric Cards Grid (6 Live Cards) */}
       <div className="space-y-3">

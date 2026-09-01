@@ -30,7 +30,7 @@ describe('Integration Test: Interviews Flow & Dashboard Widget Sync', () => {
     );
 
     expect(screen.getByRole('heading', { name: /mülakat yönetimi & takvim/i })).toBeInTheDocument();
-    expect(screen.getByText('Apex Sistemleri')).toBeInTheDocument();
-    expect(screen.getByText('Software Engineer')).toBeInTheDocument();
+    expect(screen.getAllByText('Apex Sistemleri').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Software Engineer').length).toBeGreaterThan(0);
   });
 });

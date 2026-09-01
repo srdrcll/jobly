@@ -15,18 +15,22 @@ import {
   CheckCircle2,
   Sparkles,
   List,
-  BarChart3
+  BarChart3,
+  Download
 } from 'lucide-react';
-import { useInterviewsListQuery, useDeleteInterviewMutation } from '@/hooks/queries/useInterviewsQuery';
+import { useInterviewsListQuery, useUpdateInterviewMutation, useDeleteInterviewMutation } from '@/hooks/queries/useInterviewsQuery';
 import { DbInterview } from '@/types';
 import { InterviewStatusBadge } from '@/components/interviews/InterviewStatusBadge';
+import { InlineInterviewResultDropdown } from '@/components/interviews/InlineInterviewResultDropdown';
 import { CreateInterviewModal } from '@/components/interviews/CreateInterviewModal';
 import { EditInterviewModal } from '@/components/interviews/EditInterviewModal';
 import { InterviewDetailModal } from '@/components/interviews/InterviewDetailModal';
 import { InterviewWidgets } from '@/components/interviews/prep/InterviewWidgets';
 import { InterviewCalendar } from '@/components/interviews/calendar/InterviewCalendar';
+import { AddToCalendarButton } from '@/components/interviews/calendar/AddToCalendarButton';
 import { InterviewAnalyticsSection } from '@/components/interviews/InterviewAnalyticsSection';
 import { getNextInterviewCountdown } from '@/utils/interviewAnalyticsChartsUtils';
+import { exportAllInterviewsToIcs } from '@/utils/calendarIntegrationUtils';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { TableSkeleton } from '@/components/ui/Skeleton';
@@ -34,6 +38,7 @@ import { TableSkeleton } from '@/components/ui/Skeleton';
 export const InterviewsPage: React.FC = () => {
   // Queries & Mutations
   const { data: interviews = [], isLoading, isError, error, refetch } = useInterviewsListQuery();
+  const updateMutation = useUpdateInterviewMutation();
   const deleteMutation = useDeleteInterviewMutation();
 
   // View Mode: 'list' | 'calendar' | 'analytics'
@@ -161,23 +166,37 @@ export const InterviewsPage: React.FC = () => {
             </button>
           </div>
 
-          <Button
-            variant="primary"
-            size="md"
-            leftIcon={<Plus className="w-4 h-4" />}
-            onClick={() => setIsCreateOpen(true)}
-            className="shrink-0 focus-visible:ring-2 focus-visible:ring-blue-500"
-          >
-            Yeni Mülakat Planla
-          </Button>
+          {interviews.length > 0 && (
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="md"
+                leftIcon={<Download className="w-4 h-4 text-purple-400" />}
+                onClick={() => exportAllInterviewsToIcs(interviews)}
+                title="Tüm mülakatları .ics takvim dosyası olarak indir"
+                className="hidden sm:inline-flex"
+              >
+                Takvimi İndir (.ics)
+              </Button>
+              <Button
+                variant="primary"
+                size="md"
+                leftIcon={<Plus className="w-4 h-4" />}
+                onClick={() => setIsCreateOpen(true)}
+                className="shrink-0 focus-visible:ring-2 focus-visible:ring-blue-500"
+              >
+                Yeni Mülakat Planla
+              </Button>
+            </div>
+          )}
         </div>
       </div>
 
       {/* 2. Next Interview Countdown Banner (If upcoming interview exists) */}
       {countdownInfo.interview && (
-        <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-blue-950/80 border border-blue-500/30 text-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-lg animate-fadeIn">
+        <div className="p-4 rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950/80 to-blue-950/90 border border-blue-500/40 text-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl animate-fadeIn specular-border">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-blue-500/20 text-blue-300 border border-blue-500/30 shrink-0">
+            <div className="p-2.5 rounded-2xl bg-blue-500/20 text-blue-300 border border-blue-500/30 shrink-0">
               <Clock className="w-6 h-6 animate-pulse" />
             </div>
             <div>
@@ -193,10 +212,11 @@ export const InterviewsPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-3 shrink-0 flex-wrap">
             <div className="text-right">
               <span className="text-sm font-black text-amber-300">{countdownInfo.countdownText}</span>
             </div>
+            <AddToCalendarButton interview={countdownInfo.interview} variant="secondary" size="sm" />
             <Button
               variant="primary"
               size="sm"
@@ -210,7 +230,7 @@ export const InterviewsPage: React.FC = () => {
 
       {/* 3. KPI Summary Cards Bar */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 flex items-center gap-3">
+        <div className="p-4 rounded-2xl bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark flex items-center gap-3 specular-border">
           <div className="p-2.5 rounded-xl bg-blue-500/10 text-blue-500 border border-blue-500/20">
             <CalendarIcon className="w-5 h-5" />
           </div>
@@ -220,7 +240,7 @@ export const InterviewsPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 flex items-center gap-3">
+        <div className="p-4 rounded-2xl bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark flex items-center gap-3 specular-border">
           <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
             <Sparkles className="w-5 h-5" />
           </div>
@@ -230,7 +250,7 @@ export const InterviewsPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 flex items-center gap-3">
+        <div className="p-4 rounded-2xl bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark flex items-center gap-3 specular-border">
           <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
             <CheckCircle2 className="w-5 h-5" />
           </div>
@@ -240,7 +260,7 @@ export const InterviewsPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 flex items-center gap-3">
+        <div className="p-4 rounded-2xl bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark flex items-center gap-3 specular-border">
           <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-300 border border-amber-500/20">
             <Award className="w-5 h-5" />
           </div>
@@ -269,6 +289,47 @@ export const InterviewsPage: React.FC = () => {
         <>
           {/* Reusable Widgets (Upcoming & Monthly Pace) */}
           <InterviewWidgets interviews={interviews} onSelectInterview={(item) => setSelectedDetail(item)} />
+
+          {/* 1-Click Quick Result Filter Bar */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
+            <button
+              type="button"
+              onClick={() => setSelectedResult('all')}
+              className={`px-3.5 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all text-xs ${
+                selectedResult === 'all'
+                  ? 'bg-blue-600 text-white shadow-md shadow-blue-600/25 scale-[1.02]'
+                  : 'bg-white/80 dark:bg-[#0D1424]/75 text-slate-400 hover:text-foreground border border-slate-200/80 dark:border-slate-800/70'
+              }`}
+            >
+              Tümü ({interviews.length})
+            </button>
+            {[
+              { id: 'Pending', label: '⏳ Beklemede' },
+              { id: 'Passed', label: '✅ Başarılı / Olumlu' },
+              { id: 'Offer', label: '🏆 Teklif Alındı' },
+              { id: 'Failed', label: '❌ Olumsuz' },
+            ].map((item) => {
+              const isSelected = selectedResult === item.id;
+              const count = interviews.filter((i) => i.result === item.id).length;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => setSelectedResult(isSelected ? 'all' : item.id)}
+                  className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all flex items-center gap-1.5 text-xs ${
+                    isSelected
+                      ? 'bg-blue-600 text-white shadow-md shadow-blue-600/25 scale-[1.02]'
+                      : 'bg-white/80 dark:bg-[#0D1424]/75 text-slate-400 hover:text-foreground border border-slate-200/80 dark:border-slate-800/70'
+                  }`}
+                >
+                  <span>{item.label}</span>
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-white/20 text-white' : 'bg-slate-200/50 dark:bg-slate-800 text-slate-400'}`}>
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
 
           {/* Toolbar: Search, Filters & Sorting */}
           <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft dark:shadow-soft-dark space-y-4">
@@ -359,14 +420,16 @@ export const InterviewsPage: React.FC = () => {
                   Arama kriterlerinize uyan mülakat bulunamadı veya henüz bir mülakat planlamadınız.
                 </p>
               </div>
-              <Button
-                variant="primary"
-                size="sm"
-                leftIcon={<Plus className="w-4 h-4" />}
-                onClick={() => setIsCreateOpen(true)}
-              >
-                İlk Mülakatı Planla
-              </Button>
+              {interviews.length === 0 && (
+                <Button
+                  variant="primary"
+                  size="sm"
+                  leftIcon={<Plus className="w-4 h-4" />}
+                  onClick={() => setIsCreateOpen(true)}
+                >
+                  İlk Mülakatı Planla
+                </Button>
+              )}
             </div>
           ) : (
             <>
@@ -438,14 +501,18 @@ export const InterviewsPage: React.FC = () => {
                           )}
                         </td>
 
-                        {/* Result Badge */}
-                        <td className="py-3.5 px-4">
-                          <InterviewStatusBadge result={interview.result} />
+                        {/* Result Badge with 1-Click Dropdown */}
+                        <td className="py-3.5 px-4" onClick={(e) => e.stopPropagation()}>
+                          <InlineInterviewResultDropdown
+                            currentResult={interview.result}
+                            onSelectResult={(newRes) => updateMutation.mutate({ id: interview.id, payload: { result: newRes } })}
+                          />
                         </td>
 
                         {/* Actions */}
                         <td className="py-3.5 px-4 text-right" onClick={(e) => e.stopPropagation()}>
                           <div className="flex items-center justify-end gap-1">
+                            <AddToCalendarButton interview={interview} iconOnly />
                             <button
                               type="button"
                               onClick={() => setSelectedDetail(interview)}
@@ -496,7 +563,13 @@ export const InterviewsPage: React.FC = () => {
                           <p className="text-xs text-slate-400 truncate">{interview.company_name}</p>
                         </div>
                       </div>
-                      <InterviewStatusBadge result={interview.result} />
+                      <div className="flex items-center gap-1 shrink-0" onClick={(e) => e.stopPropagation()}>
+                        <AddToCalendarButton interview={interview} iconOnly />
+                        <InlineInterviewResultDropdown
+                          currentResult={interview.result}
+                          onSelectResult={(newRes) => updateMutation.mutate({ id: interview.id, payload: { result: newRes } })}
+                        />
+                      </div>
                     </div>
 
                     <div className="flex items-center justify-between text-xs pt-2 border-t border-slate-100 dark:border-slate-800 text-slate-400">

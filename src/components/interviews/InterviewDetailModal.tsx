@@ -4,6 +4,7 @@ import { Modal } from '@/components/ui/Modal';
 import { InterviewStatusBadge } from './InterviewStatusBadge';
 import { InterviewPrepSection } from './prep/InterviewPrepSection';
 import { InterviewEvaluationSection } from './prep/InterviewEvaluationSection';
+import { AddToCalendarButton } from './calendar/AddToCalendarButton';
 import { Button } from '@/components/ui/Button';
 import { 
   Calendar, 
@@ -102,6 +103,7 @@ export const InterviewDetailModal: React.FC<InterviewDetailModalProps> = ({
               </div>
 
               <div className="flex items-center gap-2 shrink-0">
+                <AddToCalendarButton interview={interview} variant="outline" size="sm" />
                 <InterviewStatusBadge result={interview.result} />
               </div>
             </div>

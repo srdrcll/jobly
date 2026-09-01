@@ -17,12 +17,12 @@ describe('StatusBadge Component', () => {
 
   it('applies correct class names for sizes', () => {
     const { rerender } = render(<StatusBadge status="offer" size="sm" />);
-    let badge = screen.getByText('Teklif Alındı').parentElement;
+    let badge = screen.getByText('Teklif').parentElement;
     expect(badge).toHaveClass('text-xs');
     expect(badge).toHaveClass('px-2.5');
 
     rerender(<StatusBadge status="offer" size="lg" />);
-    badge = screen.getByText('Teklif Alındı').parentElement;
+    badge = screen.getByText('Teklif').parentElement;
     expect(badge).toHaveClass('text-sm');
     expect(badge).toHaveClass('px-3.5');
   });

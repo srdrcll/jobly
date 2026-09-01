@@ -9,23 +9,24 @@ describe('UpcomingInterviews Component', () => {
     render(<UpcomingInterviews interviews={[]} />);
 
     expect(screen.getByText('Planlanmış Mülakat Bulunmuyor')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /başvuruları incele/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /başvuruları/i })).toBeInTheDocument();
   });
 
   it('renders list of interviews when data is provided', () => {
     const mockInterviews: InterviewItemData[] = [
       {
         id: 'int-1',
+        applicationId: 'app-1',
         companyName: 'Apex Sistemleri',
         position: 'Senior SWE',
-        stage: 'Teknik Mülakat',
-        type: 'Online',
-        date: 'Bugün, 14:30',
-        time: '14:00',
-        durationMinutes: 45,
-        daysLeft: 5,
-        isToday: false,
+        location: 'Remote',
+        workType: 'Remote',
+        interviewType: 'Teknik Mülakat',
+        dateFormatted: 'Bugün, 14:30',
+        timeFormatted: '14:30',
         isWithin24Hours: true,
+        status: 'interview',
+        rawDate: new Date().toISOString(),
       },
     ];
 

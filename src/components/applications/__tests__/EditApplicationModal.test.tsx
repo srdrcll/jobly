@@ -28,7 +28,7 @@ describe('EditApplicationModal Component', () => {
       />
     );
 
-    expect(screen.getByRole('heading', { name: /başvuruyu düzenle/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /başvuru.*düzenle/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/şirket adı \*/i)).toHaveValue(sampleApp.company_name);
     expect(screen.getByLabelText(/pozisyon ünvanı \*/i)).toHaveValue(sampleApp.position);
   });

@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes, useRef } from 'react';
+import React, { InputHTMLAttributes, useRef, useEffect } from 'react';
 import { Search, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -11,6 +11,18 @@ export const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
   ({ value, onChange, onClear, showKbdShortcut = true, className, placeholder = "Ara... (örn. Teknoloji A.Ş., React Developer)", ...props }, ref) => {
     const internalRef = useRef<HTMLInputElement>(null);
     const inputRef = (ref as React.RefObject<HTMLInputElement>) || internalRef;
+
+    useEffect(() => {
+      if (!showKbdShortcut) return;
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          inputRef.current?.focus();
+        }
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [showKbdShortcut, inputRef]);
 
     const handleClear = () => {
       if (onClear) {

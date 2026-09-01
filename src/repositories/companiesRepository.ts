@@ -1,14 +1,34 @@
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured, withSupabaseTimeout } from '@/lib/supabase';
 import { DbCompany, DbCompanyInsert, DbCompanyUpdate } from '@/types';
-import { handleDatabaseError } from '@/lib/errors';
 import { getUserStorageKey } from '@/utils/userStorageUtils';
 
 const BASE_STORAGE_KEY = 'kp_companies_fallback_v1';
 
 function getLocalCompanies(): DbCompany[] {
   try {
-    const raw = localStorage.getItem(getUserStorageKey(BASE_STORAGE_KEY));
-    return raw ? JSON.parse(raw) : [];
+    const userKey = getUserStorageKey(BASE_STORAGE_KEY);
+    const raw = localStorage.getItem(userKey);
+    if (raw) return JSON.parse(raw);
+
+    const anonRaw = localStorage.getItem(`${BASE_STORAGE_KEY}_anonymous`);
+    if (anonRaw) {
+      const parsed = JSON.parse(anonRaw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        localStorage.setItem(userKey, anonRaw);
+        return parsed;
+      }
+    }
+
+    const legacyRaw = localStorage.getItem(BASE_STORAGE_KEY);
+    if (legacyRaw) {
+      const parsed = JSON.parse(legacyRaw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        localStorage.setItem(userKey, legacyRaw);
+        return parsed;
+      }
+    }
+
+    return [];
   } catch {
     return [];
   }
@@ -24,12 +44,20 @@ function saveLocalCompanies(items: DbCompany[]) {
 
 export const companiesRepository = {
   async getAll(): Promise<DbCompany[]> {
-    try {
-      const { data, error } = await supabase
-        .from('companies')
-        .select('*')
-        .order('created_at', { ascending: false });
+    if (!isSupabaseConfigured()) {
+      return getLocalCompanies();
+    }
 
+    try {
+      const response = await withSupabaseTimeout(
+        supabase
+          .from('companies')
+          .select('*')
+          .order('created_at', { ascending: false }),
+        2000
+      );
+
+      const { data, error } = response;
       if (error) {
         return getLocalCompanies();
       }
@@ -53,13 +81,22 @@ export const companiesRepository = {
   },
 
   async getById(id: string): Promise<DbCompany | null> {
-    try {
-      const { data, error } = await supabase
-        .from('companies')
-        .select('*')
-        .eq('id', id)
-        .single();
+    if (!isSupabaseConfigured()) {
+      const local = getLocalCompanies();
+      return local.find((c) => c.id === id) || null;
+    }
 
+    try {
+      const response = await withSupabaseTimeout(
+        supabase
+          .from('companies')
+          .select('*')
+          .eq('id', id)
+          .single(),
+        2000
+      );
+
+      const { data, error } = response;
       if (error) {
         const local = getLocalCompanies();
         return local.find((c) => c.id === id) || null;
@@ -94,13 +131,23 @@ export const companiesRepository = {
       updated_at: new Date().toISOString(),
     };
 
-    try {
-      const { data, error } = await supabase
-        .from('companies')
-        .insert(payload)
-        .select()
-        .single();
+    if (!isSupabaseConfigured()) {
+      local.unshift(newItem);
+      saveLocalCompanies(local);
+      return newItem;
+    }
 
+    try {
+      const response = await withSupabaseTimeout(
+        supabase
+          .from('companies')
+          .insert(payload)
+          .select()
+          .single(),
+        2500
+      );
+
+      const { data, error } = response;
       if (error) {
         local.unshift(newItem);
         saveLocalCompanies(local);
@@ -122,14 +169,27 @@ export const companiesRepository = {
     const local = getLocalCompanies();
     const idx = local.findIndex((c) => c.id === id);
 
-    try {
-      const { data, error } = await supabase
-        .from('companies')
-        .update({ ...payload, updated_at: new Date().toISOString() })
-        .eq('id', id)
-        .select()
-        .single();
+    if (!isSupabaseConfigured()) {
+      if (idx !== -1) {
+        local[idx] = { ...local[idx], ...payload, updated_at: new Date().toISOString() };
+        saveLocalCompanies(local);
+        return local[idx];
+      }
+      throw new Error('Şirket kaydı bulunamadı.');
+    }
 
+    try {
+      const response = await withSupabaseTimeout(
+        supabase
+          .from('companies')
+          .update({ ...payload, updated_at: new Date().toISOString() })
+          .eq('id', id)
+          .select()
+          .single(),
+        2500
+      );
+
+      const { data, error } = response;
       if (error) {
         if (idx !== -1) {
           local[idx] = { ...local[idx], ...payload, updated_at: new Date().toISOString() };
@@ -154,7 +214,7 @@ export const companiesRepository = {
 
     if (idx !== -1) {
       local[idx] = { ...local[idx], ...payload, updated_at: new Date().toISOString() };
-      saveLocalCompanies(local);
+      saveLocalApplicationsWrapper(local);
       return local[idx];
     }
 
@@ -165,13 +225,22 @@ export const companiesRepository = {
     const local = getLocalCompanies();
     saveLocalCompanies(local.filter((c) => c.id !== id));
 
+    if (!isSupabaseConfigured()) return;
+
     try {
-      await supabase
-        .from('companies')
-        .delete()
-        .eq('id', id);
+      await withSupabaseTimeout(
+        supabase
+          .from('companies')
+          .delete()
+          .eq('id', id),
+        2500
+      );
     } catch {
       // Handled by local deletion fallback
     }
   },
 };
+
+function saveLocalApplicationsWrapper(items: DbCompany[]) {
+  saveLocalCompanies(items);
+}

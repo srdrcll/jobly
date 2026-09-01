@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   Briefcase, 
   Clock, 
@@ -23,6 +24,7 @@ interface KpiCardsGridProps {
 }
 
 export const KpiCardsGrid: React.FC<KpiCardsGridProps> = ({ onOpenNewModal }) => {
+  const navigate = useNavigate();
   const { data: applications = [], isLoading, isError, error, refetch } = useApplicationsListQuery();
 
   // Memoize metric calculations to prevent re-computation on unrelated re-renders
@@ -31,7 +33,7 @@ export const KpiCardsGrid: React.FC<KpiCardsGridProps> = ({ onOpenNewModal }) =>
   // 1. Loading Skeleton State
   if (isLoading) {
     return (
-      <section aria-label="Yükleniyor..." className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+      <section aria-label="Yükleniyor..." className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-6 gap-4">
         <CardSkeleton />
         <CardSkeleton />
         <CardSkeleton />
@@ -98,8 +100,8 @@ export const KpiCardsGrid: React.FC<KpiCardsGridProps> = ({ onOpenNewModal }) =>
         </div>
       )}
 
-      {/* Responsive 6 KPI Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+      {/* Responsive 6 KPI Cards Grid with 1-Click Direct Drilldown Navigation */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-6 gap-4">
         <KpiCard
           title="Toplam Başvuru"
           value={metrics.total}
@@ -108,6 +110,7 @@ export const KpiCardsGrid: React.FC<KpiCardsGridProps> = ({ onOpenNewModal }) =>
           helperText="Tüm zamanların kayıtlı başvuruları"
           icon={Briefcase}
           iconBgClass="bg-indigo-500/10 text-indigo-500 border border-indigo-500/20"
+          onClick={() => navigate('/applications')}
         />
 
         <KpiCard
@@ -118,6 +121,7 @@ export const KpiCardsGrid: React.FC<KpiCardsGridProps> = ({ onOpenNewModal }) =>
           helperText="Devam eden başvuru süreçleriniz"
           icon={Clock}
           iconBgClass="bg-purple-500/10 text-purple-400 border border-purple-500/20"
+          onClick={() => navigate('/applications?status=applied')}
         />
 
         <KpiCard
@@ -128,6 +132,7 @@ export const KpiCardsGrid: React.FC<KpiCardsGridProps> = ({ onOpenNewModal }) =>
           helperText="Teknik & İK randevu ve vakaları"
           icon={Users}
           iconBgClass="bg-amber-500/10 text-amber-500 border border-amber-500/20"
+          onClick={() => navigate('/applications?status=interview')}
         />
 
         <KpiCard
@@ -138,6 +143,7 @@ export const KpiCardsGrid: React.FC<KpiCardsGridProps> = ({ onOpenNewModal }) =>
           helperText="Değerlendirilen iş teklifleri"
           icon={PartyPopper}
           iconBgClass="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+          onClick={() => navigate('/applications?status=offer')}
         />
 
         <KpiCard
@@ -148,6 +154,7 @@ export const KpiCardsGrid: React.FC<KpiCardsGridProps> = ({ onOpenNewModal }) =>
           helperText="Sonuçlanan olumsuz dönüşler"
           icon={XCircle}
           iconBgClass="bg-rose-500/10 text-rose-400 border border-rose-500/20"
+          onClick={() => navigate('/applications?status=rejected')}
         />
 
         <KpiCard
@@ -158,6 +165,7 @@ export const KpiCardsGrid: React.FC<KpiCardsGridProps> = ({ onOpenNewModal }) =>
           helperText="Mülakat & teklif dönüşüm yüzdesi"
           icon={TrendingUp}
           iconBgClass="bg-teal-500/10 text-teal-400 border border-teal-500/20"
+          onClick={() => navigate('/applications')}
         />
       </div>
     </section>

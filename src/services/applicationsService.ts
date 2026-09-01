@@ -32,6 +32,7 @@ export const applicationsService = {
       job_url: validated.job_url ?? null,
       contact_name: validated.contact_name ?? null,
       contact_email: validated.contact_email ?? null,
+      source: validated.source ?? null,
       notes: validated.notes ?? null,
     });
   },

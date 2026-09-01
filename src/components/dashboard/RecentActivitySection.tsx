@@ -76,7 +76,7 @@ export const RecentActivitySection: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Left Column: Recent Activity Feed (3/5 width) */}
-        <article className="lg:col-span-3 bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 shadow-soft dark:shadow-soft-dark space-y-4">
+        <article className="lg:col-span-3 bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 rounded-3xl p-6 shadow-soft dark:shadow-soft-dark space-y-4 specular-border hover:border-slate-300 dark:hover:border-slate-700/80 transition-all">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <div className="p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400" aria-hidden="true">

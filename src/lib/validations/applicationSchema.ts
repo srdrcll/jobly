@@ -57,6 +57,7 @@ export const applicationSchema = z.object({
     .nullable()
     .optional(),
   priority: priorityEnum.default('Orta').optional(),
+  source: z.string().max(80, 'Başvuru kaynağı en fazla 80 karakter olabilir.').nullable().optional(),
   notes: z.string().max(1000, 'Notlar en fazla 1000 karakter olabilir.').nullable().optional(),
   notes_count: z.number().int().nonnegative().default(0),
 });

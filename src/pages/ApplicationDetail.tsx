@@ -32,6 +32,7 @@ import {
 } from '@/hooks/queries/useApplicationsQuery';
 import { ApplicationStatus } from '@/types';
 import { formatDate, formatDateTime, getInitials } from '@/lib/utils';
+import { getPlatformStyle } from '@/utils/platformUtils';
 
 export const ApplicationDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -188,6 +189,15 @@ export const ApplicationDetailPage: React.FC = () => {
                     <MapPin className="w-3.5 h-3.5 text-slate-500" aria-hidden="true" /> {application.location}
                   </span>
                 )}
+                {application.source ? (
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold border ${getPlatformStyle(application.source)?.bg} ${getPlatformStyle(application.source)?.text} ${getPlatformStyle(application.source)?.border}`}>
+                    {getPlatformStyle(application.source)?.label}
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-slate-100 dark:bg-slate-800/60 text-slate-400 border-slate-200 dark:border-slate-700/50">
+                    Belirtilmedi
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -240,7 +250,7 @@ export const ApplicationDetailPage: React.FC = () => {
               <User className="w-4 h-4 text-blue-500" aria-hidden="true" /> İletişim & İlan Detayları
             </h3>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
               <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/60 dark:border-slate-800/60 space-y-1">
                 <span className="text-slate-400 font-semibold block">İletişim Kişisi</span>
                 <p className="font-bold text-foreground">{contactName ?? 'Belirtilmedi'}</p>
@@ -255,6 +265,11 @@ export const ApplicationDetailPage: React.FC = () => {
                 ) : (
                   <p className="text-slate-500">—</p>
                 )}
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/60 dark:border-slate-800/60 space-y-1">
+                <span className="text-slate-400 font-semibold block">Başvuru Kaynağı</span>
+                <p className="font-bold text-foreground">{application.source ?? 'Belirtilmedi'}</p>
               </div>
             </div>
 

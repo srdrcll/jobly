@@ -34,7 +34,11 @@ export const CompanyCrmWidgets: React.FC<CompanyCrmWidgetsProps> = ({ companies 
           </span>
         </div>
 
-        {attentionCompanies.length === 0 ? (
+        {companies.length === 0 ? (
+          <div className="p-4 rounded-xl border border-dashed border-slate-300 dark:border-slate-800 text-center text-xs text-slate-400">
+            Henüz kayıtlı şirket bulunmuyor.
+          </div>
+        ) : attentionCompanies.length === 0 ? (
           <div className="p-4 rounded-xl border border-dashed border-slate-300 dark:border-slate-800 text-center text-xs text-slate-400">
             Tüm hedef şirketleriniz düzenli takip altında! 🎉
           </div>
