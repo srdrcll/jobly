@@ -4,12 +4,7 @@ import {
   MAIN_NAV_ITEMS, 
   SECONDARY_NAV_ITEMS
 } from '@/constants/navigation';
-import { 
-  Compass, 
-  ChevronLeft, 
-  ChevronRight, 
-  LogOut
-} from 'lucide-react';
+import { LogOut } from 'lucide-react';
 import { cn, getInitials } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
 import { useApplicationsListQuery } from '@/hooks/queries/useApplicationsQuery';
@@ -19,13 +14,12 @@ import { JoblyLogo } from '@/components/common/JoblyLogo';
 
 interface SidebarProps {
   isCollapsed: boolean;
-  onToggleCollapse: () => void;
+  onToggleCollapse?: () => void;
   onMobileClose?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   isCollapsed,
-  onToggleCollapse,
   onMobileClose,
 }) => {
   const { user, logout } = useAuth();
@@ -53,20 +47,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
       )}
       aria-label="Ana Gezinme Menüsü"
     >
-      {/* Floating Desktop Collapse/Expand Toggle Button on Sidebar Edge */}
-      <button
-        onClick={onToggleCollapse}
-        className="hidden md:flex absolute -right-3.5 top-6 z-40 w-7 h-7 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-md items-center justify-center text-slate-500 hover:text-blue-500 hover:scale-110 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500/40"
-        title={isCollapsed ? 'Menüyü Genişlet' : 'Menüyü Daralt'}
-        aria-label={isCollapsed ? 'Menüyü Genişlet' : 'Menüyü Daralt'}
-      >
-        {isCollapsed ? (
-          <ChevronRight className="w-4 h-4" aria-hidden="true" />
-        ) : (
-          <ChevronLeft className="w-4 h-4" aria-hidden="true" />
-        )}
-      </button>
-
       {/* Top Header & Logo */}
       <div className="flex flex-col flex-1 min-h-0">
         <div className={cn(
