@@ -16,13 +16,13 @@ export const isSupabaseConfigured = (): boolean => {
   return Boolean(
     url &&
     key &&
+    url.startsWith('https://') &&
     !url.includes('your-project-id') &&
     !url.includes('example.com') &&
     !url.includes('placeholder') &&
-    !key.includes('your-actual-anon-key-here') &&
+    !key.includes('your-actual-anon-key') &&
     !key.includes('placeholder') &&
-    !key.includes('anon-key') &&
-    url.startsWith('https://')
+    key.length >= 20
   );
 };
 

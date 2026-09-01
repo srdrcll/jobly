@@ -1,8 +1,9 @@
 -- ==============================================================================
--- KARİYER PUSULASI (CAREER COMPASS) - PRODUCTION DATABASE SCHEMA (POSTGRESQL / SUPABASE)
+-- JOBLY - PRODUCTION DATABASE SCHEMA (POSTGRESQL / SUPABASE)
 -- ==============================================================================
 -- Bu SQL dosyasını Supabase Dashboard -> SQL Editor alanına yapıştırıp "Run" butonuna basarak
--- veritabanı tablolarını, indeksleri, RLS güvenlik politikalarını ve otomatik tetikleyicileri (triggers) tek seferde oluşturabilirsiniz.
+-- tüm tabloları, indeksleri, RLS güvenlik politikalarını ve otomatik tetikleyicileri (triggers)
+-- hatasız bir şekilde tek seferde oluşturabilirsiniz.
 -- ==============================================================================
 
 -- 0. Gerekli Eklentileri Etkinleştir
@@ -36,20 +37,24 @@ CREATE TABLE IF NOT EXISTS public.profiles (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+DROP TRIGGER IF EXISTS set_profiles_updated_at ON public.profiles;
 CREATE TRIGGER set_profiles_updated_at
 BEFORE UPDATE ON public.profiles
 FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
 
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Kullanıcılar kendi profilini görüntüleyebilir" ON public.profiles;
 CREATE POLICY "Kullanıcılar kendi profilini görüntüleyebilir"
   ON public.profiles FOR SELECT
   USING (auth.uid() = id);
 
+DROP POLICY IF EXISTS "Kullanıcılar kendi profilini oluşturabilir" ON public.profiles;
 CREATE POLICY "Kullanıcılar kendi profilini oluşturabilir"
   ON public.profiles FOR INSERT
   WITH CHECK (auth.uid() = id);
 
+DROP POLICY IF EXISTS "Kullanıcılar kendi profilini güncelleyebilir" ON public.profiles;
 CREATE POLICY "Kullanıcılar kendi profilini güncelleyebilir"
   ON public.profiles FOR UPDATE
   USING (auth.uid() = id)
@@ -99,6 +104,7 @@ CREATE TABLE IF NOT EXISTS public.companies (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+DROP TRIGGER IF EXISTS set_companies_updated_at ON public.companies;
 CREATE TRIGGER set_companies_updated_at
 BEFORE UPDATE ON public.companies
 FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
@@ -109,6 +115,7 @@ CREATE INDEX IF NOT EXISTS idx_companies_favorite ON public.companies(is_favorit
 
 ALTER TABLE public.companies ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Kullanıcılar kendi şirketlerini yönetebilir" ON public.companies;
 CREATE POLICY "Kullanıcılar kendi şirketlerini yönetebilir"
   ON public.companies FOR ALL
   USING (auth.uid() = user_id)
@@ -140,6 +147,7 @@ CREATE TABLE IF NOT EXISTS public.applications (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+DROP TRIGGER IF EXISTS set_applications_updated_at ON public.applications;
 CREATE TRIGGER set_applications_updated_at
 BEFORE UPDATE ON public.applications
 FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
@@ -151,6 +159,7 @@ CREATE INDEX IF NOT EXISTS idx_applications_created_at ON public.applications(cr
 
 ALTER TABLE public.applications ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Kullanıcılar kendi başvurularını yönetebilir" ON public.applications;
 CREATE POLICY "Kullanıcılar kendi başvurularını yönetebilir"
   ON public.applications FOR ALL
   USING (auth.uid() = user_id)
@@ -182,6 +191,7 @@ CREATE TABLE IF NOT EXISTS public.interviews (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+DROP TRIGGER IF EXISTS set_interviews_updated_at ON public.interviews;
 CREATE TRIGGER set_interviews_updated_at
 BEFORE UPDATE ON public.interviews
 FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
@@ -192,6 +202,7 @@ CREATE INDEX IF NOT EXISTS idx_interviews_result ON public.interviews(result);
 
 ALTER TABLE public.interviews ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Kullanıcılar kendi mülakatlarını yönetebilir" ON public.interviews;
 CREATE POLICY "Kullanıcılar kendi mülakatlarını yönetebilir"
   ON public.interviews FOR ALL
   USING (auth.uid() = user_id)
@@ -212,6 +223,7 @@ CREATE TABLE IF NOT EXISTS public.documents (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+DROP TRIGGER IF EXISTS set_documents_updated_at ON public.documents;
 CREATE TRIGGER set_documents_updated_at
 BEFORE UPDATE ON public.documents
 FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
@@ -220,6 +232,7 @@ CREATE INDEX IF NOT EXISTS idx_documents_user_id ON public.documents(user_id);
 
 ALTER TABLE public.documents ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Kullanıcılar kendi belgelerini yönetebilir" ON public.documents;
 CREATE POLICY "Kullanıcılar kendi belgelerini yönetebilir"
   ON public.documents FOR ALL
   USING (auth.uid() = user_id)
@@ -243,6 +256,7 @@ CREATE INDEX IF NOT EXISTS idx_reminders_due_date ON public.reminders(due_date A
 
 ALTER TABLE public.reminders ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Kullanıcılar kendi hatırlatıcılarını yönetebilir" ON public.reminders;
 CREATE POLICY "Kullanıcılar kendi hatırlatıcılarını yönetebilir"
   ON public.reminders FOR ALL
   USING (auth.uid() = user_id)
@@ -261,6 +275,7 @@ CREATE TABLE IF NOT EXISTS public.templates (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+DROP TRIGGER IF EXISTS set_templates_updated_at ON public.templates;
 CREATE TRIGGER set_templates_updated_at
 BEFORE UPDATE ON public.templates
 FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
@@ -269,6 +284,7 @@ CREATE INDEX IF NOT EXISTS idx_templates_user_id ON public.templates(user_id);
 
 ALTER TABLE public.templates ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Kullanıcılar kendi şablonlarını yönetebilir" ON public.templates;
 CREATE POLICY "Kullanıcılar kendi şablonlarını yönetebilir"
   ON public.templates FOR ALL
   USING (auth.uid() = user_id)
