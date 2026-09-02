@@ -26,6 +26,7 @@ import {
 import { useCreateApplicationMutation } from '@/hooks/queries/useApplicationsQuery';
 import { STATUS_CONFIG } from '@/constants/status';
 import { detectPlatformFromUrl } from '@/utils/platformUtils';
+import { parseJobUrl } from '@/utils/jobUrlParser';
 import { useToast } from '@/hooks/useToast';
 
 /** Default values extracted as a constant to prevent duplication. */
@@ -74,15 +75,25 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
   });
 
   const watchedJobUrl = watch('job_url');
+  const watchedCompany = watch('company_name');
+  const watchedPosition = watch('position');
+  const watchedSource = watch('source');
 
   useEffect(() => {
-    if (watchedJobUrl) {
-      const detected = detectPlatformFromUrl(watchedJobUrl);
-      if (detected) {
-        setValue('source', detected, { shouldDirty: true });
+    if (watchedJobUrl && watchedJobUrl.trim().length > 8) {
+      const parsed = parseJobUrl(watchedJobUrl);
+
+      if (parsed.source && (!watchedSource || !watchedSource.trim())) {
+        setValue('source', parsed.source, { shouldDirty: true, shouldValidate: true });
+      }
+      if (parsed.company_name && (!watchedCompany || !watchedCompany.trim())) {
+        setValue('company_name', parsed.company_name, { shouldDirty: true, shouldValidate: true });
+      }
+      if (parsed.position && (!watchedPosition || !watchedPosition.trim())) {
+        setValue('position', parsed.position, { shouldDirty: true, shouldValidate: true });
       }
     }
-  }, [watchedJobUrl, setValue]);
+  }, [watchedJobUrl, watchedCompany, watchedPosition, watchedSource, setValue]);
 
   // Reset form and warning state when modal opens/closes
   useEffect(() => {
