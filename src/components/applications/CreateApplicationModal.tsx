@@ -202,6 +202,32 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
       }
     >
       <form id="create-application-form" onSubmit={handleSubmit(onSubmit, onFormError)} className="space-y-5" noValidate>
+        {/* Top Quick Auto-Fill Banner */}
+        <div className="p-3.5 rounded-2xl bg-gradient-to-br from-blue-500/10 via-cyan-500/5 to-purple-500/10 border border-blue-500/20 space-y-2">
+          <div className="flex items-center justify-between">
+            <label htmlFor="create-job-url-top" className="text-xs font-bold text-blue-500 dark:text-blue-400 flex items-center gap-1.5">
+              <Sparkles className="w-4 h-4 text-cyan-400" />
+              ⚡ İlan Linkini Yapıştır (Otomatik Doldur)
+            </label>
+          </div>
+          <div className="relative flex items-center">
+            <div className="absolute left-3.5 text-slate-500 pointer-events-none" aria-hidden="true">
+              <Globe className="w-4 h-4 text-blue-500" />
+            </div>
+            <input
+              id="create-job-url-top"
+              type="text"
+              inputMode="url"
+              placeholder="https://www.linkedin.com/jobs/view/..."
+              className="w-full h-10 pl-10 pr-3.5 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-foreground placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+              {...register('job_url')}
+            />
+          </div>
+          <p className="text-[11px] text-slate-400">
+            LinkedIn, Kariyer.net, Youthall, Indeed ilan linkini buraya yapıştırdığınızda şirket, pozisyon ve platform bilgisi otomatik doldurulur.
+          </p>
+        </div>
+
         {/* Main Required & Core Fields */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
           <Input
@@ -331,16 +357,6 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
               leftIcon={<Mail className="w-4 h-4" aria-hidden="true" />}
               error={errors.contact_email?.message}
               {...register('contact_email')}
-            />
-
-            <Input
-              label="İlan Linki (URL)"
-              type="text"
-              inputMode="url"
-              placeholder="https://linkedin.com/jobs/..."
-              leftIcon={<Globe className="w-4 h-4" aria-hidden="true" />}
-              error={errors.job_url?.message}
-              {...register('job_url')}
             />
 
             {/* Notes Area */}

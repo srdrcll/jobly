@@ -6,20 +6,21 @@ export interface ParsedJobUrl {
   source?: string;
 }
 
-/**
- * Capitalizes title words cleanly (e.g., "frontend-developer" -> "Frontend Developer")
- */
 function formatSlugToText(slug: string): string {
   if (!slug) return '';
-  return slug
+  let text = slug;
+  try {
+    text = decodeURIComponent(slug);
+  } catch {
+    // fallback
+  }
+  return text
     .replace(/[-_]+/g, ' ')
+    .replace(/\s+/g, ' ')
     .replace(/\b\w/g, (char) => char.toUpperCase())
     .trim();
 }
 
-/**
- * Extracts company name and position title from common job board URLs.
- */
 export function parseJobUrl(url: string | null | undefined): ParsedJobUrl {
   if (!url || !url.trim()) return {};
 
@@ -31,45 +32,35 @@ export function parseJobUrl(url: string | null | undefined): ParsedJobUrl {
     const parsed = new URL(cleanUrl.startsWith('http') ? cleanUrl : `https://${cleanUrl}`);
     const pathname = parsed.pathname;
     const hostname = parsed.hostname.toLowerCase();
+    const searchParams = parsed.searchParams;
 
-    // 1. LinkedIn Jobs: /jobs/view/senior-frontend-developer-at-trendyol-12345/ or /jobs/view/12345/
+    // 1. LinkedIn Jobs
     if (hostname.includes('linkedin.com')) {
-      const match = pathname.match(/\/jobs\/view\/([^/]+)/);
+      result.source = 'LinkedIn';
+
+      const match = pathname.match(/\/jobs\/(?:view|search|collections)\/([^/]+)/);
       if (match && match[1]) {
-        const rawSlug = match[1].replace(/-\d+$/, ''); // Remove trailing ID numbers
+        let rawSlug = match[1].replace(/-\d{6,}$/, '').replace(/\d{6,}$/, '');
         if (rawSlug.includes('-at-')) {
-          const [posPart, compPart] = rawSlug.split('-at-');
-          if (posPart) result.position = formatSlugToText(posPart);
-          if (compPart) result.company_name = formatSlugToText(compPart);
-        } else if (isNaN(Number(rawSlug))) {
+          const parts = rawSlug.split('-at-');
+          if (parts[0]) result.position = formatSlugToText(parts[0]);
+          if (parts[1]) result.company_name = formatSlugToText(parts[1]);
+        } else if (rawSlug && isNaN(Number(rawSlug)) && rawSlug.length > 2) {
           result.position = formatSlugToText(rawSlug);
         }
       }
-    }
 
-    // 2. Lever Jobs: jobs.lever.co/company-name/job-id OR company.lever.co/job-id
-    else if (hostname.includes('lever.co')) {
-      const parts = pathname.split('/').filter(Boolean);
-      if (hostname === 'jobs.lever.co' && parts.length >= 1) {
-        result.company_name = formatSlugToText(parts[0]);
-      } else {
-        const sub = hostname.replace('.lever.co', '');
-        if (sub && sub !== 'jobs') {
-          result.company_name = formatSlugToText(sub);
-        }
+      if (searchParams.has('keywords') && !result.position) {
+        result.position = formatSlugToText(searchParams.get('keywords') || '');
+      }
+      if (searchParams.has('company') && !result.company_name) {
+        result.company_name = formatSlugToText(searchParams.get('company') || '');
       }
     }
 
-    // 3. Greenhouse Jobs: boards.greenhouse.io/company-name/jobs/12345
-    else if (hostname.includes('greenhouse.io')) {
-      const parts = pathname.split('/').filter(Boolean);
-      if (parts.length >= 1) {
-        result.company_name = formatSlugToText(parts[0]);
-      }
-    }
-
-    // 4. Kariyer.net: /is-ilani/trendyol-senior-frontend-developer-391028
+    // 2. Kariyer.net
     else if (hostname.includes('kariyer.net')) {
+      result.source = 'Kariyer.net';
       const match = pathname.match(/\/is-ilani\/([^/]+)/);
       if (match && match[1]) {
         const rawSlug = match[1].replace(/-\d+$/, '');
@@ -77,33 +68,49 @@ export function parseJobUrl(url: string | null | undefined): ParsedJobUrl {
         if (words.length > 1) {
           result.company_name = formatSlugToText(words[0]);
           result.position = formatSlugToText(words.slice(1).join(' '));
-        } else {
+        } else if (rawSlug) {
           result.position = formatSlugToText(rawSlug);
         }
       }
     }
 
-    // 5. Youthall: /trendyol/frontend-developer-internship/
+    // 3. Youthall
     else if (hostname.includes('youthall.com')) {
+      result.source = 'Youthall';
       const parts = pathname.split('/').filter(Boolean);
-      if (parts.length >= 1) {
+      if (parts.length >= 1) result.company_name = formatSlugToText(parts[0]);
+      if (parts.length >= 2) result.position = formatSlugToText(parts[1]);
+    }
+
+    // 4. Lever
+    else if (hostname.includes('lever.co')) {
+      result.source = 'Lever';
+      const parts = pathname.split('/').filter(Boolean);
+      if (hostname === 'jobs.lever.co' && parts.length >= 1) {
         result.company_name = formatSlugToText(parts[0]);
-      }
-      if (parts.length >= 2) {
-        result.position = formatSlugToText(parts[1]);
+        if (parts.length >= 2) result.position = formatSlugToText(parts[1]);
+      } else {
+        const sub = hostname.replace('.lever.co', '');
+        if (sub && sub !== 'jobs') result.company_name = formatSlugToText(sub);
+        if (parts.length >= 1) result.position = formatSlugToText(parts[0]);
       }
     }
 
-    // 6. Indeed: /viewjob?jk=123&q=Frontend+Developer
+    // 5. Greenhouse
+    else if (hostname.includes('greenhouse.io')) {
+      result.source = 'Greenhouse';
+      const parts = pathname.split('/').filter(Boolean);
+      if (parts.length >= 1) result.company_name = formatSlugToText(parts[0]);
+    }
+
+    // 6. Indeed
     else if (hostname.includes('indeed.com')) {
-      const searchParams = parsed.searchParams;
+      result.source = 'Indeed';
       const queryPos = searchParams.get('q');
-      if (queryPos) {
-        result.position = formatSlugToText(queryPos);
-      }
+      if (queryPos) result.position = formatSlugToText(queryPos);
     }
   } catch {
-    // Ignore invalid URL format errors
+    // Ignore invalid URL
   }
 
   return result;
