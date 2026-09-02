@@ -22,7 +22,6 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { StatusBadge } from '@/components/ui/StatusBadge';
-import { PriorityBadge, PriorityLevel } from '@/components/common/PriorityBadge';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { ConfirmationDialog } from '@/components/ui/ConfirmationDialog';
 import { EditApplicationModal } from '@/components/applications/EditApplicationModal';
@@ -204,7 +203,12 @@ export const ApplicationDetailPage: React.FC = () => {
 
           <div className="flex flex-wrap items-center gap-2.5 self-start">
             <StatusBadge status={application.status as ApplicationStatus} size="lg" />
-            <PriorityBadge priority={priorityDisplay} />
+            {application.source && (
+              <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-colors shadow-xs ${getPlatformStyle(application.source)?.bg} ${getPlatformStyle(application.source)?.text} ${getPlatformStyle(application.source)?.border}`}>
+                <Globe className="w-3.5 h-3.5" aria-hidden="true" />
+                {getPlatformStyle(application.source)?.label}
+              </span>
+            )}
           </div>
         </div>
 

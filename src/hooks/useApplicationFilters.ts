@@ -1,39 +1,26 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { DbApplication, ApplicationStatus } from '@/types';
-import { PriorityLevel } from '@/components/common/PriorityBadge';
 
 export type SortOption = 
   | 'date-desc' 
   | 'date-asc' 
   | 'company-asc' 
-  | 'company-desc' 
-  | 'priority-desc';
+  | 'company-desc';
 
 export interface ApplicationFilterState {
   statuses: ApplicationStatus[];
-  priorities: PriorityLevel[];
+  sources: string[];
   workModels: ('Remote' | 'Hybrid' | 'On-site')[];
   sortBy: SortOption;
 }
 
-const STORAGE_KEY = 'kp_application_filters_v1';
+const STORAGE_KEY = 'kp_application_filters_v2';
 
 const INITIAL_FILTER_STATE: ApplicationFilterState = {
   statuses: [],
-  priorities: [],
+  sources: [],
   workModels: [],
   sortBy: 'date-desc',
-};
-
-const PRIORITY_RANK: Record<string, number> = {
-  Kritik: 4,
-  Critical: 4,
-  Yüksek: 3,
-  High: 3,
-  Orta: 2,
-  Medium: 2,
-  Düşük: 1,
-  Low: 1,
 };
 
 function getStoredFilters(): ApplicationFilterState {
@@ -43,13 +30,13 @@ function getStoredFilters(): ApplicationFilterState {
       const parsed = JSON.parse(stored);
       return {
         statuses: Array.isArray(parsed.statuses) ? parsed.statuses : [],
-        priorities: Array.isArray(parsed.priorities) ? parsed.priorities : [],
+        sources: Array.isArray(parsed.sources) ? parsed.sources : [],
         workModels: Array.isArray(parsed.workModels) ? parsed.workModels : [],
         sortBy: parsed.sortBy || 'date-desc',
       };
     }
   } catch {
-    // Fallback to initial state on parse error
+    // Fallback on error
   }
   return INITIAL_FILTER_STATE;
 }
@@ -57,12 +44,11 @@ function getStoredFilters(): ApplicationFilterState {
 export function useApplicationFilters(applications: DbApplication[] = [], searchQuery: string = '') {
   const [filters, setFilters] = useState<ApplicationFilterState>(getStoredFilters);
 
-  // Persist filter state to sessionStorage on state change
   useEffect(() => {
     try {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify(filters));
     } catch {
-      // Storage quota or restriction fallback
+      // Ignore quota restrictions
     }
   }, [filters]);
 
@@ -89,12 +75,12 @@ export function useApplicationFilters(applications: DbApplication[] = [], search
     }));
   }, []);
 
-  const togglePriority = useCallback((priority: PriorityLevel) => {
+  const toggleSource = useCallback((source: string) => {
     setFilters((prev) => ({
       ...prev,
-      priorities: prev.priorities.includes(priority)
-        ? prev.priorities.filter((p) => p !== priority)
-        : [...prev.priorities, priority],
+      sources: prev.sources.includes(source)
+        ? prev.sources.filter((s) => s !== source)
+        : [...prev.sources, source],
     }));
   }, []);
 
@@ -114,7 +100,7 @@ export function useApplicationFilters(applications: DbApplication[] = [], search
   const clearFilters = useCallback(() => {
     setFilters({
       statuses: [],
-      priorities: [],
+      sources: [],
       workModels: [],
       sortBy: 'date-desc',
     });
@@ -123,42 +109,43 @@ export function useApplicationFilters(applications: DbApplication[] = [], search
 
   const activeFiltersCount = 
     filters.statuses.length + 
-    filters.priorities.length + 
+    filters.sources.length + 
     filters.workModels.length;
 
   const filteredAndSortedApplications = useMemo(() => {
     let result = Array.isArray(applications) ? [...applications] : [];
 
-    // 1. Search Query Filter (Company, Position, Notes)
+    // 1. Search Query Filter
     const trimmedQuery = searchQuery.trim().toLowerCase();
     if (trimmedQuery) {
       result = result.filter((app) => {
         const companyMatch = app?.company_name?.toLowerCase().includes(trimmedQuery);
         const positionMatch = app?.position?.toLowerCase().includes(trimmedQuery);
+        const sourceMatch = app?.source?.toLowerCase().includes(trimmedQuery);
         const notesMatch = app?.notes?.toLowerCase().includes(trimmedQuery);
-        return companyMatch || positionMatch || notesMatch;
+        return companyMatch || positionMatch || sourceMatch || notesMatch;
       });
     }
 
-    // 2. Status Multi-select Filter
+    // 2. Status Filter
     if (filters.statuses.length > 0) {
       result = result.filter((app) => filters.statuses.includes(app?.status as ApplicationStatus));
     }
 
-    // 3. Priority Multi-select Filter
-    if (filters.priorities.length > 0) {
+    // 3. Platform / Source Filter
+    if (filters.sources.length > 0) {
       result = result.filter((app) => {
-        const appPriority = (app?.priority ?? 'Orta') as PriorityLevel;
-        return filters.priorities.includes(appPriority);
+        const appSource = app?.source?.trim().toLowerCase() || 'diğer';
+        return filters.sources.some((s) => s.toLowerCase() === appSource || (s === 'Diğer' && (!app?.source || !app.source.trim())));
       });
     }
 
-    // 4. Work Model Multi-select Filter
+    // 4. Work Model Filter
     if (filters.workModels.length > 0) {
       result = result.filter((app) => app?.work_type && filters.workModels.includes(app.work_type));
     }
 
-    // 5. Combined Sorting Engine
+    // 5. Sorting Engine
     result.sort((a, b) => {
       const compA = a?.company_name || '';
       const compB = b?.company_name || '';
@@ -173,11 +160,6 @@ export function useApplicationFilters(applications: DbApplication[] = [], search
           return compA.localeCompare(compB, 'tr-TR');
         case 'company-desc':
           return compB.localeCompare(compA, 'tr-TR');
-        case 'priority-desc': {
-          const rankA = PRIORITY_RANK[a?.priority ?? 'Orta'] ?? 2;
-          const rankB = PRIORITY_RANK[b?.priority ?? 'Orta'] ?? 2;
-          return rankB - rankA;
-        }
         case 'date-desc':
         default: {
           const dateA = new Date(a?.applied_date || a?.created_at || 0).getTime();
@@ -196,7 +178,7 @@ export function useApplicationFilters(applications: DbApplication[] = [], search
     toggleStatus,
     setSingleStatus,
     setStatuses,
-    togglePriority,
+    toggleSource,
     toggleWorkModel,
     setSortBy,
     clearFilters,

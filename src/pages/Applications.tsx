@@ -24,13 +24,13 @@ import {
   CheckSquare,
   Sparkles,
   ExternalLink,
-  CalendarPlus
+  CalendarPlus,
+  Globe
 } from 'lucide-react';
 import { PageHeader } from '@/components/common/PageHeader';
 import { Button } from '@/components/ui/Button';
 import { SearchInput } from '@/components/ui/SearchInput';
 import { StatusBadge } from '@/components/ui/StatusBadge';
-import { PriorityBadge, PriorityLevel } from '@/components/common/PriorityBadge';
 import { EmptyState } from '@/components/common/EmptyState';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/Table';
@@ -57,7 +57,6 @@ const SORT_OPTIONS: { id: SortOption; label: string }[] = [
   { id: 'date-asc', label: 'Tarihe Göre (En Eski)' },
   { id: 'company-asc', label: 'Şirket Adı (A - Z)' },
   { id: 'company-desc', label: 'Şirket Adı (Z - A)' },
-  { id: 'priority-desc', label: 'Önceliğe Göre (Kritik -> Düşük)' },
 ];
 
 export const ApplicationsPage: React.FC = () => {
@@ -101,7 +100,7 @@ export const ApplicationsPage: React.FC = () => {
     toggleStatus,
     setSingleStatus,
     setStatuses,
-    togglePriority,
+    toggleSource,
     toggleWorkModel,
     setSortBy,
     clearFilters,
@@ -458,26 +457,26 @@ export const ApplicationsPage: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Priority Multi-select Filter */}
+                {/* Platform / Kaynak Multi-select Filter */}
                 <div className="space-y-1.5 pt-2 border-t border-slate-100 dark:border-slate-800/60">
                   <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
-                    Öncelik Seviyesi
+                    Başvuru Kaynağı (Platform)
                   </span>
                   <div className="flex flex-wrap gap-1.5">
-                    {(['Düşük', 'Orta', 'Yüksek', 'Kritik'] as PriorityLevel[]).map((p) => {
-                      const isSelected = filters.priorities.includes(p);
+                    {['LinkedIn', 'Kariyer.net', 'Youthall', 'Indeed', 'Şirket Sitesi', 'Diğer'].map((src) => {
+                      const isSelected = filters.sources.includes(src);
                       return (
                         <button
-                          key={p}
+                          key={src}
                           type="button"
-                          onClick={() => togglePriority(p)}
+                          onClick={() => toggleSource(src)}
                           className={`text-xs px-2.5 py-1 rounded-lg border transition-all ${
                             isSelected
-                              ? 'bg-amber-500/20 text-amber-400 border-amber-500/40 font-bold shadow-xs'
+                              ? 'bg-blue-500/20 text-blue-400 border-blue-500/40 font-bold shadow-xs'
                               : 'bg-slate-100 dark:bg-slate-800/80 text-slate-400 border-transparent hover:text-foreground'
                           }`}
                         >
-                          {p}
+                          {src}
                         </button>
                       );
                     })}
@@ -720,7 +719,7 @@ export const ApplicationsPage: React.FC = () => {
                   <TableHead>Şirket</TableHead>
                   <TableHead>Pozisyon & Konum</TableHead>
                   <TableHead>Durum</TableHead>
-                  <TableHead>Öncelik</TableHead>
+                  <TableHead>Platform / Kaynak</TableHead>
                   <TableHead>Başvuru Tarihi</TableHead>
                   <TableHead className="text-right">Aksiyonlar</TableHead>
                 </TableRow>
@@ -728,9 +727,6 @@ export const ApplicationsPage: React.FC = () => {
               <TableBody>
                 {filteredAndSortedApplications.map((app) => {
                   const companyInitials = getInitials(app.company_name);
-
-                  const targetRoleDisplay = app.target_role ?? 'Software Engineer';
-                  const priorityDisplay = (app.priority ?? 'Orta') as PriorityLevel;
                   const isMenuOpen = activeMenuId === app.id;
                   const isSelected = selectedIds.includes(app.id);
 
@@ -775,18 +771,7 @@ export const ApplicationsPage: React.FC = () => {
                       {/* Position Column */}
                       <TableCell>
                         <div>
-                          <div className="flex items-center gap-1.5 flex-wrap">
-                            <span className="font-bold text-foreground text-xs block">{app.position}</span>
-                            {app.source ? (
-                              <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold border transition-colors shadow-xs ${getPlatformStyle(app.source)?.bg} ${getPlatformStyle(app.source)?.text} ${getPlatformStyle(app.source)?.border}`}>
-                                {getPlatformStyle(app.source)?.label}
-                              </span>
-                            ) : (
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold border transition-colors shadow-xs bg-slate-100 dark:bg-slate-800/60 text-slate-400 border-slate-200 dark:border-slate-700/50">
-                                Belirtilmedi
-                              </span>
-                            )}
-                          </div>
+                          <span className="font-bold text-foreground text-xs block">{app.position}</span>
                           {app.location && (
                             <span className="text-[10px] text-slate-400 flex items-center gap-1 mt-0.5">
                               <MapPin className="w-3 h-3 text-slate-500" aria-hidden="true" /> {app.location}
@@ -803,9 +788,18 @@ export const ApplicationsPage: React.FC = () => {
                         />
                       </TableCell>
 
-                      {/* Priority Column */}
+                      {/* Platform / Source Column */}
                       <TableCell>
-                        <PriorityBadge priority={priorityDisplay} />
+                        {app.source ? (
+                          <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold border transition-colors shadow-xs ${getPlatformStyle(app.source)?.bg} ${getPlatformStyle(app.source)?.text} ${getPlatformStyle(app.source)?.border}`}>
+                            <Globe className="w-3.5 h-3.5 text-blue-500" aria-hidden="true" />
+                            {getPlatformStyle(app.source)?.label}
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium border bg-slate-100 dark:bg-slate-800/60 text-slate-400 border-slate-200 dark:border-slate-700/50">
+                            Diğer / Belirtilmedi
+                          </span>
+                        )}
                       </TableCell>
 
                       {/* Applied Date Column */}
@@ -962,14 +956,14 @@ export const ApplicationsPage: React.FC = () => {
                       currentStatus={app.status as ApplicationStatus}
                       onSelectStatus={(newStatus) => updateMutation.mutate({ id: app.id, payload: { status: newStatus } })}
                     />
-                    <PriorityBadge priority={priorityDisplay} />
                     {app.source ? (
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${getPlatformStyle(app.source)?.bg} ${getPlatformStyle(app.source)?.text} ${getPlatformStyle(app.source)?.border}`}>
+                      <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold border ${getPlatformStyle(app.source)?.bg} ${getPlatformStyle(app.source)?.text} ${getPlatformStyle(app.source)?.border}`}>
+                        <Globe className="w-3 h-3 text-blue-500" aria-hidden="true" />
                         {getPlatformStyle(app.source)?.label}
                       </span>
                     ) : (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold border bg-slate-100 dark:bg-slate-800/60 text-slate-400 border-slate-200 dark:border-slate-700/50">
-                        Belirtilmedi
+                      <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium border bg-slate-100 dark:bg-slate-800/60 text-slate-400 border-slate-200 dark:border-slate-700/50">
+                        Diğer / Belirtilmedi
                       </span>
                     )}
                     {app.job_url && (
