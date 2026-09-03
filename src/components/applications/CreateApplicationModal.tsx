@@ -127,6 +127,9 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
         if (metaParsed.position) {
           setValue('position', metaParsed.position, { shouldDirty: true, shouldValidate: true });
         }
+        if (metaParsed.location) {
+          setValue('location', metaParsed.location, { shouldDirty: true, shouldValidate: true });
+        }
 
         if (metaParsed.company_name || metaParsed.position) {
           setAutoFillNotice(`✨ ${metaParsed.company_name || ''} ${metaParsed.position ? `- ${metaParsed.position}` : ''}`);

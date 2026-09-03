@@ -32,6 +32,7 @@ import {
 import { ApplicationStatus } from '@/types';
 import { formatDate, formatDateTime, getInitials } from '@/lib/utils';
 import { getPlatformStyle } from '@/utils/platformUtils';
+import { getCompanyLogoUrl } from '@/utils/jobUrlParser';
 
 export const ApplicationDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -128,9 +129,9 @@ export const ApplicationDetailPage: React.FC = () => {
   }
 
   const companyInitials = getInitials(application.company_name);
+  const companyLogoUrl = getCompanyLogoUrl(application.company_name);
 
   const targetRoleDisplay = application.target_role ?? 'Belirtilmedi';
-  const priorityDisplay = (application.priority ?? 'Orta') as PriorityLevel;
   const jobUrl = application.job_url;
   const contactName = application.contact_name;
   const contactEmail = application.contact_email;
@@ -175,8 +176,18 @@ export const ApplicationDetailPage: React.FC = () => {
       <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 shadow-soft relative overflow-hidden space-y-6">
         <div className="flex flex-col sm:flex-row items-start justify-between gap-6">
           <div className="flex items-start gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 flex items-center justify-center text-blue-500 font-black text-xl shrink-0 shadow-sm">
-              {companyInitials || <Building2 className="w-8 h-8" aria-hidden="true" />}
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 flex items-center justify-center text-blue-500 font-black text-xl shrink-0 shadow-sm overflow-hidden relative">
+              {companyLogoUrl ? (
+                <img
+                  src={companyLogoUrl}
+                  alt={application.company_name}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLElement).style.display = 'none';
+                  }}
+                />
+              ) : null}
+              <span>{companyInitials || <Building2 className="w-8 h-8" aria-hidden="true" />}</span>
             </div>
 
             <div className="space-y-1">

@@ -3,7 +3,9 @@ import { detectPlatformFromUrl } from './platformUtils';
 export interface ParsedJobUrl {
   company_name?: string;
   position?: string;
+  location?: string;
   source?: string;
+  logo_url?: string;
 }
 
 function formatSlugToText(slug: string): string {
@@ -14,11 +16,37 @@ function formatSlugToText(slug: string): string {
   } catch {
     // fallback
   }
+
+  // Clean trailing location / pipes from slug
+  text = text
+    .replace(/\s*\|\s*(LinkedIn Jobs|LinkedIn|Kariyer\.net|Youthall|Indeed|Glassdoor).*$/i, '')
+    .replace(/\s*[\u2014\u2013—–-]\s*(Istanbul|Ankara|Izmir|Turkey|Türkiye|Remote).*$/i, '')
+    .trim();
+
   return text
     .replace(/[-_]+/g, ' ')
     .replace(/\s+/g, ' ')
     .replace(/\b\w/g, (char) => char.toUpperCase())
     .trim();
+}
+
+/**
+ * Generates high-res company logo URL using Clearbit Logo API or custom logo URL.
+ */
+export function getCompanyLogoUrl(companyName: string | null | undefined, customLogoUrl?: string | null): string | null {
+  if (customLogoUrl && customLogoUrl.startsWith('http')) {
+    return customLogoUrl;
+  }
+  if (!companyName || !companyName.trim()) return null;
+
+  const cleanDomain = companyName
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '');
+
+  if (!cleanDomain || cleanDomain.length < 2) return null;
+
+  return `https://logo.clearbit.com/${cleanDomain}.com`;
 }
 
 export function parseJobUrl(url: string | null | undefined): ParsedJobUrl {
@@ -117,15 +145,13 @@ export function parseJobUrl(url: string | null | undefined): ParsedJobUrl {
 }
 
 /**
- * Asynchronously fetches metadata from webpage HTML (via microlink API) if local slug parser couldn't extract company or position.
+ * Asynchronously fetches metadata from webpage HTML (via microlink API).
+ * Cleanly strips location & pipes from Company Name.
  */
 export async function fetchJobMetaFromUrl(url: string | null | undefined): Promise<ParsedJobUrl> {
   const localParsed = parseJobUrl(url);
 
   if (!url || !url.trim()) return localParsed;
-  if (localParsed.company_name && localParsed.position) {
-    return localParsed;
-  }
 
   try {
     const targetUrl = url.trim().startsWith('http') ? url.trim() : `https://${url.trim()}`;
@@ -134,41 +160,61 @@ export async function fetchJobMetaFromUrl(url: string | null | undefined): Promi
 
     const json = await res.json();
     const title = (json?.data?.title as string) || '';
+    const logoUrl = (json?.data?.logo?.url as string) || (json?.data?.image?.url as string) || undefined;
 
-    if (!title || typeof title !== 'string') return localParsed;
+    const result: ParsedJobUrl = { 
+      ...localParsed,
+      logo_url: logoUrl 
+    };
 
-    let cleanTitle = title.replace(/\s*\|\s*LinkedIn$/i, '').replace(/\s*-\s*LinkedIn$/i, '').trim();
+    if (!title || typeof title !== 'string') return result;
 
-    const result: ParsedJobUrl = { ...localParsed };
+    // Strip trailing site branding
+    let cleanTitle = title
+      .replace(/\s*\|\s*(LinkedIn Jobs|LinkedIn|Kariyer\.net|Youthall|Indeed|Glassdoor).*$/i, '')
+      .replace(/\s*-\s*(LinkedIn Jobs|LinkedIn|Kariyer\.net|Youthall|Indeed|Glassdoor).*$/i, '')
+      .trim();
 
-    // Format 1: "Company hiring Position in Location" (LinkedIn format)
-    const hiringMatch = cleanTitle.match(/^(.+?)\s+hiring\s+(.+?)(?:\s+in\s+.*)?$/i);
-    if (hiringMatch) {
-      if (!result.company_name) result.company_name = hiringMatch[1].trim();
-      if (!result.position) result.position = hiringMatch[2].trim();
-      return result;
-    }
-
-    // Format 2: "Position at Company"
-    if (cleanTitle.includes(' at ')) {
-      const parts = cleanTitle.split(' at ');
-      if (!result.position && parts[0]) result.position = parts[0].trim();
-      if (!result.company_name && parts[1]) result.company_name = parts[1].replace(/\s+in\s+.*$/i, '').trim();
-      return result;
-    }
-
-    // Format 3: "Position - Company"
-    if (cleanTitle.includes(' - ')) {
-      const parts = cleanTitle.split(' - ');
+    // Format A: "Mackolik — Istanbul, Türkiye" or "Mackolik - Istanbul, Turkey"
+    if (cleanTitle.includes('—') || cleanTitle.includes('–')) {
+      const parts = cleanTitle.split(/\s*[\u2014\u2013—–]\s*/);
       if (parts.length >= 2) {
-        if (!result.position) result.position = parts[0].trim();
-        if (!result.company_name) result.company_name = parts[1].trim();
-        return result;
+        if (!result.company_name || result.company_name.includes('—') || result.company_name.includes('Istanbul')) {
+          result.company_name = parts[0].trim();
+        }
+        if (!result.location) {
+          result.location = parts[1].trim();
+        }
       }
     }
 
-    if (!result.position && cleanTitle.length < 80) {
-      result.position = cleanTitle;
+    // Format B: "Company hiring Position in Location" (LinkedIn format)
+    const hiringMatch = cleanTitle.match(/^(.+?)\s+hiring\s+(.+?)(?:\s+in\s+(.+))?$/i);
+    if (hiringMatch) {
+      if (!result.company_name) result.company_name = hiringMatch[1].trim();
+      if (!result.position) result.position = hiringMatch[2].trim();
+      if (hiringMatch[3] && !result.location) result.location = hiringMatch[3].trim();
+      return result;
+    }
+
+    // Format C: "Position at Company"
+    if (cleanTitle.includes(' at ')) {
+      const parts = cleanTitle.split(' at ');
+      if (!result.position && parts[0]) result.position = parts[0].trim();
+      if (parts[1]) {
+        const compLoc = parts[1].split(/\s+in\s+/i);
+        if (!result.company_name) result.company_name = compLoc[0].trim();
+        if (compLoc[1] && !result.location) result.location = compLoc[1].trim();
+      }
+      return result;
+    }
+
+    // Clean up any remaining dashes/pipes in company_name if set
+    if (result.company_name) {
+      result.company_name = result.company_name
+        .replace(/\s*[\u2014\u2013—–|-].*$/, '')
+        .replace(/\s*\|\s*.*$/, '')
+        .trim();
     }
 
     return result;

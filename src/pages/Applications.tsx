@@ -36,6 +36,7 @@ import { Skeleton } from '@/components/ui/Skeleton';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/Table';
 import { ConfirmationDialog } from '@/components/ui/ConfirmationDialog';
 import { getPlatformStyle } from '@/utils/platformUtils';
+import { getCompanyLogoUrl } from '@/utils/jobUrlParser';
 import { CreateApplicationModal } from '@/components/applications/CreateApplicationModal';
 import { EditApplicationModal } from '@/components/applications/EditApplicationModal';
 import { CreateInterviewModal } from '@/components/interviews/CreateInterviewModal';
@@ -727,6 +728,7 @@ export const ApplicationsPage: React.FC = () => {
               <TableBody>
                 {filteredAndSortedApplications.map((app) => {
                   const companyInitials = getInitials(app.company_name);
+                  const companyLogoUrl = getCompanyLogoUrl(app.company_name);
                   const isMenuOpen = activeMenuId === app.id;
                   const isSelected = selectedIds.includes(app.id);
 
@@ -754,8 +756,18 @@ export const ApplicationsPage: React.FC = () => {
                       {/* Company Column */}
                       <TableCell>
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 flex items-center justify-center text-blue-500 font-bold text-xs shrink-0 shadow-sm">
-                            {companyInitials || <Building2 className="w-4 h-4" aria-hidden="true" />}
+                          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 flex items-center justify-center text-blue-500 font-bold text-xs shrink-0 shadow-sm overflow-hidden relative">
+                            {companyLogoUrl ? (
+                              <img
+                                src={companyLogoUrl}
+                                alt={app.company_name}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  (e.target as HTMLElement).style.display = 'none';
+                                }}
+                              />
+                            ) : null}
+                            <span>{companyInitials || <Building2 className="w-4 h-4" aria-hidden="true" />}</span>
                           </div>
                           <div>
                             <span className="font-bold text-foreground block text-xs hover:underline">{app.company_name}</span>
@@ -880,9 +892,7 @@ export const ApplicationsPage: React.FC = () => {
           <div className="block md:hidden space-y-3">
             {filteredAndSortedApplications.map((app) => {
               const companyInitials = getInitials(app.company_name);
-
-              const targetRoleDisplay = app.target_role ?? 'Software Engineer';
-              const priorityDisplay = (app.priority ?? 'Orta') as PriorityLevel;
+              const companyLogoUrl = getCompanyLogoUrl(app.company_name);
               const isMenuOpen = activeMenuId === app.id;
               const isSelected = selectedIds.includes(app.id);
 
@@ -905,8 +915,18 @@ export const ApplicationsPage: React.FC = () => {
                           className="w-4 h-4 rounded border-slate-300 dark:border-slate-700 text-blue-600 focus:ring-blue-500 cursor-pointer mt-1"
                         />
                       </div>
-                      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 flex items-center justify-center text-blue-500 font-bold text-xs shrink-0">
-                        {companyInitials}
+                      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 flex items-center justify-center text-blue-500 font-bold text-xs shrink-0 overflow-hidden relative">
+                        {companyLogoUrl ? (
+                          <img
+                            src={companyLogoUrl}
+                            alt={app.company_name}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLElement).style.display = 'none';
+                            }}
+                          />
+                        ) : null}
+                        <span>{companyInitials}</span>
                       </div>
                       <div className="min-w-0">
                         <h4 className="font-extrabold text-foreground text-sm truncate">{app.company_name}</h4>
