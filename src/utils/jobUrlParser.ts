@@ -115,3 +115,64 @@ export function parseJobUrl(url: string | null | undefined): ParsedJobUrl {
 
   return result;
 }
+
+/**
+ * Asynchronously fetches metadata from webpage HTML (via microlink API) if local slug parser couldn't extract company or position.
+ */
+export async function fetchJobMetaFromUrl(url: string | null | undefined): Promise<ParsedJobUrl> {
+  const localParsed = parseJobUrl(url);
+
+  if (!url || !url.trim()) return localParsed;
+  if (localParsed.company_name && localParsed.position) {
+    return localParsed;
+  }
+
+  try {
+    const targetUrl = url.trim().startsWith('http') ? url.trim() : `https://${url.trim()}`;
+    const res = await fetch(`https://api.microlink.io?url=${encodeURIComponent(targetUrl)}`);
+    if (!res.ok) return localParsed;
+
+    const json = await res.json();
+    const title = (json?.data?.title as string) || '';
+
+    if (!title || typeof title !== 'string') return localParsed;
+
+    let cleanTitle = title.replace(/\s*\|\s*LinkedIn$/i, '').replace(/\s*-\s*LinkedIn$/i, '').trim();
+
+    const result: ParsedJobUrl = { ...localParsed };
+
+    // Format 1: "Company hiring Position in Location" (LinkedIn format)
+    const hiringMatch = cleanTitle.match(/^(.+?)\s+hiring\s+(.+?)(?:\s+in\s+.*)?$/i);
+    if (hiringMatch) {
+      if (!result.company_name) result.company_name = hiringMatch[1].trim();
+      if (!result.position) result.position = hiringMatch[2].trim();
+      return result;
+    }
+
+    // Format 2: "Position at Company"
+    if (cleanTitle.includes(' at ')) {
+      const parts = cleanTitle.split(' at ');
+      if (!result.position && parts[0]) result.position = parts[0].trim();
+      if (!result.company_name && parts[1]) result.company_name = parts[1].replace(/\s+in\s+.*$/i, '').trim();
+      return result;
+    }
+
+    // Format 3: "Position - Company"
+    if (cleanTitle.includes(' - ')) {
+      const parts = cleanTitle.split(' - ');
+      if (parts.length >= 2) {
+        if (!result.position) result.position = parts[0].trim();
+        if (!result.company_name) result.company_name = parts[1].trim();
+        return result;
+      }
+    }
+
+    if (!result.position && cleanTitle.length < 80) {
+      result.position = cleanTitle;
+    }
+
+    return result;
+  } catch {
+    return localParsed;
+  }
+}

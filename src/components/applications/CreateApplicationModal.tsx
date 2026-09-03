@@ -13,7 +13,9 @@ import {
   FileText, 
   Sparkles, 
   PlusCircle,
-  AlertTriangle
+  AlertTriangle,
+  Loader2,
+  CheckCircle2
 } from 'lucide-react';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
@@ -26,7 +28,7 @@ import {
 import { useCreateApplicationMutation } from '@/hooks/queries/useApplicationsQuery';
 import { STATUS_CONFIG } from '@/constants/status';
 import { detectPlatformFromUrl } from '@/utils/platformUtils';
-import { parseJobUrl } from '@/utils/jobUrlParser';
+import { parseJobUrl, fetchJobMetaFromUrl } from '@/utils/jobUrlParser';
 import { useToast } from '@/hooks/useToast';
 
 /** Default values extracted as a constant to prevent duplication. */
@@ -74,26 +76,78 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
     defaultValues: { ...CREATE_DEFAULTS, ...initialValues },
   });
 
+  const [isParsingUrl, setIsParsingUrl] = useState(false);
+  const [autoFillNotice, setAutoFillNotice] = useState<string | null>(null);
+
   const watchedJobUrl = watch('job_url');
-  const watchedCompany = watch('company_name');
-  const watchedPosition = watch('position');
-  const watchedSource = watch('source');
 
   useEffect(() => {
-    if (watchedJobUrl && watchedJobUrl.trim().length > 8) {
-      const parsed = parseJobUrl(watchedJobUrl);
+    let isMounted = true;
 
-      if (parsed.source && (!watchedSource || !watchedSource.trim())) {
-        setValue('source', parsed.source, { shouldDirty: true, shouldValidate: true });
+    if (!watchedJobUrl || watchedJobUrl.trim().length < 8) {
+      if (isMounted) {
+        setIsParsingUrl(false);
+        setAutoFillNotice(null);
       }
-      if (parsed.company_name && (!watchedCompany || !watchedCompany.trim())) {
-        setValue('company_name', parsed.company_name, { shouldDirty: true, shouldValidate: true });
-      }
-      if (parsed.position && (!watchedPosition || !watchedPosition.trim())) {
-        setValue('position', parsed.position, { shouldDirty: true, shouldValidate: true });
-      }
+      return;
     }
-  }, [watchedJobUrl, watchedCompany, watchedPosition, watchedSource, setValue]);
+
+    const triggerParse = async () => {
+      const syncParsed = parseJobUrl(watchedJobUrl);
+      if (syncParsed.source) {
+        setValue('source', syncParsed.source, { shouldDirty: true, shouldValidate: true });
+      }
+      if (syncParsed.company_name) {
+        setValue('company_name', syncParsed.company_name, { shouldDirty: true, shouldValidate: true });
+      }
+      if (syncParsed.position) {
+        setValue('position', syncParsed.position, { shouldDirty: true, shouldValidate: true });
+      }
+
+      if (syncParsed.company_name || syncParsed.position) {
+        if (isMounted) setAutoFillNotice(`✨ ${syncParsed.company_name || ''} ${syncParsed.position ? `- ${syncParsed.position}` : ''}`);
+        return;
+      }
+
+      if (isMounted) {
+        setIsParsingUrl(true);
+        setAutoFillNotice('🔄 Bağlantı taranıyor...');
+      }
+
+      try {
+        const metaParsed = await fetchJobMetaFromUrl(watchedJobUrl);
+        if (!isMounted) return;
+
+        if (metaParsed.source) {
+          setValue('source', metaParsed.source, { shouldDirty: true, shouldValidate: true });
+        }
+        if (metaParsed.company_name) {
+          setValue('company_name', metaParsed.company_name, { shouldDirty: true, shouldValidate: true });
+        }
+        if (metaParsed.position) {
+          setValue('position', metaParsed.position, { shouldDirty: true, shouldValidate: true });
+        }
+
+        if (metaParsed.company_name || metaParsed.position) {
+          setAutoFillNotice(`✨ ${metaParsed.company_name || ''} ${metaParsed.position ? `- ${metaParsed.position}` : ''}`);
+        } else if (metaParsed.source) {
+          setAutoFillNotice(`✓ ${metaParsed.source} algılandı`);
+        } else {
+          setAutoFillNotice(null);
+        }
+      } catch {
+        if (isMounted) setAutoFillNotice(null);
+      } finally {
+        if (isMounted) setIsParsingUrl(false);
+      }
+    };
+
+    triggerParse();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [watchedJobUrl, setValue]);
 
   // Reset form and warning state when modal opens/closes
   useEffect(() => {
@@ -209,6 +263,17 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
               <Sparkles className="w-4 h-4 text-cyan-400" />
               ⚡ İlan Linkini Yapıştır (Otomatik Doldur)
             </label>
+            {isParsingUrl ? (
+              <span className="text-[10px] font-bold text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/20 flex items-center gap-1">
+                <Loader2 className="w-3 h-3 animate-spin text-blue-400" />
+                Taranıyor...
+              </span>
+            ) : autoFillNotice ? (
+              <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                {autoFillNotice}
+              </span>
+            ) : null}
           </div>
           <div className="relative flex items-center">
             <div className="absolute left-3.5 text-slate-500 pointer-events-none" aria-hidden="true">
