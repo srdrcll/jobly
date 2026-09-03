@@ -31,7 +31,7 @@ function formatSlugToText(slug: string): string {
 }
 
 /**
- * Normalizes LinkedIn search/collections URLs to canonical /jobs/view/ URLs so metadata can be fetched cleanly.
+ * Normalizes LinkedIn search/collections and Indeed URLs to clean canonical URLs.
  */
 export function normalizeJobUrl(url: string | null | undefined): string {
   if (!url || !url.trim()) return '';
@@ -44,6 +44,11 @@ export function normalizeJobUrl(url: string | null | undefined): string {
       const jobId = parsed.searchParams.get('currentJobId') || parsed.searchParams.get('jobId') || parsed.searchParams.get('job_id');
       if (jobId && /^\d+$/.test(jobId)) {
         return `https://www.linkedin.com/jobs/view/${jobId}/`;
+      }
+    } else if (parsed.hostname.includes('indeed.com')) {
+      const jk = parsed.searchParams.get('jk');
+      if (jk) {
+        return `https://${parsed.hostname}/viewjob?jk=${jk}`;
       }
     }
   } catch {
@@ -193,9 +198,24 @@ export async function fetchJobMetaFromUrl(url: string | null | undefined): Promi
 
     // Strip trailing site branding
     let cleanTitle = title
-      .replace(/\s*\|\s*(LinkedIn Jobs|LinkedIn|Kariyer\.net|Youthall|Indeed|Glassdoor).*$/i, '')
-      .replace(/\s*-\s*(LinkedIn Jobs|LinkedIn|Kariyer\.net|Youthall|Indeed|Glassdoor).*$/i, '')
+      .replace(/\s*\|\s*(LinkedIn Jobs|LinkedIn|Kariyer\.net|Youthall|Indeed\.com|Indeed|Glassdoor).*$/i, '')
+      .replace(/\s*-\s*(LinkedIn Jobs|LinkedIn|Kariyer\.net|Youthall|Indeed\.com|Indeed|Glassdoor).*$/i, '')
       .trim();
+
+    // Indeed format: "Position - Company - Location"
+    if (title.toLowerCase().includes('indeed')) {
+      const parts = cleanTitle.split(/\s*-\s*/);
+      if (parts.length >= 3) {
+        if (!result.position) result.position = parts[0].trim();
+        if (!result.company_name) result.company_name = parts[1].trim();
+        if (!result.location) result.location = parts[2].trim();
+        return result;
+      } else if (parts.length === 2) {
+        if (!result.position) result.position = parts[0].trim();
+        if (!result.company_name) result.company_name = parts[1].trim();
+        return result;
+      }
+    }
 
     // 1. Format: "Position - Location at Company - Position - Location"
     if (cleanTitle.includes(' at ')) {
