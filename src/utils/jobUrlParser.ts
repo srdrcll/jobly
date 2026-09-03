@@ -168,7 +168,7 @@ export function parseJobUrl(url: string | null | undefined): ParsedJobUrl {
 
 /**
  * Asynchronously fetches metadata from webpage HTML (via microlink API).
- * Cleanly strips location & pipes from Company Name.
+ * Cleanly extracts Company, Position, and Location.
  */
 export async function fetchJobMetaFromUrl(url: string | null | undefined): Promise<ParsedJobUrl> {
   const localParsed = parseJobUrl(url);
@@ -197,38 +197,42 @@ export async function fetchJobMetaFromUrl(url: string | null | undefined): Promi
       .replace(/\s*-\s*(LinkedIn Jobs|LinkedIn|Kariyer\.net|Youthall|Indeed|Glassdoor).*$/i, '')
       .trim();
 
-    // Format A: "Mackolik — Istanbul, Türkiye" or "Mackolik - Istanbul, Turkey"
-    if (cleanTitle.includes('—') || cleanTitle.includes('–')) {
-      const parts = cleanTitle.split(/\s*[\u2014\u2013—–]\s*/);
-      if (parts.length >= 2) {
-        if (!result.company_name || result.company_name.includes('—') || result.company_name.includes('Istanbul')) {
-          result.company_name = parts[0].trim();
-        }
-        if (!result.location) {
-          result.location = parts[1].trim();
-        }
+    // 1. Format: "Position - Location at Company - Position - Location"
+    if (cleanTitle.includes(' at ')) {
+      const atParts = cleanTitle.split(' at ');
+      const leftPart = atParts[0].trim();
+      const rightPart = atParts[1].trim();
+
+      // Right part contains company
+      const rightSub = rightPart.split(' - ');
+      result.company_name = rightSub[0].trim();
+
+      // Left part contains position & location
+      const leftSub = leftPart.split(' - ');
+      result.position = leftSub[0].trim();
+      if (leftSub.length > 1) {
+        result.location = leftSub.slice(1).join(' - ').trim();
       }
+
+      return result;
     }
 
-    // Format B: "Company hiring Position in Location" (LinkedIn format)
+    // 2. Format: "Company hiring Position in Location" (LinkedIn format)
     const hiringMatch = cleanTitle.match(/^(.+?)\s+hiring\s+(.+?)(?:\s+in\s+(.+))?$/i);
     if (hiringMatch) {
-      if (!result.company_name) result.company_name = hiringMatch[1].trim();
-      if (!result.position) result.position = hiringMatch[2].trim();
+      result.company_name = hiringMatch[1].trim();
+      result.position = hiringMatch[2].trim();
       if (hiringMatch[3] && !result.location) result.location = hiringMatch[3].trim();
       return result;
     }
 
-    // Format C: "Position at Company"
-    if (cleanTitle.includes(' at ')) {
-      const parts = cleanTitle.split(' at ');
-      if (!result.position && parts[0]) result.position = parts[0].trim();
-      if (parts[1]) {
-        const compLoc = parts[1].split(/\s+in\s+/i);
-        if (!result.company_name) result.company_name = compLoc[0].trim();
-        if (compLoc[1] && !result.location) result.location = compLoc[1].trim();
+    // 3. Format: "Mackolik — Istanbul, Türkiye" or "Mackolik - Istanbul, Turkey"
+    if (cleanTitle.includes('—') || cleanTitle.includes('–')) {
+      const parts = cleanTitle.split(/\s*[\u2014\u2013—–]\s*/);
+      if (parts.length >= 2) {
+        result.company_name = parts[0].trim();
+        result.location = parts[1].trim();
       }
-      return result;
     }
 
     // Clean up any remaining dashes/pipes in company_name if set
