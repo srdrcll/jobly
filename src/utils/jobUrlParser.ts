@@ -31,6 +31,28 @@ function formatSlugToText(slug: string): string {
 }
 
 /**
+ * Normalizes LinkedIn search/collections URLs to canonical /jobs/view/ URLs so metadata can be fetched cleanly.
+ */
+export function normalizeJobUrl(url: string | null | undefined): string {
+  if (!url || !url.trim()) return '';
+  let cleanUrl = url.trim();
+  if (!cleanUrl.startsWith('http')) cleanUrl = `https://${cleanUrl}`;
+
+  try {
+    const parsed = new URL(cleanUrl);
+    if (parsed.hostname.includes('linkedin.com')) {
+      const jobId = parsed.searchParams.get('currentJobId') || parsed.searchParams.get('jobId') || parsed.searchParams.get('job_id');
+      if (jobId && /^\d+$/.test(jobId)) {
+        return `https://www.linkedin.com/jobs/view/${jobId}/`;
+      }
+    }
+  } catch {
+    // Ignore invalid URL
+  }
+  return cleanUrl;
+}
+
+/**
  * Generates high-res company logo URL using Clearbit Logo API or custom logo URL.
  */
 export function getCompanyLogoUrl(companyName: string | null | undefined, customLogoUrl?: string | null): string | null {
@@ -154,7 +176,7 @@ export async function fetchJobMetaFromUrl(url: string | null | undefined): Promi
   if (!url || !url.trim()) return localParsed;
 
   try {
-    const targetUrl = url.trim().startsWith('http') ? url.trim() : `https://${url.trim()}`;
+    const targetUrl = normalizeJobUrl(url);
     const res = await fetch(`https://api.microlink.io?url=${encodeURIComponent(targetUrl)}`);
     if (!res.ok) return localParsed;
 
@@ -167,7 +189,7 @@ export async function fetchJobMetaFromUrl(url: string | null | undefined): Promi
       logo_url: logoUrl 
     };
 
-    if (!title || typeof title !== 'string') return result;
+    if (!title || typeof title !== 'string' || title.includes('Search | LinkedIn')) return result;
 
     // Strip trailing site branding
     let cleanTitle = title

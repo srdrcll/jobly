@@ -134,7 +134,7 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
         if (metaParsed.company_name || metaParsed.position) {
           setAutoFillNotice(`✨ ${metaParsed.company_name || ''} ${metaParsed.position ? `- ${metaParsed.position}` : ''}`);
         } else if (metaParsed.source) {
-          setAutoFillNotice(`✓ ${metaParsed.source} algılandı`);
+          setAutoFillNotice(`⚠️ ${metaParsed.source} algılandı — Şirket ve pozisyon yazınız`);
         } else {
           setAutoFillNotice(null);
         }
@@ -272,8 +272,16 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
                 Taranıyor...
               </span>
             ) : autoFillNotice ? (
-              <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 flex items-center gap-1">
-                <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border flex items-center gap-1 ${
+                autoFillNotice.startsWith('⚠️')
+                  ? 'text-amber-400 bg-amber-500/10 border-amber-500/20'
+                  : 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20'
+              }`}>
+                {autoFillNotice.startsWith('⚠️') ? (
+                  <AlertTriangle className="w-3 h-3 text-amber-400" />
+                ) : (
+                  <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                )}
                 {autoFillNotice}
               </span>
             ) : null}
