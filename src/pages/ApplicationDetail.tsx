@@ -18,13 +18,15 @@ import {
   ExternalLink,
   AlertCircle,
   RefreshCw,
-  Shield
+  Shield,
+  Sparkles
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { ConfirmationDialog } from '@/components/ui/ConfirmationDialog';
 import { EditApplicationModal } from '@/components/applications/EditApplicationModal';
+import { GenerateCoverLetterModal } from '@/components/applications/GenerateCoverLetterModal';
 import { 
   useApplicationDetailQuery, 
   useDeleteApplicationMutation 
@@ -40,6 +42,7 @@ export const ApplicationDetailPage: React.FC = () => {
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isAiModalOpen, setIsAiModalOpen] = useState(false);
 
   const { data: application, isLoading, isError, error, refetch } = useApplicationDetailQuery(id);
   const deleteMutation = useDeleteApplicationMutation();
@@ -151,7 +154,16 @@ export const ApplicationDetailPage: React.FC = () => {
           </Button>
         </Link>
 
-        <div className="flex items-center gap-2.5 self-end sm:self-auto">
+        <div className="flex flex-wrap items-center gap-2.5 self-end sm:self-auto">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => setIsAiModalOpen(true)}
+            leftIcon={<Sparkles className="w-4 h-4 text-cyan-400" aria-hidden="true" />}
+          >
+            Ön Mektup / E-posta Üret
+          </Button>
+
           <Button
             variant="outline"
             size="sm"
@@ -358,6 +370,13 @@ export const ApplicationDetailPage: React.FC = () => {
       <EditApplicationModal
         isOpen={isEditModalOpen}
         onClose={handleCloseEdit}
+        application={application}
+      />
+
+      {/* AI Cover Letter Modal */}
+      <GenerateCoverLetterModal
+        isOpen={isAiModalOpen}
+        onClose={() => setIsAiModalOpen(false)}
         application={application}
       />
 

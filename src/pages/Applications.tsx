@@ -40,6 +40,7 @@ import { getCompanyLogoUrl } from '@/utils/jobUrlParser';
 import { CreateApplicationModal } from '@/components/applications/CreateApplicationModal';
 import { EditApplicationModal } from '@/components/applications/EditApplicationModal';
 import { CreateInterviewModal } from '@/components/interviews/CreateInterviewModal';
+import { GenerateCoverLetterModal } from '@/components/applications/GenerateCoverLetterModal';
 import { InlineStatusDropdown } from '@/components/applications/InlineStatusDropdown';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useApplicationFilters, SortOption } from '@/hooks/useApplicationFilters';
@@ -84,6 +85,10 @@ export const ApplicationsPage: React.FC = () => {
     company_name?: string;
     position?: string;
   } | undefined>(undefined);
+
+  // AI Cover Letter Modal State
+  const [selectedAiApp, setSelectedAiApp] = useState<DbApplication | null>(null);
+  const [isAiModalOpen, setIsAiModalOpen] = useState(false);
 
   // Popover Toggles
   const [isFilterPopoverOpen, setIsFilterPopoverOpen] = useState(false);
@@ -855,6 +860,19 @@ export const ApplicationsPage: React.FC = () => {
                             <CalendarPlus className="w-4 h-4" />
                           </button>
 
+                          {/* 1-Click AI Cover Letter */}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setSelectedAiApp(app);
+                              setIsAiModalOpen(true);
+                            }}
+                            className="p-1.5 rounded-lg hover:bg-cyan-500/10 text-slate-400 hover:text-cyan-400 transition-colors"
+                            title="Yapay Zeka ile Ön Mektup Üret"
+                          >
+                            <Sparkles className="w-4 h-4 text-cyan-400" />
+                          </button>
+
                           <button
                             type="button"
                             onClick={() => handleNavigateDetail(app.id)}
@@ -1038,6 +1056,16 @@ export const ApplicationsPage: React.FC = () => {
           setInterviewPrefill(undefined);
         }}
         initialValues={interviewPrefill}
+      />
+
+      {/* AI Cover Letter Modal */}
+      <GenerateCoverLetterModal
+        isOpen={isAiModalOpen}
+        onClose={() => {
+          setIsAiModalOpen(false);
+          setSelectedAiApp(null);
+        }}
+        application={selectedAiApp}
       />
 
       {/* Single Delete Confirmation Dialog */}
