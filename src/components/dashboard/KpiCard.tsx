@@ -40,8 +40,8 @@ export const KpiCard: React.FC<KpiCardProps> = ({
     <div
       onClick={onClick}
       className={cn(
-        'group p-5 rounded-3xl bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark hover:border-slate-300 dark:hover:border-slate-700/80 hover:shadow-card-hover dark:hover:shadow-card-hover-dark hover:-translate-y-1 transition-all duration-300 relative overflow-hidden flex flex-col justify-between specular-border',
-        onClick && 'cursor-pointer hover:border-blue-500/50 dark:hover:border-blue-500/50 select-none active:scale-[0.98]',
+        'group p-5 rounded-3xl spatial-card relative overflow-hidden flex flex-col justify-between specular-border',
+        onClick && 'cursor-pointer select-none active:scale-[0.98]',
         className
       )}
     >
