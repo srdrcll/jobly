@@ -1,5 +1,6 @@
 import React from 'react';
-import { Briefcase, ArrowUpRight, Calendar, DollarSign, MapPin } from 'lucide-react';
+import { Briefcase, ArrowUpRight, Calendar, MapPin } from 'lucide-react';
+import { TurkishLiraIcon } from '@/components/common/TurkishLiraIcon';
 import { DbApplication } from '@/types';
 import { useNavigate } from 'react-router-dom';
 
@@ -62,7 +63,7 @@ export const CompanyProfileRelatedApps: React.FC<CompanyProfileRelatedAppsProps>
                 )}
                 {app.salary && (
                   <span className="flex items-center gap-1 text-emerald-400 font-semibold">
-                    <DollarSign className="w-3 h-3" />
+                    <TurkishLiraIcon className="w-3 h-3" />
                     {app.salary}
                   </span>
                 )}

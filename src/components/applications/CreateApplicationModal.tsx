@@ -7,7 +7,6 @@ import {
   Target, 
   Calendar, 
   Globe, 
-  DollarSign, 
   User, 
   Mail, 
   FileText, 
@@ -17,6 +16,7 @@ import {
   Loader2,
   CheckCircle2
 } from 'lucide-react';
+import { TurkishLiraIcon } from '@/components/common/TurkishLiraIcon';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -444,7 +444,7 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
             <Input
               label="Maaş Beklentisi"
               placeholder="örn. 45.000 TL / Ay"
-              leftIcon={<DollarSign className="w-4 h-4" aria-hidden="true" />}
+              leftIcon={<TurkishLiraIcon className="w-4 h-4" aria-hidden="true" />}
               error={errors.salary?.message}
               {...register('salary')}
             />

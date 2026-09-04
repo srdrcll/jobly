@@ -7,7 +7,6 @@ import {
   Target, 
   Calendar, 
   MapPin, 
-  DollarSign, 
   Globe, 
   User, 
   Mail, 
@@ -21,6 +20,7 @@ import {
   Shield,
   Sparkles
 } from 'lucide-react';
+import { TurkishLiraIcon } from '@/components/common/TurkishLiraIcon';
 import { Button } from '@/components/ui/Button';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { Skeleton } from '@/components/ui/Skeleton';
@@ -260,7 +260,7 @@ export const ApplicationDetailPage: React.FC = () => {
 
           <div className="space-y-1">
             <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-              <DollarSign className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" /> Maaş Beklentisi
+              <TurkishLiraIcon className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" /> Maaş Beklentisi
             </span>
             <p className="text-xs font-bold text-emerald-400">{application.salary ?? '—'}</p>
           </div>

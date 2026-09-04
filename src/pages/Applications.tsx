@@ -9,7 +9,6 @@ import {
   Building2, 
   Calendar, 
   MapPin, 
-  DollarSign, 
   MoreHorizontal, 
   AlertCircle,
   RefreshCw,
@@ -27,6 +26,7 @@ import {
   CalendarPlus,
   Globe
 } from 'lucide-react';
+import { TurkishLiraIcon } from '@/components/common/TurkishLiraIcon';
 import { PageHeader } from '@/components/common/PageHeader';
 import { Button } from '@/components/ui/Button';
 import { SearchInput } from '@/components/ui/SearchInput';
@@ -1024,7 +1024,7 @@ export const ApplicationsPage: React.FC = () => {
                     </span>
                     {app.salary && (
                       <span className="font-semibold text-emerald-400 flex items-center gap-0.5">
-                        <DollarSign className="w-3.5 h-3.5" aria-hidden="true" /> {app.salary}
+                        <TurkishLiraIcon className="w-3.5 h-3.5" aria-hidden="true" /> {app.salary}
                       </span>
                     )}
                   </div>
