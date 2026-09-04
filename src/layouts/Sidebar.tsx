@@ -42,7 +42,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   return (
     <aside
       className={cn(
-        'h-screen bg-white/90 dark:bg-[#0B101D]/95 backdrop-blur-2xl border-r border-slate-200/80 dark:border-slate-800/80 flex flex-col justify-between transition-all duration-300 select-none z-30 relative',
+        'h-screen bg-white/90 dark:bg-[#0B101D]/95 backdrop-blur-2xl border-r border-slate-200/80 dark:border-slate-800/80 flex flex-col justify-between transition-all duration-300 select-none z-30 relative overflow-x-hidden',
         isCollapsed ? 'w-20' : 'w-64'
       )}
       aria-label="Ana Gezinme Menüsü"
@@ -71,7 +71,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* Navigation Groups (Scrollable) */}
-        <div className="p-3 space-y-5 overflow-y-auto flex-1 custom-scrollbar">
+        <div className="p-3 space-y-5 overflow-y-auto overflow-x-hidden flex-1 no-scrollbar">
           {/* Navigation Group 1: Main App */}
           <div>
             {!isCollapsed && (
