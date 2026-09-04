@@ -10,7 +10,37 @@ export interface ParsedJobUrl {
 }
 
 /**
- * Extracts and removes work model info (Remote, Hybrid, On-site) from a text string.
+ * Detects Work Model (Remote, Hybrid, On-site) from any text string (title, description, URL params).
+ */
+export function detectWorkType(text: string | null | undefined): 'Remote' | 'Hybrid' | 'On-site' | undefined {
+  if (!text) return undefined;
+  const lower = text.toLowerCase();
+
+  // If text says "on site or hybrid or remote", it represents an unselected multi-filter, skip
+  if (lower.includes('on site or hybrid or remote') || lower.includes('on-site or hybrid or remote')) {
+    return undefined;
+  }
+
+  // 1. Remote indicators
+  if (/\b(remote|uzaktan|tamamen uzaktan|home office|evden|telecommute|work from home)\b/i.test(lower)) {
+    return 'Remote';
+  }
+
+  // 2. Hybrid indicators
+  if (/\b(hybrid|hibrit|karma|hibrit çalışma)\b/i.test(lower)) {
+    return 'Hybrid';
+  }
+
+  // 3. On-site indicators
+  if (/\b(on[- ]site|yerinde|ofis|ofiste|ofisten|iş yerinde)\b/i.test(lower)) {
+    return 'On-site';
+  }
+
+  return undefined;
+}
+
+/**
+ * Extracts and removes work model info (Remote, Hybrid, On-site) from a position title string.
  */
 function extractWorkTypeAndClean(text: string): { cleaned: string; work_type?: 'Remote' | 'Hybrid' | 'On-site' } {
   if (!text) return { cleaned: '' };
@@ -19,22 +49,25 @@ function extractWorkTypeAndClean(text: string): { cleaned: string; work_type?: '
   let work_type: 'Remote' | 'Hybrid' | 'On-site' | undefined = undefined;
 
   const lower = text.toLowerCase();
-  if (lower.includes('on site or hybrid or remote') || lower.includes('on-site or hybrid or remote')) {
-    cleaned = cleaned.replace(/,\s*on[- ]site or hybrid or remote/gi, '').replace(/on[- ]site or hybrid or remote/gi, '');
-  }
 
-  if (/,\s*remote\b|\bremote\b|\buzaktan\b/i.test(cleaned)) {
+  // Detect specific work type before stripping
+  if (/\b(remote|uzaktan)\b/i.test(lower) && !lower.includes('hybrid') && !lower.includes('on site') && !lower.includes('on-site')) {
     work_type = 'Remote';
-    cleaned = cleaned.replace(/,\s*(remote|uzaktan)/gi, '').replace(/\b(remote|uzaktan)\b/gi, '');
-  } else if (/,\s*hybrid\b|\bhybrid\b|\bhibrit\b/i.test(cleaned)) {
+  } else if (/\b(hybrid|hibrit)\b/i.test(lower) && !lower.includes('on site') && !lower.includes('on-site') && !lower.includes('remote')) {
     work_type = 'Hybrid';
-    cleaned = cleaned.replace(/,\s*(hybrid|hibrit)/gi, '').replace(/\b(hybrid|hibrit)\b/gi, '');
-  } else if (/,\s*on[- ]site\b|\bon[- ]site\b|\bofiste?\b/i.test(cleaned)) {
+  } else if (/\b(on[- ]site|ofiste?)\b/i.test(lower) && !lower.includes('hybrid') && !lower.includes('remote')) {
     work_type = 'On-site';
-    cleaned = cleaned.replace(/,\s*on[- ]site/gi, '').replace(/\bon[- ]site\b/gi, '').replace(/\bofiste?\b/gi, '');
   }
 
-  cleaned = cleaned.replace(/^[\s,–—-]+|[\s,–—-]+$/g, '').trim();
+  // Clean trailing / embedded work models from title
+  cleaned = cleaned
+    .replace(/,\s*on[- ]site or hybrid or remote/gi, '')
+    .replace(/on[- ]site or hybrid or remote/gi, '')
+    .replace(/,\s*(remote|uzaktan|hybrid|hibrit|on[- ]site|ofiste?)/gi, '')
+    .replace(/\((remote|uzaktan|hybrid|hibrit|on[- ]site|ofiste?)\)/gi, '')
+    .replace(/\[(remote|uzaktan|hybrid|hibrit|on[- ]site|ofiste?)\]/gi, '')
+    .replace(/^[\s,–—-]+|[\s,–—-]+$/g, '')
+    .trim();
 
   return { cleaned, work_type };
 }
@@ -119,6 +152,21 @@ export function parseJobUrl(url: string | null | undefined): ParsedJobUrl {
     const pathname = parsed.pathname;
     const hostname = parsed.hostname.toLowerCase();
     const searchParams = parsed.searchParams;
+
+    // Detect work type from URL query parameters (e.g. LinkedIn f_WT)
+    const f_WT = searchParams.get('f_WT');
+    if (f_WT) {
+      if (f_WT.includes('2')) result.work_type = 'Remote';
+      else if (f_WT.includes('3')) result.work_type = 'Hybrid';
+      else if (f_WT.includes('1')) result.work_type = 'On-site';
+    }
+
+    const wpt = searchParams.get('workplaceType');
+    if (wpt && !result.work_type) {
+      if (wpt.includes('2')) result.work_type = 'Remote';
+      else if (wpt.includes('3')) result.work_type = 'Hybrid';
+      else if (wpt.includes('1')) result.work_type = 'On-site';
+    }
 
     // 1. LinkedIn Jobs
     if (hostname.includes('linkedin.com')) {
@@ -215,7 +263,7 @@ export function parseJobUrl(url: string | null | undefined): ParsedJobUrl {
       const queryPos = searchParams.get('q');
       if (queryPos) {
         const { cleaned, work_type } = extractWorkTypeAndClean(queryPos);
-        if (work_type) result.work_type = work_type;
+        if (work_type && !result.work_type) result.work_type = work_type;
         result.position = formatSlugToText(cleaned);
       }
     }
@@ -235,7 +283,7 @@ export function parseJobUrl(url: string | null | undefined): ParsedJobUrl {
 
 /**
  * Asynchronously fetches metadata from webpage HTML (via microlink API).
- * Cleanly extracts Company, Position, and Location.
+ * Cleanly extracts Company, Position, Location, and Work Model.
  */
 export async function fetchJobMetaFromUrl(url: string | null | undefined): Promise<ParsedJobUrl> {
   const localParsed = parseJobUrl(url);
@@ -258,6 +306,11 @@ export async function fetchJobMetaFromUrl(url: string | null | undefined): Promi
       ...localParsed,
       logo_url: logoUrl || localParsed.logo_url 
     };
+
+    // Detect Work Model from title or description
+    if (!result.work_type) {
+      result.work_type = detectWorkType(title) || detectWorkType(description);
+    }
 
     // If author is a company name and not LinkedIn
     if (author && typeof author === 'string' && !author.toLowerCase().includes('linkedin') && !result.company_name) {
