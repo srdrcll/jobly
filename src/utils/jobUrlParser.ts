@@ -6,6 +6,37 @@ export interface ParsedJobUrl {
   location?: string;
   source?: string;
   logo_url?: string;
+  work_type?: 'Remote' | 'Hybrid' | 'On-site';
+}
+
+/**
+ * Extracts and removes work model info (Remote, Hybrid, On-site) from a text string.
+ */
+function extractWorkTypeAndClean(text: string): { cleaned: string; work_type?: 'Remote' | 'Hybrid' | 'On-site' } {
+  if (!text) return { cleaned: '' };
+
+  let cleaned = text;
+  let work_type: 'Remote' | 'Hybrid' | 'On-site' | undefined = undefined;
+
+  const lower = text.toLowerCase();
+  if (lower.includes('on site or hybrid or remote') || lower.includes('on-site or hybrid or remote')) {
+    cleaned = cleaned.replace(/,\s*on[- ]site or hybrid or remote/gi, '').replace(/on[- ]site or hybrid or remote/gi, '');
+  }
+
+  if (/,\s*remote\b|\bremote\b|\buzaktan\b/i.test(cleaned)) {
+    work_type = 'Remote';
+    cleaned = cleaned.replace(/,\s*(remote|uzaktan)/gi, '').replace(/\b(remote|uzaktan)\b/gi, '');
+  } else if (/,\s*hybrid\b|\bhybrid\b|\bhibrit\b/i.test(cleaned)) {
+    work_type = 'Hybrid';
+    cleaned = cleaned.replace(/,\s*(hybrid|hibrit)/gi, '').replace(/\b(hybrid|hibrit)\b/gi, '');
+  } else if (/,\s*on[- ]site\b|\bon[- ]site\b|\bofiste?\b/i.test(cleaned)) {
+    work_type = 'On-site';
+    cleaned = cleaned.replace(/,\s*on[- ]site/gi, '').replace(/\bon[- ]site\b/gi, '').replace(/\bofiste?\b/gi, '');
+  }
+
+  cleaned = cleaned.replace(/^[\s,–—-]+|[\s,–—-]+$/g, '').trim();
+
+  return { cleaned, work_type };
 }
 
 function formatSlugToText(slug: string): string {
@@ -93,7 +124,7 @@ export function parseJobUrl(url: string | null | undefined): ParsedJobUrl {
     if (hostname.includes('linkedin.com')) {
       result.source = 'LinkedIn';
 
-      const match = pathname.match(/\/jobs\/(?:view|search|collections)\/([^/]+)/);
+      const match = pathname.match(/\/jobs\/(?:view|search|collections|search-results)\/([^/]+)/);
       if (match && match[1]) {
         let rawSlug = match[1].replace(/-\d{6,}$/, '').replace(/\d{6,}$/, '');
         if (rawSlug.includes('-at-')) {
@@ -105,11 +136,31 @@ export function parseJobUrl(url: string | null | undefined): ParsedJobUrl {
         }
       }
 
-      if (searchParams.has('keywords') && !result.position) {
-        result.position = formatSlugToText(searchParams.get('keywords') || '');
-      }
+      // Check URL query params for explicit company
       if (searchParams.has('company') && !result.company_name) {
         result.company_name = formatSlugToText(searchParams.get('company') || '');
+      }
+      if (searchParams.has('companyName') && !result.company_name) {
+        result.company_name = formatSlugToText(searchParams.get('companyName') || '');
+      }
+
+      // Check keywords for "Position at Company" or "Company - Position"
+      if (searchParams.has('keywords') && (!result.position || !result.company_name)) {
+        const rawKw = searchParams.get('keywords') || '';
+        const { cleaned, work_type } = extractWorkTypeAndClean(rawKw);
+        if (work_type && !result.work_type) result.work_type = work_type;
+
+        if (cleaned.toLowerCase().includes(' at ')) {
+          const atParts = cleaned.split(/ at /i);
+          if (!result.position) result.position = formatSlugToText(atParts[0]);
+          if (!result.company_name) result.company_name = formatSlugToText(atParts[1]);
+        } else if (cleaned.includes(' - ')) {
+          const dashParts = cleaned.split(' - ');
+          if (!result.position) result.position = formatSlugToText(dashParts[0]);
+          if (!result.company_name) result.company_name = formatSlugToText(dashParts[1]);
+        } else if (!result.position && cleaned) {
+          result.position = formatSlugToText(cleaned);
+        }
       }
     }
 
@@ -162,10 +213,21 @@ export function parseJobUrl(url: string | null | undefined): ParsedJobUrl {
     else if (hostname.includes('indeed.com')) {
       result.source = 'Indeed';
       const queryPos = searchParams.get('q');
-      if (queryPos) result.position = formatSlugToText(queryPos);
+      if (queryPos) {
+        const { cleaned, work_type } = extractWorkTypeAndClean(queryPos);
+        if (work_type) result.work_type = work_type;
+        result.position = formatSlugToText(cleaned);
+      }
     }
   } catch {
     // Ignore invalid URL
+  }
+
+  // Clean position if work type is inside
+  if (result.position) {
+    const { cleaned, work_type } = extractWorkTypeAndClean(result.position);
+    result.position = cleaned;
+    if (work_type && !result.work_type) result.work_type = work_type;
   }
 
   return result;
@@ -187,14 +249,40 @@ export async function fetchJobMetaFromUrl(url: string | null | undefined): Promi
 
     const json = await res.json();
     const title = (json?.data?.title as string) || '';
+    const description = (json?.data?.description as string) || '';
+    const author = (json?.data?.author as string) || '';
+    const publisher = (json?.data?.publisher as string) || '';
     const logoUrl = (json?.data?.logo?.url as string) || (json?.data?.image?.url as string) || undefined;
 
     const result: ParsedJobUrl = { 
       ...localParsed,
-      logo_url: logoUrl 
+      logo_url: logoUrl || localParsed.logo_url 
     };
 
-    if (!title || typeof title !== 'string' || title.includes('Search | LinkedIn')) return result;
+    // If author is a company name and not LinkedIn
+    if (author && typeof author === 'string' && !author.toLowerCase().includes('linkedin') && !result.company_name) {
+      result.company_name = author.trim();
+    }
+
+    // If description mentions "XYZ firmasında ... pozisyonu" (Turkish LinkedIn)
+    if (description && typeof description === 'string' && !result.company_name) {
+      const descMatchTr = description.match(/(.+?)\s+firmasında\s+(.+?)\s+pozisyonu/i);
+      if (descMatchTr) {
+        result.company_name = descMatchTr[1].trim();
+        if (!result.position) result.position = descMatchTr[2].trim();
+      } else {
+        const descMatchEn = description.match(/^(.+?)\s+is hiring(?:\s+a|\s+an)?\s+(.+?)(?:\s+in\s+(.+))?$/i);
+        if (descMatchEn) {
+          result.company_name = descMatchEn[1].trim();
+          if (!result.position) result.position = descMatchEn[2].trim();
+          if (descMatchEn[3] && !result.location) result.location = descMatchEn[3].trim();
+        }
+      }
+    }
+
+    if (!title || typeof title !== 'string' || title.includes('Search | LinkedIn') || title === 'LinkedIn') {
+      return result;
+    }
 
     // Strip trailing site branding
     let cleanTitle = title
@@ -246,12 +334,12 @@ export async function fetchJobMetaFromUrl(url: string | null | undefined): Promi
       return result;
     }
 
-    // 3. Format: "Mackolik — Istanbul, Türkiye" or "Mackolik - Istanbul, Turkey"
+    // 3. Format: "Company — Position" or "Company - Position"
     if (cleanTitle.includes('—') || cleanTitle.includes('–')) {
       const parts = cleanTitle.split(/\s*[\u2014\u2013—–]\s*/);
       if (parts.length >= 2) {
-        result.company_name = parts[0].trim();
-        result.location = parts[1].trim();
+        if (!result.company_name) result.company_name = parts[0].trim();
+        if (!result.position) result.position = parts[1].trim();
       }
     }
 
@@ -261,6 +349,13 @@ export async function fetchJobMetaFromUrl(url: string | null | undefined): Promi
         .replace(/\s*[\u2014\u2013—–|-].*$/, '')
         .replace(/\s*\|\s*.*$/, '')
         .trim();
+    }
+
+    // Clean position if work type is inside
+    if (result.position) {
+      const { cleaned, work_type } = extractWorkTypeAndClean(result.position);
+      result.position = cleaned;
+      if (work_type && !result.work_type) result.work_type = work_type;
     }
 
     return result;

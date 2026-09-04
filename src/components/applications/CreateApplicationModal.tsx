@@ -69,6 +69,7 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
     handleSubmit,
     reset,
     setValue,
+    setFocus,
     watch,
     formState: { errors, isDirty, isSubmitting },
   } = useForm<ApplicationFormValues>({
@@ -103,43 +104,69 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
       if (syncParsed.position) {
         setValue('position', syncParsed.position, { shouldDirty: true, shouldValidate: true });
       }
+      if (syncParsed.work_type) {
+        setValue('work_type', syncParsed.work_type, { shouldDirty: true, shouldValidate: true });
+      }
 
-      if (syncParsed.company_name || syncParsed.position) {
-        if (isMounted) setAutoFillNotice(`✨ ${syncParsed.company_name || ''} ${syncParsed.position ? `- ${syncParsed.position}` : ''}`);
+      // If BOTH company name and position are already extracted, we're done!
+      if (syncParsed.company_name && syncParsed.position) {
+        if (isMounted) setAutoFillNotice(`✨ ${syncParsed.company_name} — ${syncParsed.position}`);
         return;
       }
 
       if (isMounted) {
         setIsParsingUrl(true);
-        setAutoFillNotice('🔄 Bağlantı taranıyor...');
+        setAutoFillNotice('🔄 Bağlantı taranıyor, şirket ve pozisyon aranıyor...');
       }
 
       try {
         const metaParsed = await fetchJobMetaFromUrl(watchedJobUrl);
         if (!isMounted) return;
 
-        if (metaParsed.source) {
-          setValue('source', metaParsed.source, { shouldDirty: true, shouldValidate: true });
+        const finalCompany = metaParsed.company_name || syncParsed.company_name;
+        const finalPosition = metaParsed.position || syncParsed.position;
+        const finalSource = metaParsed.source || syncParsed.source;
+        const finalWorkType = metaParsed.work_type || syncParsed.work_type;
+
+        if (finalSource) {
+          setValue('source', finalSource, { shouldDirty: true, shouldValidate: true });
         }
-        if (metaParsed.company_name) {
-          setValue('company_name', metaParsed.company_name, { shouldDirty: true, shouldValidate: true });
+        if (finalCompany) {
+          setValue('company_name', finalCompany, { shouldDirty: true, shouldValidate: true });
         }
-        if (metaParsed.position) {
-          setValue('position', metaParsed.position, { shouldDirty: true, shouldValidate: true });
+        if (finalPosition) {
+          setValue('position', finalPosition, { shouldDirty: true, shouldValidate: true });
+        }
+        if (finalWorkType) {
+          setValue('work_type', finalWorkType, { shouldDirty: true, shouldValidate: true });
         }
         if (metaParsed.location) {
           setValue('location', metaParsed.location, { shouldDirty: true, shouldValidate: true });
         }
 
-        if (metaParsed.company_name || metaParsed.position) {
-          setAutoFillNotice(`✨ ${metaParsed.company_name || ''} ${metaParsed.position ? `- ${metaParsed.position}` : ''}`);
-        } else if (metaParsed.source) {
-          setAutoFillNotice(`⚠️ ${metaParsed.source} algılandı — Şirket ve pozisyon yazınız`);
+        if (finalCompany && finalPosition) {
+          setAutoFillNotice(`✨ ${finalCompany} — ${finalPosition}`);
+        } else if (finalPosition && !finalCompany) {
+          setAutoFillNotice(`⚠️ Pozisyon: "${finalPosition}" algılandı — Lütfen Şirket Adını yazınız`);
+          setTimeout(() => setFocus('company_name'), 50);
+        } else if (finalCompany && !finalPosition) {
+          setAutoFillNotice(`⚠️ Şirket: "${finalCompany}" algılandı — Lütfen Pozisyonu yazınız`);
+          setTimeout(() => setFocus('position'), 50);
+        } else if (finalSource) {
+          setAutoFillNotice(`ℹ️ ${finalSource} bağlantısı algılandı — Lütfen Şirket ve Pozisyonu yazınız`);
+          setTimeout(() => setFocus('company_name'), 50);
         } else {
           setAutoFillNotice(null);
         }
       } catch {
-        if (isMounted) setAutoFillNotice(null);
+        if (isMounted) {
+          if (syncParsed.position && !syncParsed.company_name) {
+            setAutoFillNotice(`⚠️ Pozisyon: "${syncParsed.position}" algılandı — Lütfen Şirket Adını yazınız`);
+            setTimeout(() => setFocus('company_name'), 50);
+          } else {
+            setAutoFillNotice(null);
+          }
+        }
       } finally {
         if (isMounted) setIsParsingUrl(false);
       }
@@ -150,7 +177,7 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
     return () => {
       isMounted = false;
     };
-  }, [watchedJobUrl, setValue]);
+  }, [watchedJobUrl, setValue, setFocus]);
 
   // Reset form and warning state when modal opens/closes
   useEffect(() => {
@@ -272,17 +299,21 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
                 Taranıyor...
               </span>
             ) : autoFillNotice ? (
-              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border flex items-center gap-1 ${
+              <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border flex items-center gap-1.5 ${
                 autoFillNotice.startsWith('⚠️')
-                  ? 'text-amber-400 bg-amber-500/10 border-amber-500/20'
-                  : 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20'
+                  ? 'text-amber-500 dark:text-amber-400 bg-amber-500/10 border-amber-500/20'
+                  : autoFillNotice.startsWith('ℹ️')
+                  ? 'text-blue-500 dark:text-blue-400 bg-blue-500/10 border-blue-500/20'
+                  : 'text-emerald-500 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/20'
               }`}>
                 {autoFillNotice.startsWith('⚠️') ? (
-                  <AlertTriangle className="w-3 h-3 text-amber-400" />
+                  <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                ) : autoFillNotice.startsWith('ℹ️') ? (
+                  <Globe className="w-3.5 h-3.5 text-blue-400 shrink-0" />
                 ) : (
-                  <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                 )}
-                {autoFillNotice}
+                <span>{autoFillNotice.replace(/^[✨⚠️ℹ️]\s*/, '')}</span>
               </span>
             ) : null}
           </div>
