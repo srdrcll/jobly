@@ -78,25 +78,13 @@ export const KpiCardsGrid: React.FC<KpiCardsGridProps> = ({ onOpenNewModal }) =>
     <section aria-label="Canlı İstatistik Metrikleri" className="space-y-4 animate-fadeIn">
       {/* Empty State Banner (If no applications exist yet) */}
       {isEmpty && (
-        <div className="p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+        <div className="p-4 rounded-2xl bg-gradient-to-r from-blue-500/10 via-indigo-500/10 to-cyan-500/10 border border-blue-500/20 flex items-center justify-between gap-3 text-xs shadow-xs">
           <div className="space-y-0.5">
-            <p className="font-bold text-indigo-300">Henüz Kayıtlı Başvurunuz Bulunmuyor</p>
-            <p className="text-slate-400">
-              İlk iş başvurunuzu ekleyerek başarı oranınızı ve istatistiklerinizi canlı takip etmeye başlayın.
+            <p className="font-bold text-blue-500 dark:text-blue-400">Henüz Kayıtlı Başvurunuz Bulunmuyor</p>
+            <p className="text-slate-500 dark:text-slate-400">
+              Başarı oranınızı ve mülakatlarınızı takip etmek için sağ üstteki <strong className="text-foreground">"+ Yeni Başvuru"</strong> butonunu kullanabilirsiniz.
             </p>
           </div>
-          {onOpenNewModal && (
-            <Button
-              variant="primary"
-              size="sm"
-              leftIcon={<Plus className="w-4 h-4" />}
-              onClick={onOpenNewModal}
-              className="shrink-0 focus-visible:ring-2 focus-visible:ring-indigo-500"
-              aria-label="İlk İş Başvurusunu Ekle"
-            >
-              İlk Başvuruyu Ekle
-            </Button>
-          )}
         </div>
       )}
 

@@ -1,7 +1,6 @@
 import React from 'react';
-import { Calendar as CalendarIcon, Sparkles, Plus } from 'lucide-react';
+import { Calendar as CalendarIcon, Sparkles, Target, Zap } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
-import { Button } from '@/components/ui/Button';
 
 const getGreeting = (): { text: string; emoji: string } => {
   const hour = new Date().getHours();
@@ -25,7 +24,7 @@ const getFormattedDate = (): string => {
   });
 };
 
-export const WelcomeSection: React.FC<{ onOpenNewModal?: () => void }> = ({ onOpenNewModal }) => {
+export const WelcomeSection: React.FC = () => {
   const { user } = useAuth();
   const greeting = getGreeting();
   const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Kariyer Yolcusu';
@@ -57,16 +56,20 @@ export const WelcomeSection: React.FC<{ onOpenNewModal?: () => void }> = ({ onOp
         </p>
       </div>
 
-      <div className="relative z-10 shrink-0">
-        <Button
-          variant="primary"
-          size="md"
-          onClick={onOpenNewModal}
-          leftIcon={<Plus className="w-4 h-4" aria-hidden="true" />}
-          className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-bold shadow-lg shadow-blue-500/25 rounded-2xl px-5 py-3"
-        >
-          Hızlı Başvuru Ekle
-        </Button>
+      {/* Executive Quick Metric Pill */}
+      <div className="relative z-10 shrink-0 flex items-center gap-3">
+        <div className="px-4 py-3 rounded-2xl bg-white/60 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 flex items-center gap-3 shadow-sm backdrop-blur-md">
+          <div className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center font-bold">
+            <Zap className="w-4 h-4 text-emerald-400" />
+          </div>
+          <div>
+            <span className="text-[10px] uppercase font-extrabold tracking-wider text-slate-400 block">Kariyer Takip Modu</span>
+            <span className="text-xs font-bold text-foreground flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              Aktif & Canlı
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );
