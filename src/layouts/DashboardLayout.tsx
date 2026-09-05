@@ -12,8 +12,9 @@ export const DashboardLayout: React.FC = () => {
   return (
     <div className="min-h-screen bg-background text-foreground flex overflow-hidden relative">
       {/* Ambient Aurora Light Spots in Background */}
-      <div className="ambient-glow-blue -top-24 -left-24 hidden dark:block" aria-hidden="true" />
-      <div className="ambient-glow-purple top-1/3 -right-24 hidden dark:block" aria-hidden="true" />
+      <div className="ambient-glow-blue -top-28 -left-20 hidden dark:block opacity-75 pointer-events-none" aria-hidden="true" />
+      <div className="ambient-glow-purple top-1/3 -right-24 hidden dark:block opacity-65 pointer-events-none" aria-hidden="true" />
+      <div className="ambient-glow-cyan bottom-10 left-1/3 hidden dark:block opacity-50 pointer-events-none" aria-hidden="true" />
 
       {/* Desktop Sidebar */}
       <div className="hidden md:block shrink-0 z-20">

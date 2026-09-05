@@ -270,7 +270,7 @@ export const ApplicationsPage: React.FC = () => {
       {isSomeSelected && (
         <div 
           onClick={(e) => e.stopPropagation()}
-          className="p-4 rounded-2xl bg-slate-900/90 dark:bg-slate-950/95 backdrop-blur-md border border-blue-500/40 shadow-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-fadeIn text-white z-20 sticky top-4"
+          className="p-4 rounded-2xl bg-slate-900/90 dark:bg-[#131D33]/95 backdrop-blur-md border border-blue-500/40 shadow-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-fadeIn text-white z-20 sticky top-4"
         >
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500/30 to-cyan-500/30 border border-blue-500/40 flex items-center justify-center text-blue-400 font-bold text-xs shadow-xs shrink-0">
@@ -353,7 +353,7 @@ export const ApplicationsPage: React.FC = () => {
           className={`px-3.5 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all text-xs ${
             filters.statuses.length === 0
               ? 'bg-blue-600 text-white shadow-md shadow-blue-600/25 scale-[1.02]'
-              : 'bg-white/80 dark:bg-[#0D1424]/75 text-slate-400 hover:text-foreground border border-slate-200/80 dark:border-slate-800/70'
+              : 'bg-white/80 dark:bg-[#162238]/75 text-slate-400 hover:text-foreground border border-slate-200/80 dark:border-slate-800/70'
           }`}
         >
           Tümü ({applications?.length || 0})
@@ -370,7 +370,7 @@ export const ApplicationsPage: React.FC = () => {
               className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all flex items-center gap-1.5 text-xs ${
                 isSelected
                   ? 'bg-blue-600 text-white shadow-md shadow-blue-600/25 scale-[1.02]'
-                  : 'bg-white/80 dark:bg-[#0D1424]/75 text-slate-400 hover:text-foreground border border-slate-200/80 dark:border-slate-800/70'
+                  : 'bg-white/80 dark:bg-[#162238]/75 text-slate-400 hover:text-foreground border border-slate-200/80 dark:border-slate-800/70'
               }`}
             >
               <span className={`w-2 h-2 rounded-full ${config.dotClass}`} />
@@ -384,7 +384,7 @@ export const ApplicationsPage: React.FC = () => {
       </div>
 
       {/* Toolbar: Search, Filter, Sort Controls */}
-      <div className="p-4 rounded-3xl bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark flex flex-col sm:flex-row items-center justify-between gap-4 relative specular-border">
+      <div className="p-4 rounded-3xl bg-white/80 dark:bg-[#162238]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark flex flex-col sm:flex-row items-center justify-between gap-4 relative specular-border">
         <div className="w-full sm:w-80">
           <SearchInput
             value={searchQuery}
@@ -420,7 +420,7 @@ export const ApplicationsPage: React.FC = () => {
                 id="filter-popover-menu"
                 role="region"
                 aria-label="Filtreleme Seçenekleri"
-                className="absolute right-0 top-12 w-80 bg-white/95 dark:bg-[#0E1424]/95 backdrop-blur-xl border border-slate-200/90 dark:border-slate-800/80 rounded-3xl shadow-soft-dark p-4 z-40 space-y-4 animate-fadeIn specular-border"
+                className="absolute right-0 top-12 w-80 bg-white/95 dark:bg-[#18243E]/95 backdrop-blur-xl border border-slate-200/90 dark:border-slate-800/80 rounded-3xl shadow-soft-dark p-4 z-40 space-y-4 animate-fadeIn specular-border"
               >
                 <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
                   <h4 className="text-xs font-bold text-foreground flex items-center gap-1.5">

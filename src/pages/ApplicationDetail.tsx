@@ -278,12 +278,12 @@ export const ApplicationDetailPage: React.FC = () => {
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/60 dark:border-slate-800/60 space-y-1">
+              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/60 dark:border-slate-800/60 space-y-1">
                 <span className="text-slate-400 font-semibold block">İletişim Kişisi</span>
                 <p className="font-bold text-foreground">{contactName ?? 'Belirtilmedi'}</p>
               </div>
 
-              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/60 dark:border-slate-800/60 space-y-1">
+              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/60 dark:border-slate-800/60 space-y-1">
                 <span className="text-slate-400 font-semibold block">İletişim E-Postası</span>
                 {contactEmail ? (
                   <a href={`mailto:${contactEmail}`} className="font-bold text-blue-500 hover:underline flex items-center gap-1">
@@ -294,7 +294,7 @@ export const ApplicationDetailPage: React.FC = () => {
                 )}
               </div>
 
-              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/60 dark:border-slate-800/60 space-y-1">
+              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/60 dark:border-slate-800/60 space-y-1">
                 <span className="text-slate-400 font-semibold block">Başvuru Kaynağı</span>
                 <p className="font-bold text-foreground">{application.source ?? 'Belirtilmedi'}</p>
               </div>
@@ -321,7 +321,7 @@ export const ApplicationDetailPage: React.FC = () => {
               <FileText className="w-4 h-4 text-blue-500" aria-hidden="true" /> Özel Notlar & Mülakat Detayları
             </h3>
             {notes ? (
-              <p className="text-xs text-slate-300 leading-relaxed whitespace-pre-wrap bg-slate-50 dark:bg-slate-950/60 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-800/60">
+              <p className="text-xs text-slate-300 leading-relaxed whitespace-pre-wrap bg-slate-50 dark:bg-slate-800/40 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-800/60">
                 {notes}
               </p>
             ) : (

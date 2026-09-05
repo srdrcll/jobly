@@ -42,14 +42,14 @@ export default {
           DEFAULT: 'hsl(var(--card) / <alpha-value>)',
           foreground: 'hsl(var(--card-foreground) / <alpha-value>)',
         },
-        // Premium Obsidian & Surface Palette
+        // Premium Obsidian & Modern Slate Palette
         obsidian: {
-          950: '#06090F',
-          900: '#0B0F17',
-          850: '#0E131F',
-          800: '#13192B',
-          700: '#1C243B',
-          600: '#28334E',
+          950: '#0A0F1D', // Deep midnight base
+          900: '#0F172A', // Slate 900
+          850: '#131C31',
+          800: '#17223C', // Card slate
+          700: '#1E2B4B',
+          600: '#283861',
         },
         // Application Status Colors with enhanced vibrancy
         status: {

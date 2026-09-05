@@ -75,7 +75,7 @@ export const ProfilePage: React.FC = () => {
       />
 
       {/* Main Profile Header Card */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark relative overflow-hidden specular-border">
+      <div className="p-6 sm:p-8 rounded-3xl bg-white/80 dark:bg-[#162238]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark relative overflow-hidden specular-border">
         <div className="absolute top-0 right-0 w-48 h-48 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" aria-hidden="true" />
 
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
@@ -112,7 +112,7 @@ export const ProfilePage: React.FC = () => {
       {/* Password Change & Security Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Security / Password Update Form */}
-        <div className="p-6 rounded-3xl bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark space-y-4 specular-border">
+        <div className="p-6 rounded-3xl bg-white/80 dark:bg-[#162238]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark space-y-4 specular-border">
           <h3 className="text-base font-bold text-foreground flex items-center gap-2">
             <Lock className="w-4 h-4 text-blue-500" aria-hidden="true" /> Şifre Değiştir
           </h3>
@@ -152,7 +152,7 @@ export const ProfilePage: React.FC = () => {
         </div>
 
         {/* Account Info Card */}
-        <div className="p-6 rounded-3xl bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark space-y-4 specular-border">
+        <div className="p-6 rounded-3xl bg-white/80 dark:bg-[#162238]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark space-y-4 specular-border">
           <h3 className="text-base font-bold text-foreground flex items-center gap-2">
             <Award className="w-4 h-4 text-blue-500" aria-hidden="true" /> Oturum Detayları
           </h3>

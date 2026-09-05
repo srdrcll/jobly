@@ -13,7 +13,7 @@ export const UpcomingInterviews: React.FC<UpcomingInterviewsProps> = ({ intervie
   const navigate = useNavigate();
 
   return (
-    <div className="bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 rounded-3xl p-6 shadow-soft dark:shadow-soft-dark space-y-4 h-full flex flex-col justify-between specular-border hover:border-slate-300 dark:hover:border-slate-700/80 transition-all">
+    <div className="bg-white/80 dark:bg-[#162238]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 rounded-3xl p-6 shadow-soft dark:shadow-soft-dark space-y-4 h-full flex flex-col justify-between specular-border hover:border-slate-300 dark:hover:border-slate-700/80 transition-all">
       {/* Header with View All Button */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">

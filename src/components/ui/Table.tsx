@@ -18,7 +18,7 @@ export const TableHeader = React.forwardRef<HTMLTableSectionElement, HTMLAttribu
   ({ className, ...props }, ref) => (
     <thead
       ref={ref}
-      className={cn('bg-slate-50/80 dark:bg-slate-950/80 border-b border-slate-200 dark:border-slate-800/80 text-xs font-semibold text-slate-400 uppercase tracking-wider select-none', className)}
+      className={cn('bg-slate-50/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800/80 text-xs font-semibold text-slate-400 uppercase tracking-wider select-none', className)}
       {...props}
     />
   )

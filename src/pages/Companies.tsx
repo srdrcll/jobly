@@ -216,7 +216,7 @@ export const CompaniesPage: React.FC = () => {
 
       {/* 2. Top KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-4 rounded-2xl bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark flex items-center gap-3 specular-border">
+        <div className="p-4 rounded-2xl bg-white/80 dark:bg-[#162238]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark flex items-center gap-3 specular-border">
           <div className="p-2.5 rounded-xl bg-blue-500/10 text-blue-500 border border-blue-500/20">
             <Building2 className="w-5 h-5" />
           </div>
@@ -226,7 +226,7 @@ export const CompaniesPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark flex items-center gap-3 specular-border">
+        <div className="p-4 rounded-2xl bg-white/80 dark:bg-[#162238]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark flex items-center gap-3 specular-border">
           <div className="p-2.5 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
             <Target className="w-5 h-5" />
           </div>
@@ -236,7 +236,7 @@ export const CompaniesPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark flex items-center gap-3 specular-border">
+        <div className="p-4 rounded-2xl bg-white/80 dark:bg-[#162238]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark flex items-center gap-3 specular-border">
           <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
             <Users className="w-5 h-5" />
           </div>
@@ -246,7 +246,7 @@ export const CompaniesPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark flex items-center gap-3 specular-border">
+        <div className="p-4 rounded-2xl bg-white/80 dark:bg-[#162238]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 shadow-soft dark:shadow-soft-dark flex items-center gap-3 specular-border">
           <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
             <Star className="w-5 h-5 fill-emerald-400" />
           </div>
@@ -296,7 +296,7 @@ export const CompaniesPage: React.FC = () => {
           className={`px-3.5 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all text-xs ${
             selectedStatus === 'all' && !showFavoritesOnly
               ? 'bg-blue-600 text-white shadow-md shadow-blue-600/25 scale-[1.02]'
-              : 'bg-white/80 dark:bg-[#0D1424]/75 text-slate-400 hover:text-foreground border border-slate-200/80 dark:border-slate-800/70'
+              : 'bg-white/80 dark:bg-[#162238]/75 text-slate-400 hover:text-foreground border border-slate-200/80 dark:border-slate-800/70'
           }`}
         >
           Tümü ({companies.length})
@@ -307,7 +307,7 @@ export const CompaniesPage: React.FC = () => {
           className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all flex items-center gap-1.5 text-xs ${
             showFavoritesOnly
               ? 'bg-amber-500 text-slate-900 shadow-md shadow-amber-500/25 scale-[1.02]'
-              : 'bg-white/80 dark:bg-[#0D1424]/75 text-slate-400 hover:text-foreground border border-slate-200/80 dark:border-slate-800/70'
+              : 'bg-white/80 dark:bg-[#162238]/75 text-slate-400 hover:text-foreground border border-slate-200/80 dark:border-slate-800/70'
           }`}
         >
           <Star className={`w-3.5 h-3.5 ${showFavoritesOnly ? 'fill-slate-900' : 'text-amber-400'}`} />
@@ -336,7 +336,7 @@ export const CompaniesPage: React.FC = () => {
               className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all flex items-center gap-1.5 text-xs ${
                 isSelected
                   ? 'bg-blue-600 text-white shadow-md shadow-blue-600/25 scale-[1.02]'
-                  : 'bg-white/80 dark:bg-[#0D1424]/75 text-slate-400 hover:text-foreground border border-slate-200/80 dark:border-slate-800/70'
+                  : 'bg-white/80 dark:bg-[#162238]/75 text-slate-400 hover:text-foreground border border-slate-200/80 dark:border-slate-800/70'
               }`}
             >
               <span>{item.label}</span>

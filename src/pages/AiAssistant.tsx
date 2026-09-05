@@ -225,7 +225,7 @@ export const AiAssistantPage: React.FC = () => {
 
       {/* 3. TAB 1: AI CHAT INTERFACE */}
       {mainTab === 'chat' && (
-        <div className="h-[calc(100vh-14rem)] flex overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800/80 bg-slate-50 dark:bg-slate-950 shadow-soft dark:shadow-soft-dark">
+        <div className="h-[calc(100vh-14rem)] flex overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800/80 bg-slate-50 dark:bg-[#131D33] shadow-soft dark:shadow-soft-dark">
           {/* Left Sidebar */}
           {isSidebarOpen && (
             <AiChatSidebar

@@ -236,7 +236,7 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
               </div>
               <select
                 id="edit-status"
-                className="w-full h-10 pl-10 pr-3.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+                className="w-full h-10 pl-10 pr-3.5 bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700/60 rounded-xl text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
                 {...register('status')}
               >
                 {Object.entries(STATUS_CONFIG).map(([key, config]) => (
@@ -255,7 +255,7 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
             </label>
             <select
               id="edit-work-type"
-              className="w-full h-10 px-3.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+              className="w-full h-10 px-3.5 bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700/60 rounded-xl text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
               {...register('work_type')}
             >
               <option value="Remote">Remote (Uzaktan)</option>
@@ -284,7 +284,7 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
                 id="edit-source"
                 list="edit-platform-sources"
                 placeholder="örn. LinkedIn, Kariyer.net, Youthall"
-                className="w-full h-10 pl-10 pr-3.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+                className="w-full h-10 pl-10 pr-3.5 bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700/60 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
                 {...register('source')}
               />
             </div>
@@ -351,7 +351,7 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
                 id="edit-notes"
                 rows={3}
                 placeholder="Mülakat detayları veya notlarınızı ekleyin..."
-                className="w-full p-3 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 resize-none"
+                className="w-full p-3 bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700/60 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 resize-none"
                 {...register('notes')}
               />
               {errors.notes?.message && (

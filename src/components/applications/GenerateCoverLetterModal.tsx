@@ -183,7 +183,7 @@ export const GenerateCoverLetterModal: React.FC<GenerateCoverLetterModalProps> =
           {/* Tone Selector */}
           <div className="space-y-1.5">
             <label className="block text-xs font-semibold text-slate-400">Üslup / İletişim Tarzı</label>
-            <div className="grid grid-cols-2 gap-1.5 p-1 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-xs">
+            <div className="grid grid-cols-2 gap-1.5 p-1 bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700/60 rounded-xl text-xs">
               <button
                 type="button"
                 onClick={() => setTone('professional')}
@@ -218,7 +218,7 @@ export const GenerateCoverLetterModal: React.FC<GenerateCoverLetterModalProps> =
           {/* Language Selector */}
           <div className="space-y-1.5">
             <label className="block text-xs font-semibold text-slate-400">Dil Seçimi</label>
-            <div className="grid grid-cols-2 gap-1.5 p-1 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-xs h-[42px] items-center">
+            <div className="grid grid-cols-2 gap-1.5 p-1 bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700/60 rounded-xl text-xs h-[42px] items-center">
               <button
                 type="button"
                 onClick={() => setLanguage('tr')}
@@ -259,7 +259,7 @@ export const GenerateCoverLetterModal: React.FC<GenerateCoverLetterModalProps> =
             type="text"
             readOnly
             value={generated.subject}
-            className="w-full h-10 px-3.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold text-foreground"
+            className="w-full h-10 px-3.5 bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700/60 rounded-xl text-xs font-semibold text-foreground"
           />
         </div>
 
@@ -270,7 +270,7 @@ export const GenerateCoverLetterModal: React.FC<GenerateCoverLetterModalProps> =
             rows={10}
             value={generated.body}
             onChange={(e) => setGenerated((prev) => ({ ...prev, body: e.target.value }))}
-            className="w-full p-3.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-xs text-foreground leading-relaxed font-mono resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+            className="w-full p-3.5 bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700/60 rounded-xl text-xs text-foreground leading-relaxed font-mono resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/40"
           />
         </div>
       </div>

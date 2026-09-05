@@ -94,7 +94,7 @@ export const AnalyticsSection: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Chart 1: Status Distribution Pie/Donut Chart */}
-        <article className="bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 rounded-3xl p-6 shadow-soft dark:shadow-soft-dark space-y-4 flex flex-col justify-between specular-border hover:border-slate-300 dark:hover:border-slate-700/80 transition-all">
+        <article className="bg-white/80 dark:bg-[#162238]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 rounded-3xl p-6 shadow-soft dark:shadow-soft-dark space-y-4 flex flex-col justify-between specular-border hover:border-slate-300 dark:hover:border-slate-700/80 transition-all">
           <div className="flex items-center gap-2.5">
             <div className="p-2.5 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400" aria-hidden="true">
               <PieChart className="w-5 h-5" />
@@ -108,7 +108,7 @@ export const AnalyticsSection: React.FC = () => {
         </article>
 
         {/* Chart 2: Monthly Applications Bar Chart */}
-        <article className="bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 rounded-3xl p-6 shadow-soft dark:shadow-soft-dark space-y-4 flex flex-col justify-between specular-border hover:border-slate-300 dark:hover:border-slate-700/80 transition-all">
+        <article className="bg-white/80 dark:bg-[#162238]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 rounded-3xl p-6 shadow-soft dark:shadow-soft-dark space-y-4 flex flex-col justify-between specular-border hover:border-slate-300 dark:hover:border-slate-700/80 transition-all">
           <div className="flex items-center gap-2.5">
             <div className="p-2.5 rounded-2xl bg-violet-500/10 border border-violet-500/20 text-violet-400" aria-hidden="true">
               <BarChart3 className="w-5 h-5" />
@@ -122,7 +122,7 @@ export const AnalyticsSection: React.FC = () => {
         </article>
 
         {/* Chart 3: Weekly Activity Line Chart */}
-        <article className="bg-white/80 dark:bg-[#0D1424]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 rounded-3xl p-6 shadow-soft dark:shadow-soft-dark space-y-4 flex flex-col justify-between specular-border hover:border-slate-300 dark:hover:border-slate-700/80 transition-all">
+        <article className="bg-white/80 dark:bg-[#162238]/75 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/70 rounded-3xl p-6 shadow-soft dark:shadow-soft-dark space-y-4 flex flex-col justify-between specular-border hover:border-slate-300 dark:hover:border-slate-700/80 transition-all">
           <div className="flex items-center gap-2.5">
             <div className="p-2.5 rounded-2xl bg-purple-500/10 border border-purple-500/20 text-purple-400" aria-hidden="true">
               <Activity className="w-5 h-5" />

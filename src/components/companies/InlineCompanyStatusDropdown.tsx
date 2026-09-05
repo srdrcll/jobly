@@ -77,7 +77,7 @@ export const InlineCompanyStatusDropdown: React.FC<InlineCompanyStatusDropdownPr
 
       {isOpen && (
         <div 
-          className="absolute left-0 top-full mt-1.5 w-52 bg-white/95 dark:bg-[#0E1424]/95 backdrop-blur-xl border border-slate-200/90 dark:border-slate-800/90 rounded-2xl shadow-xl z-50 p-1.5 space-y-1 animate-fadeIn specular-border"
+          className="absolute left-0 top-full mt-1.5 w-52 bg-white/95 dark:bg-[#18243E]/95 backdrop-blur-xl border border-slate-200/90 dark:border-slate-700/60 rounded-2xl shadow-xl z-50 p-1.5 space-y-1 animate-fadeIn specular-border"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="px-2 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800/60 mb-1">

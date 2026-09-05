@@ -326,7 +326,7 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
               type="text"
               inputMode="url"
               placeholder="https://www.linkedin.com/jobs/view/..."
-              className="w-full h-10 pl-10 pr-3.5 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-foreground placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+              className="w-full h-10 pl-10 pr-3.5 bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700/60 rounded-xl text-sm text-foreground placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
               {...register('job_url')}
             />
           </div>
@@ -361,7 +361,7 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
             <div className="relative flex items-center w-full">
               <select
                 id="create-status"
-                className="w-full h-10 px-3 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/40 cursor-pointer"
+                className="w-full h-10 px-3 bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700/60 rounded-xl text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/40 cursor-pointer"
                 {...register('status')}
               >
                 {Object.entries(STATUS_CONFIG).map(([key, config]) => (
@@ -384,7 +384,7 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
             <div className="relative flex items-center w-full">
               <select
                 id="create-work-type"
-                className="w-full h-10 px-3 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/40 cursor-pointer"
+                className="w-full h-10 px-3 bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700/60 rounded-xl text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/40 cursor-pointer"
                 {...register('work_type')}
               >
                 <option value="Remote">Remote (Uzaktan)</option>
@@ -418,7 +418,7 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
                 id="create-source"
                 list="platform-sources"
                 placeholder="örn. LinkedIn, Kariyer.net, Youthall"
-                className="w-full h-10 pl-10 pr-3.5 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+                className="w-full h-10 pl-10 pr-3.5 bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700/60 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
                 {...register('source')}
               />
             </div>
@@ -475,7 +475,7 @@ export const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
                 id="create-notes"
                 rows={3}
                 placeholder="Mülakat süreci, teknoloji mülakatı detayları veya başvuru notlarınızı ekleyin..."
-                className="w-full p-3 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 resize-none"
+                className="w-full p-3 bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700/60 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 resize-none"
                 {...register('notes')}
               />
               {errors.notes?.message && (

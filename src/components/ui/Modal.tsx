@@ -114,7 +114,7 @@ export const Modal: React.FC<ModalProps> = ({
       <div
         ref={modalRef}
         className={cn(
-          'relative w-full bg-white/95 dark:bg-[#0D1322]/95 backdrop-blur-2xl border border-slate-200/90 dark:border-slate-800/80 rounded-3xl shadow-soft-dark overflow-hidden z-10 animate-slideUp text-slate-900 dark:text-slate-100 my-8 focus:outline-none specular-border',
+          'relative w-full bg-white/95 dark:bg-[#141E34]/98 backdrop-blur-2xl border border-slate-200/90 dark:border-slate-700/80 rounded-3xl shadow-soft-dark overflow-hidden z-10 animate-slideUp text-slate-900 dark:text-slate-100 my-8 focus:outline-none specular-border',
           widthClasses[maxWidth]
         )}
         role="dialog"
@@ -157,7 +157,7 @@ export const Modal: React.FC<ModalProps> = ({
 
         {/* Footer */}
         {footer && (
-          <div className="flex items-center justify-end gap-3 p-4 px-6 border-t border-slate-100 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-950/40">
+          <div className="flex items-center justify-end gap-3 p-4 px-6 border-t border-slate-100 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-900/60">
             {footer}
           </div>
         )}

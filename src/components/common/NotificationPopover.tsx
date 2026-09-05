@@ -112,10 +112,10 @@ export const NotificationPopover: React.FC<NotificationPopoverProps> = ({
   return (
     <div
       ref={popoverRef}
-      className="absolute right-0 top-full mt-2 w-80 sm:w-96 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl z-50 overflow-hidden animate-fadeIn"
+      className="absolute right-0 top-full mt-2 w-80 sm:w-96 rounded-2xl bg-white dark:bg-[#141E34] border border-slate-200 dark:border-slate-700/60 shadow-2xl z-50 overflow-hidden animate-fadeIn"
     >
       {/* Header */}
-      <div className="p-4 border-b border-slate-100 dark:border-slate-800/80 flex items-center justify-between bg-slate-50/50 dark:bg-slate-950/50">
+      <div className="p-4 border-b border-slate-100 dark:border-slate-800/80 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
         <div className="flex items-center gap-2">
           <Bell className="w-4 h-4 text-blue-500" />
           <h3 className="font-bold text-sm text-foreground">Bildirimler</h3>
@@ -196,7 +196,7 @@ export const NotificationPopover: React.FC<NotificationPopoverProps> = ({
       </div>
 
       {/* Footer */}
-      <div className="p-2.5 bg-slate-50 dark:bg-slate-950/80 border-t border-slate-100 dark:border-slate-800/80 text-center">
+      <div className="p-2.5 bg-slate-50 dark:bg-slate-900/80 border-t border-slate-100 dark:border-slate-800/80 text-center">
         <button
           onClick={() => {
             navigate('/interviews');
