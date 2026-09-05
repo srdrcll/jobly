@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar as CalendarIcon, Sparkles, Target, Zap } from 'lucide-react';
+import { Calendar as CalendarIcon } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 
 const getGreeting = (): { text: string; emoji: string } => {
@@ -30,11 +30,11 @@ export const WelcomeSection: React.FC = () => {
   const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Kariyer Yolcusu';
 
   return (
-    <div className="p-6 sm:p-8 rounded-3xl spatial-card relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6 specular-border">
+    <div className="p-6 sm:p-8 rounded-3xl spatial-card relative overflow-hidden flex flex-col justify-center specular-border">
       {/* Background Aurora Radial Glow */}
       <div className="ambient-glow-cyan -top-24 -left-24 pointer-events-none" />
 
-      <div className="space-y-2 relative z-10">
+      <div className="space-y-2 relative z-10 max-w-2xl">
         <div className="flex items-center gap-2.5 text-xs">
           <span className="px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-500 font-bold border border-blue-500/20 flex items-center gap-1.5">
             <span>{greeting.emoji}</span>
@@ -51,25 +51,9 @@ export const WelcomeSection: React.FC = () => {
           Hoş Geldin, <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-indigo-400 to-cyan-400">{userName}</span> 👋
         </h1>
 
-        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-xl font-medium leading-relaxed">
+        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed">
           Kariyer hedeflerinize ve iş başvurularınıza dair tüm canlı metrikler, mülakat takipleri ve yapay zeka analizleri elinizin altında.
         </p>
-      </div>
-
-      {/* Executive Quick Metric Pill */}
-      <div className="relative z-10 shrink-0 flex items-center gap-3">
-        <div className="px-4 py-3 rounded-2xl bg-white/60 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800/80 flex items-center gap-3 shadow-sm backdrop-blur-md">
-          <div className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center font-bold">
-            <Zap className="w-4 h-4 text-emerald-400" />
-          </div>
-          <div>
-            <span className="text-[10px] uppercase font-extrabold tracking-wider text-slate-400 block">Kariyer Takip Modu</span>
-            <span className="text-xs font-bold text-foreground flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              Aktif & Canlı
-            </span>
-          </div>
-        </div>
       </div>
     </div>
   );
